@@ -463,8 +463,10 @@ footer .badges img{height:28px;width:auto}
 @media(prefers-reduced-motion:reduce){.wavi-fx a{animation:none}}
 /* ===== STICKY MOBILE ===== */
 .sticky{position:fixed;left:0;right:0;bottom:0;z-index:60;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:rgba(4,18,27,.95);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,.08);display:none;gap:10px}
-.sticky .btn{flex:1;font-size:14px;padding:13px 8px}
-@media(max-width:860px){.sticky{display:flex}.hero .cta-row .btn-primary,.hero .cta-note{display:none}.hero .cta-row .btn-ghost{width:100%}}
+.sticky .btn{flex:1;font-size:14px;padding:9px 8px;flex-direction:column;gap:1px;line-height:1.15}
+.sticky .btn small{font-family:var(--text);text-transform:none;font-size:11.5px;font-weight:500;letter-spacing:0;opacity:.85}
+/* no celular a barra fixa ja tem "Agendar raio-x" e "Testar a IA": os botoes do topo so repetiam */
+@media(max-width:860px){.sticky{display:flex}.hero .cta-row,.hero .cta-note{display:none}}
 
 /* reveal (só com JS) */
 .js .rv{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease}
@@ -611,6 +613,23 @@ body.tm-open{overflow:hidden}
 @media(max-width:560px){.try .btn{width:100%}}
 .ast{color:var(--mint);text-decoration:none;font-weight:700;margin-left:1px}
 .price-note{margin-top:18px;font-size:14px;color:var(--muted);max-width:820px}
+/* ===== revisao do celular (29/09): sem CTA repetido da barra fixa, alvos de toque maiores ===== */
+.try-m{display:none}
+.so-mob{display:none}
+@media(max-width:560px){#raiox .cta-row .btn{width:100%}#raiox .so-web{display:none}#raiox .so-mob{display:block;font-family:var(--text);text-transform:none;font-size:12.5px;font-weight:500;opacity:.8}#raiox a[data-agendar]{flex-direction:column;gap:2px}}
+@media(max-width:380px){#raiox .cta-row .btn{font-size:15px;padding-left:12px;padding-right:12px}}
+@media(max-width:860px){
+  .phone{width:min(290px,100%)}
+  .phone .screen{aspect-ratio:9/13}
+  .phone .go{display:none}
+  .phone .live{font-size:11px;letter-spacing:.08em;padding:6px 10px;white-space:nowrap}
+  .try .btn,.try-w{display:none}.try-m{display:inline}.try-m b{color:var(--mint)}
+  .rx-q .sn button{min-height:44px;padding:0 16px}
+}
+.nav .login{padding:12px 6px}
+/* o "Responder rapido" comecava na mesma cor do fim da prova: a onda sumia e ficava um buraco */
+.hist{background:linear-gradient(180deg,var(--navy) 0,var(--navy) 30%,var(--surface-2) 100%);padding-top:100px}
+@media(max-width:720px){.hist{padding-top:76px}}
 </style>
 <!-- voltaram do site anterior: preview no WhatsApp/Twitter, ícone do iPhone, cor da barra e referrer -->
 <link rel="apple-touch-icon" href="/assets/img/icon-512.png">
@@ -703,7 +722,7 @@ body.tm-open{overflow:hidden}
     </div>
     <span class="prints-hint">← deslize para ver a outra conversa →</span>
     <div class="try rv" id="testar">
-      <div><b>Não acredite no print.</b> Converse você mesmo com a IA de uma das nossas escolas, em operação real. Pergunte como um pai perguntaria.</div>
+      <div><b>Não acredite no print.</b> Converse você mesmo com a IA de uma das nossas escolas<span class="try-w">, em operação real. Pergunte como um pai perguntaria.</span><span class="try-m">. É só tocar em <b>Testar a IA</b> ↓</span></div>
       <a class="btn btn-primary js-wa" data-evt="clique_testar" data-loc="prova" data-msg="testar" data-num="demo" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.4A8.4 8.4 0 1 1 21 11.5z"/></svg>Conversar com a IA</a>
     </div>
 </section>
@@ -1012,7 +1031,7 @@ body.tm-open{overflow:hidden}
     <span class="label" style="text-align:center">Fundo da piscina</span>
     <h2 class="rv">Ainda com dúvida se serve <em>para a sua escola?</em></h2>
     <p class="lead rv">Marque 30 minutos por vídeo com quem opera escola de natação há 11 anos. A gente olha a sua operação com você e mostra onde a WasFit entra.</p>
-    <div class="cta-row rv" style="justify-content:center"><a class="btn btn-primary" data-evt="clique_cadastro" data-loc="final" href="https://app.wasfit.com.br/">Começar 7 dias grátis</a><a class="btn btn-ghost" data-agendar data-evt="clique_reuniao" data-loc="final" href="#diagnostico">Agendar chamada de vídeo · 30 min</a></div>
+    <div class="cta-row rv" style="justify-content:center"><a class="btn btn-primary" data-evt="clique_cadastro" data-loc="final" href="https://app.wasfit.com.br/">Começar 7 dias grátis</a><a class="btn btn-ghost" data-agendar data-evt="clique_reuniao" data-loc="final" href="#diagnostico">Agendar chamada de vídeo<span class="so-web"> · 30 min</span><small class="so-mob">reunião de 30 min</small></a></div>
   </div>
 </section>
 
@@ -1035,7 +1054,7 @@ body.tm-open{overflow:hidden}
   <div class="say" id="waviSay"><b>WasFit</b>Eu respondo o WhatsApp da sua escola. Quer me testar?</div>
 </div>
 <div class="sticky">
-  <a class="btn btn-primary" data-agendar data-evt="clique_reuniao" data-loc="sticky" href="#diagnostico">Agendar raio-x</a>
+  <a class="btn btn-primary" data-agendar data-evt="clique_reuniao" data-loc="sticky" href="#diagnostico">Agendar raio-x<small>reunião de 30 min</small></a>
   <a class="btn btn-ghost js-wa" data-evt="clique_testar" data-loc="sticky" data-msg="testar" data-num="demo" href="#">Testar a IA</a>
 </div>
 
