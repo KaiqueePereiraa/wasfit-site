@@ -6,7 +6,7 @@
 <!-- CSP também vai por cabeçalho (.htaccess/_headers/netlify.toml). Esta <meta> é a única
      proteção no GitHub Pages, que não lê aqueles arquivos. Os hashes são dos <script>
      inline DESTA página: se editar qualquer um deles, recalcule. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'sha256-djPdT5J1kuWFwawDhtbzz0YHt/63i3CUBG3CyUjLa4c=' 'sha256-Du+OJKJSbdUgz5nrHeWWINvez6XKDDU/tyj/5c2uvwo=' 'sha256-7FDHf6k/mYN8dgP2RKM2G6hbEQXg/wPZF8+6cX0IGcE='; connect-src 'self' https://script.google.com https://v1.api.wasfit.com.br; media-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'sha256-djPdT5J1kuWFwawDhtbzz0YHt/63i3CUBG3CyUjLa4c=' 'sha256-Du+OJKJSbdUgz5nrHeWWINvez6XKDDU/tyj/5c2uvwo=' 'sha256-c9rRax9D57fLqXzv61Ch392ImVY3VQHrNKcuah7lC2o='; connect-src 'self' https://script.google.com https://v1.api.wasfit.com.br; media-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests">
 <title>WasFit · a IA de WhatsApp que fala a língua da sua escola de natação</title>
 <meta name="description" content="IA de WhatsApp criada dentro de uma escola de natação: touca, nível, experimental, reposição, rematrícula. Treinada na Metodologia Gustavo Borges. No ar em 30 minutos. Integração nativa com o EVO. API oficial da Meta.">
 <link rel="canonical" href="https://wasfit.com.br/">
@@ -1067,9 +1067,16 @@ body.tm-open{overflow:hidden}
     </div>
     <div class="tm-step" id="agOk" hidden>
       <div class="tm-ico">✓</div>
-      <h2>Recebemos. <em>Falta só o horário.</em></h2>
-      <p>Toque abaixo para confirmar o melhor horário com a gente no WhatsApp. A mensagem já vai pronta.</p>
-      <a class="btn btn-primary" id="agWa" data-evt="clique_reuniao" data-loc="agendar_ok" href="#" target="_blank" rel="noopener" style="width:100%;margin-top:18px">Confirmar horário no WhatsApp</a>
+      <h2>Pronto! <em>Olha o seu WhatsApp.</em></h2>
+      <p>A gente acabou de te mandar uma mensagem no número que você deixou. É só responder por lá e escolher o melhor horário para a chamada de 30 min.</p>
+      <p class="tm-fine" style="margin-top:18px">Não chegou em alguns minutos? Chame a gente direto:</p>
+      <a class="btn btn-ghost" id="agWa" data-evt="clique_reuniao" data-loc="agendar_nao_chegou" href="#" target="_blank" rel="noopener" style="width:100%;margin-top:8px">Chamar a WasFit no WhatsApp</a>
+    </div>
+    <div class="tm-step" id="agErr" hidden>
+      <div class="tm-ico err">!</div>
+      <h2>Quase lá</h2>
+      <p>Deu instabilidade aqui e a nossa mensagem pode não chegar. Chame a gente direto no WhatsApp que marcamos o horário na hora. Os seus dados já vão prontos.</p>
+      <a class="btn btn-primary" id="agWa2" data-evt="clique_reuniao" data-loc="agendar_erro" href="#" target="_blank" rel="noopener" style="width:100%;margin-top:18px">Chamar a WasFit no WhatsApp</a>
     </div>
   </div>
 </div>
@@ -1290,7 +1297,7 @@ body.tm-open{overflow:hidden}
     function rx(){if(Object.keys(rxA).length<6)return null;var n=0,fu=[];for(var i=0;i<5;i++){if(rxA[i])n++;else fu.push(CH[i])}return{n:n,furos:fu,evo:rxA[5]?'sim':'não',t:document.getElementById('rxT').textContent}}
     function abrir(loc){
       ultimo=document.activeElement;origemClique=loc||'';
-      elF.hidden=false;elOk.hidden=true;f.reset();send.disabled=false;spin.hidden=true;rot.textContent='Quero agendar a chamada';
+      elF.hidden=false;elOk.hidden=true;document.getElementById('agErr').hidden=true;f.reset();send.disabled=false;spin.hidden=true;rot.textContent='Quero agendar a chamada';
       [].forEach.call(f.querySelectorAll('input'),function(i){i.setAttribute('aria-invalid','false')});
       var r=rx();rxInfo.hidden=!r;if(r)rxInfo.innerHTML='<b>Seu raio-x vai junto:</b> '+r.n+'/5 · '+r.t.toLowerCase();
       ag.hidden=false;document.body.classList.add('tm-open');
@@ -1322,11 +1329,11 @@ body.tm-open{overflow:hidden}
       ['utm_source','utm_medium','utm_campaign','utm_content'].forEach(function(k){D[k]=utm[k]||''});
       var payload={data:D};
       var msg='Oi! Quero agendar a chamada de vídeo de 30 min com a WasFit.\nEscola: '+D.instagram+' ('+L.cidade+')\nNome: '+L.nome+' · '+L.cargo+' · '+L.alunos+' alunos'+(r?'\nRaio-x: '+r.n+'/5 · '+r.t+'\nFuros: '+(r.furos.join(', ')||'nenhum')+'\nEVO: '+r.evo:'')+origem;
-      document.getElementById('agWa').href='https://wa.me/'+WA_COMERCIAL+'?text='+encodeURIComponent(msg);
+      var wurl='https://wa.me/'+WA_COMERCIAL+'?text='+encodeURIComponent(msg);document.getElementById('agWa').href=wurl;document.getElementById('agWa2').href=wurl;
       var feito=false;
       function fim(st){if(feito)return;feito=true;D.status_plataforma=st;
         if(SHEET_ENDPOINT){try{fetch(SHEET_ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)})}catch(x){}}
-        elF.hidden=true;elOk.hidden=false;
+        elF.hidden=true;if(st==='ok')elOk.hidden=false;else document.getElementById('agErr').hidden=false;
         window.dataLayer.push({event:'agendar_lead',local:origemClique,status:st})}
       if(!WEBHOOK.raiox){fim('sem webhook');return}
       setTimeout(function(){fim('sem resposta')},4000);
