@@ -6,7 +6,7 @@
 <!-- CSP também vai por cabeçalho (.htaccess/_headers/netlify.toml). Esta <meta> é a única
      proteção no GitHub Pages, que não lê aqueles arquivos. Os hashes são dos <script>
      inline DESTA página: se editar qualquer um deles, recalcule. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'sha256-djPdT5J1kuWFwawDhtbzz0YHt/63i3CUBG3CyUjLa4c=' 'sha256-1BncqiN1pMFgGfOXlrx+loDCWcpqwHar5fxj2SA0Ggg=' 'sha256-XlXghU+xlMp/KNKjrvnIkC4hwlKeLUG/cxR0xhMvv9M='; connect-src 'self' https://script.google.com https://v1.api.wasfit.com.br; media-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'sha256-djPdT5J1kuWFwawDhtbzz0YHt/63i3CUBG3CyUjLa4c=' 'sha256-uuMEqQMblMfuiu3Q+Td+sf6xbR6KL6vkmW8VdthNRbc=' 'sha256-XlXghU+xlMp/KNKjrvnIkC4hwlKeLUG/cxR0xhMvv9M='; connect-src 'self' https://script.google.com https://v1.api.wasfit.com.br; media-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests">
 <title>Raio-X da escola · WasFit</title>
 <meta name="description" content="Em 2 minutos: 6 perguntas de sim ou não e o resultado na hora, mostrando onde a matrícula da sua escola de natação está vazando.">
 <meta name="robots" content="index,follow">
@@ -180,7 +180,7 @@ h2{font-size:clamp(22px,3.5vw,32px);margin-bottom:10px}
     {k:'origem',t:'Você sabe de onde vêm os seus leads hoje?',s:'Instagram, indicação, Google, passou na porta.',leak:'Sem origem, você investe no canal errado e não sabe qual campanha trouxe matrícula.',ok:'Você sabe onde investir.'},
     {k:'registro',t:'Todos os contatos ficam registrados em um só lugar?',s:'Não no celular de alguém, não em caderno.',leak:'Contato que fica no celular da recepção some quando a pessoa sai de férias, ou da empresa.',ok:'A base é da escola, não de uma pessoa.'},
     {k:'followup',t:'Alguém faz follow-up de quem pediu preço e sumiu?',s:'De forma sistemática, toda semana.',leak:'Quem pergunta o preço e some é a matrícula mais barata de recuperar. Hoje ninguém volta nela.',ok:'Você recupera quem esfriou.'},
-    {k:'rematricula',t:'Existe fluxo ativo de rematrícula e de reposição?',s:'Aviso antes do vencimento, reposição oferecida sem pedir.',leak:'Aluno que vence e ninguém chama vira cancelamento silencioso. É a evasão que não aparece no relatório.',ok:'Renovação não depende de lembrar.'},
+    {k:'etapa',t:'Você sabe em que etapa está cada interessado agora?',s:'Pediu preço, agendou experimental ou sumiu.',leak:'Se alguém perguntar agora quantos estão esperando retorno, ninguém sabe. Sem etapa, o lead que pediu preço fica igual ao que já agendou, e os dois esfriam.',ok:'A recepção sabe quem chamar primeiro.'},
     {k:'noite',t:'O WhatsApp da escola responde à noite e no fim de semana?',s:'Quando as famílias pesquisam.',leak:'Mensagem de domingo respondida na segunda já encontrou o pai matriculado em outra escola.',ok:'Você atende quando o pai procura.'},
     {k:'evo',t:'A escola usa o EVO?',s:'Sistema de gestão.',leak:'Sem sistema conectado, cobrança, ausência e rematrícula ficam no manual. Não é vazamento, é limite: as duas IAs do dia 1 funcionam mesmo assim.',ok:'Todas as 10 IAs entram no primeiro mês.',neutral:true}
   ];
