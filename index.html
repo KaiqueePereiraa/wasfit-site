@@ -6,7 +6,7 @@
 <!-- CSP também vai por cabeçalho (.htaccess/_headers/netlify.toml). Esta <meta> é a única
      proteção no GitHub Pages, que não lê aqueles arquivos. Os hashes são dos <script>
      inline DESTA página: se editar qualquer um deles, recalcule. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'sha256-Hg1a4n1Ywa1JbUXFk9h5HvqunCRBdX+SGUEdU36X3bc=' 'sha256-djPdT5J1kuWFwawDhtbzz0YHt/63i3CUBG3CyUjLa4c=' 'sha256-Du+OJKJSbdUgz5nrHeWWINvez6XKDDU/tyj/5c2uvwo=' 'sha256-DLpywlajYWu4B1979uK+fhUDSwIWIOj33pJ1F4TzEPA='; connect-src 'self' https://script.google.com https://v1.api.wasfit.com.br; media-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'sha256-Hg1a4n1Ywa1JbUXFk9h5HvqunCRBdX+SGUEdU36X3bc=' 'sha256-djPdT5J1kuWFwawDhtbzz0YHt/63i3CUBG3CyUjLa4c=' 'sha256-Du+OJKJSbdUgz5nrHeWWINvez6XKDDU/tyj/5c2uvwo=' 'sha256-t3mwj/gsy6/5G6NLRbLW6RZRIgAFmrieKavJc29LQgU='; connect-src 'self' https://script.google.com https://v1.api.wasfit.com.br; media-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests">
 <!-- sem cadeado nunca: quem chega por http:// vai para https:// (o Cloudflare ainda nao redireciona sozinho) -->
 <script>if(location.protocol==='http:'&&/(^|\.)wasfit\.com\.br$/.test(location.hostname))location.replace('https:'+location.href.slice(5));</script>
 <title>WasFit · a IA de WhatsApp que fala a língua da sua escola de natação</title>
@@ -503,7 +503,7 @@ body.tm-open{overflow:hidden}
 @media(prefers-reduced-motion:reduce){.tm-box{animation:none}.tm-spin{animation-duration:2s}}
 
 /* organizacao dos textos (10/09): espaco antes dos planos, passos alinhados ao topo, quebras no celular */
-#preco .price-grid{margin-top:44px}
+#preco .price-grid{margin-top:0}
 #comecar .start-grid{align-items:start}
 .mock-h i{white-space:nowrap}
 @media(max-width:520px){#raiox-home .label{font-size:12.5px;letter-spacing:.08em}}
@@ -651,6 +651,26 @@ body.tm-open{overflow:hidden}
 .quem-cards .founder,.quem-cards .seal{margin-top:0}
 .quem-cards .seal{padding:18px 20px}
 @media(max-width:860px){.quem-cards{grid-template-columns:1fr;gap:14px}}
+/* asterisco do uso da IA: a nota para no meio da tela (nao atras do menu fixo) e pisca um destaque */
+#limite-ia{scroll-margin-top:38vh;scroll-margin-bottom:38vh;border-radius:10px;transition:background-color .6s}
+#limite-ia:target{animation:notaluz 2.4s ease-out}
+@keyframes notaluz{0%,35%{background:rgba(21,234,158,.18);box-shadow:0 0 0 8px rgba(21,234,158,.18);color:#fff}100%{background:transparent;box-shadow:0 0 0 8px transparent}}
+@media(prefers-reduced-motion:reduce){#limite-ia:target{animation:none;background:rgba(21,234,158,.12)}}
+/* oferta de fundador: acima dos planos */
+.fund{display:grid;grid-template-columns:1.15fr .85fr;gap:28px 40px;align-items:start;background:linear-gradient(150deg,rgba(21,234,158,.10),rgba(255,255,255,.02) 60%);border:1.5px solid rgba(21,234,158,.45);border-radius:var(--radius-lg);padding:32px;box-shadow:0 0 0 6px rgba(21,234,158,.06);margin-bottom:34px}
+@media(max-width:900px){.fund{grid-template-columns:1fr;padding:24px 20px}}
+.fund h2{margin:4px 0 10px}
+.fund-sub{color:var(--muted);font-size:16px;margin-bottom:12px}
+.fund-list{list-style:none;display:grid;gap:12px}
+.fund-list li{position:relative;padding-left:30px;color:#DCEFF5;font-size:16px;line-height:1.45}
+.fund-list li::before{content:"✓";position:absolute;left:0;top:1px;width:20px;height:20px;border-radius:50%;background:var(--grad);color:var(--grad-ink);font-size:12px;font-weight:700;display:grid;place-items:center}
+.fund-list b{color:#fff}
+.fund-r{display:grid;gap:14px}
+.fund-why{font-size:15px;color:var(--muted);line-height:1.5;background:rgba(4,18,27,.35);border-radius:12px;padding:14px 16px}
+.fund-why b{color:#fff}
+.fund .vagas{margin-top:0}
+.fund .btn{width:100%}
+.fund-after{font-size:13px;color:var(--muted-dark);line-height:1.45}
 </style>
 <!-- voltaram do site anterior: preview no WhatsApp/Twitter, ícone do iPhone, cor da barra e referrer -->
 <link rel="apple-touch-icon" href="/assets/img/icon-512.png">
@@ -979,8 +999,27 @@ body.tm-open{overflow:hidden}
 <section class="preco crest" style="--crest:var(--navy)" id="preco" data-say="Sem fidelidade. Se eu não entregar, você cancela.">
   <div class="wrap">
     <div class="offer-bar rv"><img src="/assets/img/ein-lockup.png" alt="EIN, Encontro Internacional de Natação"><span class="label" style="margin:0;color:var(--muted)">Lançamento oficial · 15–17 de outubro · Senac Santo Amaro, SP</span></div>
-    <h2 class="rv">Trave o preço agora. <em>Ele nunca mais sobe.</em></h2>
-    <p class="lead rv">Já vem com o uso da IA incluído por 12 meses<a class="ast" href="#limite-ia" aria-label="ver o limite de uso da IA">*</a>. Você não paga nada além da mensalidade para ela atender. As 20 primeiras escolas até 31 de outubro ainda travam o preço enquanto forem clientes e têm 30 dias de garantia.</p>
+    <div class="fund rv">
+      <div class="fund-l">
+        <span class="label">Oferta de lançamento · EIN 2026</span>
+        <h2>Seja uma das <em>20 escolas fundadoras.</em></h2>
+        <p class="fund-sub">Quem entrar até 31 de outubro garante:</p>
+        <ul class="fund-list">
+          <li><b>Preço congelado.</b> O valor do seu plano hoje (R$ 597/mês no Escola) continua o mesmo enquanto você for cliente, sem os reajustes da mensalidade.</li>
+          <li><b>12 meses de IA incluídos.</b> 6 milhões de tokens de conversa por mês<a class="ast" href="#limite-ia" aria-label="ver o limite de uso da IA">*</a>.</li>
+          <li><b>Reunião de implantação com a nossa equipe.</b> A gente configura junto com você e tira as dúvidas da sua equipe.</li>
+        </ul>
+      </div>
+      <div class="fund-r">
+        <p class="fund-why"><b>Por que só 20?</b> Cada escola fundadora recebe acompanhamento de perto, e manter esse preço tem um custo para a gente. Com 20 escolas, damos conta das duas coisas.</p>
+        <div class="vagas">
+          <div><b id="vagasT">19 de 20 vagas disponíveis</b><br><small>até 31/10/2026</small></div>
+          <div class="bar" id="vagasB"><i id="vagasBar" style="width:5%"></i></div>
+        </div>
+        <a class="btn btn-primary" data-evt="clique_cadastro" data-loc="oferta_fundador" href="https://app.wasfit.com.br/">Garantir minha vaga de fundador</a>
+        <p class="fund-after">Depois de 31/10, a mensalidade passa a ter reajustes e os tokens da IA passam a ser cobrados à parte.</p>
+      </div>
+    </div>
 
     <div class="price-grid">
       <div class="plan hi rv">
@@ -1002,10 +1041,6 @@ body.tm-open{overflow:hidden}
           <div class="units"><button type="button" id="uMinus" aria-label="menos uma unidade">−</button><output id="uOut">2 unidades</output><button type="button" id="uPlus" aria-label="mais uma unidade">+</button></div>
           <div class="impl">R$ 997 para 2 unidades, + R$ 400 por unidade adicional.</div><div class="impl"><b>Sem implantação. Créditos da IA inclusos por 12 meses, na conta da rede<a class="ast" href="#limite-ia" aria-label="ver o limite de uso da IA">*</a>.</b></div>
           <a class="btn btn-ghost" data-evt="clique_plano" data-plano="rede" data-loc="preco" href="https://app.wasfit.com.br/">Começar 7 dias grátis · Rede</a>
-        </div>
-        <div class="vagas rv">
-          <div><b id="vagasT">Preço de fundador · 20 primeiras escolas</b><br><small>Preço travado enquanto for cliente · 30 dias de garantia · até 31/10/2026</small></div>
-          <div class="bar" id="vagasB" hidden><i id="vagasBar"></i></div>
         </div>
       </div>
     </div>
@@ -1233,7 +1268,7 @@ body.tm-open{overflow:hidden}
   document.getElementById('uPlus').onclick=function(){if(units<12){units++;render()}};
   render();
   /* vagas: /vagas.json {"restam":17} editável sem deploy */
-  if(location.protocol!=='file:')fetch('/vagas.json',{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){var n=Math.max(0,Math.min(20,parseInt(j.restam,10)));if(!isNaN(n)&&n<20){document.getElementById('vagasT').textContent=n?'Restam '+n+' de 20 vagas':'Vagas de fundador esgotadas';document.getElementById('vagasB').hidden=false;document.getElementById('vagasBar').style.width=((20-n)/20*100)+'%'}}).catch(function(){});
+  if(location.protocol!=='file:')fetch('/vagas.json',{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){var n=Math.max(0,Math.min(20,parseInt(j.restam,10)));if(!isNaN(n)){document.getElementById('vagasT').textContent=n?n+' de 20 vagas disponíveis':'Vagas de fundador esgotadas';document.getElementById('vagasBar').style.width=((20-n)/20*100)+'%'}}).catch(function(){});
   /* reveal + mascote */
   var secs=document.querySelectorAll('section[id]'),links=document.querySelectorAll('.ruler a');var fx=document.getElementById('waviFx'),say=document.getElementById('waviSay');
   /* No mobile o balao so vive enquanto a faixa embaixo dele estiver livre (as ondas entre secoes).
