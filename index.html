@@ -671,6 +671,19 @@ body.tm-open{overflow:hidden}
 .fund .vagas{margin-top:0}
 .fund .btn{width:100%}
 .fund-after{font-size:13px;color:var(--muted-dark);line-height:1.45}
+/* precos no celular: linha do EIN compacta, caixas alinhadas, contador e botoes em uma linha */
+@media(max-width:560px){
+  .offer-bar{flex-wrap:nowrap;gap:12px;align-items:center;margin-bottom:18px}
+  .offer-bar img{height:26px;flex:none}
+  .offer-bar .label{font-size:10.5px;letter-spacing:.06em;line-height:1.45}
+  .fund-r{gap:12px}
+  .fund-why,.fund .vagas{padding:14px 16px;border-radius:12px}
+  .fund .vagas{gap:10px}
+  .fund .vagas b{font-size:17px;line-height:1.2}
+  .fund .btn,#preco .plan .btn{font-size:15px;padding:15px 10px;letter-spacing:0}
+  .fund-list li{font-size:15.5px}
+}
+@media(max-width:380px){.fund-minha{display:none}}
 </style>
 <!-- voltaram do site anterior: preview no WhatsApp/Twitter, ícone do iPhone, cor da barra e referrer -->
 <link rel="apple-touch-icon" href="/assets/img/icon-512.png">
@@ -1016,7 +1029,7 @@ body.tm-open{overflow:hidden}
           <div><b id="vagasT">19 de 20 vagas disponíveis</b><br><small>até 31/10/2026</small></div>
           <div class="bar" id="vagasB"><i id="vagasBar" style="width:5%"></i></div>
         </div>
-        <a class="btn btn-primary" data-evt="clique_cadastro" data-loc="oferta_fundador" href="https://app.wasfit.com.br/">Garantir minha vaga de fundador</a>
+        <a class="btn btn-primary" data-evt="clique_cadastro" data-loc="oferta_fundador" href="https://app.wasfit.com.br/"><span>Garantir <span class="fund-minha">minha </span>vaga de fundador</span></a>
         <p class="fund-after">Depois de 31/10, a mensalidade passa a ter reajustes e os tokens da IA passam a ser cobrados à parte.</p>
       </div>
     </div>
