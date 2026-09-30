@@ -6,7 +6,7 @@
 <!-- CSP também vai por cabeçalho (.htaccess/_headers/netlify.toml). Esta <meta> é a única
      proteção no GitHub Pages, que não lê aqueles arquivos. Os hashes são dos <script>
      inline DESTA página: se editar qualquer um deles, recalcule. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'sha256-Hg1a4n1Ywa1JbUXFk9h5HvqunCRBdX+SGUEdU36X3bc=' 'sha256-djPdT5J1kuWFwawDhtbzz0YHt/63i3CUBG3CyUjLa4c=' 'sha256-Du+OJKJSbdUgz5nrHeWWINvez6XKDDU/tyj/5c2uvwo=' 'sha256-c9rRax9D57fLqXzv61Ch392ImVY3VQHrNKcuah7lC2o='; connect-src 'self' https://script.google.com https://v1.api.wasfit.com.br; media-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'sha256-Hg1a4n1Ywa1JbUXFk9h5HvqunCRBdX+SGUEdU36X3bc=' 'sha256-djPdT5J1kuWFwawDhtbzz0YHt/63i3CUBG3CyUjLa4c=' 'sha256-Du+OJKJSbdUgz5nrHeWWINvez6XKDDU/tyj/5c2uvwo=' 'sha256-DLpywlajYWu4B1979uK+fhUDSwIWIOj33pJ1F4TzEPA='; connect-src 'self' https://script.google.com https://v1.api.wasfit.com.br; media-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests">
 <!-- sem cadeado nunca: quem chega por http:// vai para https:// (o Cloudflare ainda nao redireciona sozinho) -->
 <script>if(location.protocol==='http:'&&/(^|\.)wasfit\.com\.br$/.test(location.hostname))location.replace('https:'+location.href.slice(5));</script>
 <title>WasFit · a IA de WhatsApp que fala a língua da sua escola de natação</title>
@@ -632,6 +632,12 @@ body.tm-open{overflow:hidden}
 /* o "Responder rapido" comecava na mesma cor do fim da prova: a onda sumia e ficava um buraco */
 .hist{background:linear-gradient(180deg,var(--navy) 0,var(--navy) 30%,var(--surface-2) 100%);padding-top:100px}
 @media(max-width:720px){.hist{padding-top:76px}}
+.mc-log{display:flex;flex-direction:column;gap:6px;min-height:230px}
+.mc-log .mc.out{max-width:88%}
+.mc-who{display:block;font-size:12px;color:#9FFFD6;margin-bottom:2px}
+.mc-dig{opacity:.7;font-style:italic}
+.mc b{font-weight:600}
+@media(max-width:560px){.mock .mock-2{grid-template-columns:1fr}.mc-log{min-height:260px}}
 </style>
 <!-- voltaram do site anterior: preview no WhatsApp/Twitter, ícone do iPhone, cor da barra e referrer -->
 <link rel="apple-touch-icon" href="/assets/img/icon-512.png">
@@ -913,14 +919,13 @@ body.tm-open{overflow:hidden}
       </div>
       <div class="mock rv" id="mock">
         <div class="mock-h"><span>Experimente: preencha como se fosse a sua escola</span><i>ao vivo</i></div>
-        <div class="mock-f"><label for="mEscola">Nome da escola</label><input class="in" id="mEscola" value="Acqua Vida Natação" maxlength="40"></div>
-        <div class="mock-2"><div class="mock-f"><label for="mPlano">Plano 2x/semana</label><input class="in" id="mPlano" value="250" inputmode="numeric" maxlength="5"></div><div class="mock-f"><label for="mHora">Horário com vaga</label><input class="in" id="mHora" value="Ter/Qui 17h" maxlength="24"></div></div>
-        <div class="mock-f"><label for="mTouca">Regra de troca de touca</label><input class="in" id="mTouca" value="quando a professora valida os objetivos do nível" maxlength="80"></div>
+        <div class="mock-2"><div class="mock-f"><label for="mEscola">Nome da escola</label><input class="in" id="mEscola" value="Acqua Vida Natação" maxlength="40"></div><div class="mock-f"><label for="mIa">Nome da sua IA</label><input class="in" id="mIa" value="Polwerine" maxlength="20"></div></div>
+        <div class="mock-f"><label for="mDif">Diferencial da escola</label><input class="in" id="mDif" value="piscina aquecida e turmas de até 6 crianças" maxlength="80"></div>
+        <div class="mock-2"><div class="mock-f"><label for="mPlano">Plano 2x/semana (R$)</label><input class="in" id="mPlano" value="250" inputmode="numeric" maxlength="5"></div><div class="mock-f"><label for="mHora">Horários com vaga</label><input class="in" id="mHora" value="Ter/Qui 17h20, Ter/Qui 18h40" maxlength="60"></div></div>
         <div class="mock-chat">
-          <div class="mc-h">Escolha a pergunta do pai. A IA responde com os seus dados.</div>
-          <div class="chips"><button type="button" class="chip on" data-q="medo">tem medo de água</button><button type="button" class="chip" data-q="touca">por que não trocou de touca?</button><button type="button" class="chip" data-q="cancel">quero cancelar</button></div>
-          <div class="mc in" id="mcIn"></div>
-          <div class="mc out" id="mcOut"></div>
+          <div class="mc-h">Escolha a mensagem do pai. A IA responde com os seus dados.</div>
+          <div class="chips"><button type="button" class="chip on" data-q="novo">nunca fez natação</button><button type="button" class="chip" data-q="horario">quais horários têm vaga?</button><button type="button" class="chip" data-q="touca">qual a próxima touca?</button><button type="button" class="chip" data-q="cancel">quero cancelar</button></div>
+          <div class="mc-log" id="mcLog" aria-live="polite"></div>
           <div class="mc sys" id="mcSys"></div>
         </div>
         <div class="mock-c"><div class="ok">✓ WhatsApp</div><div class="ok">✓ EVO</div></div>
@@ -1269,23 +1274,46 @@ body.tm-open{overflow:hidden}
   var rF=document.getElementById('rFill'),rD=document.getElementById('rDiver'),rIds=['topo','problema','prova','quem','preco','faq'];function rul(){if(!rF)return;var y=scrollY+innerHeight*.4,tops=rIds.map(function(id){var e=document.getElementById(id);return e.getBoundingClientRect().top+scrollY}),n=tops.length-1,p=0;if(y>=tops[n]){var end=document.documentElement.scrollHeight;p=1}else{for(var i=0;i<n;i++){if(y<tops[i+1]){p=(i+Math.max(0,(y-tops[i])/(tops[i+1]-tops[i])))/n;break}}}p=Math.max(0,Math.min(1,p));rF.style.height=(p*100)+'%';rD.style.top=(p*100)+'%'}window.addEventListener('scroll',rul,{passive:true});rul();
   
   /* mock interativo */
-  var mE=document.getElementById('mEscola'),mP=document.getElementById('mPlano'),mH=document.getElementById('mHora'),mT=document.getElementById('mTouca'),mO=document.getElementById('mcOut'),mI=document.getElementById('mcIn'),mS=document.getElementById('mcSys'),mq='medo';
+  var mE=document.getElementById('mEscola'),mA=document.getElementById('mIa'),mD=document.getElementById('mDif'),mP=document.getElementById('mPlano'),mH=document.getElementById('mHora'),mL=document.getElementById('mcLog'),mS=document.getElementById('mcSys'),mq='novo',mRun=0;
+  /* conversas tiradas de atendimentos reais (Acqua Republica, 09/2026). Cada item: ['p'|'ia', texto]; **x** = negrito */
   var Q={
-    medo:{q:'boa noite! meu filho tem 4 anos e morre de medo de água. tem como?',
-      a:function(e,p,h,t){return 'Boa noite! Tem sim, e é bem comum nessa idade. Aqui na '+e+' ele começa na adaptação: turma pequena, professora dentro da água, sem pressa para colocar o rosto. A troca de touca só acontece '+t+'. Tenho vaga '+h+(p?', R$ '+p+'/mês':'')+'. Quer que eu reserve uma experimental para ele conhecer a piscina?'},
-      s:'22:55 · sem resposta → etiqueta Em Espera. Amanhã a recepção retoma.'},
-    touca:{q:'oi, minha filha está na mesma touca há 3 meses. por que ainda não trocou?',
-      a:function(e,p,h,t){return 'Oi! Boa pergunta. Aqui na '+e+' a troca acontece '+t+', não por tempo de turma. Vou verificar com a professora quais objetivos ainda faltam para ela e te retorno por aqui. Quer que eu já agende uma conversa de 10 minutos com a coordenação?'},
-      s:'Registrado: dúvida pedagógica → encaminhada à coordenação. Sem resposta perdida.'},
-    cancel:{q:'quero cancelar a matrícula do meu filho',
-      a:function(e,p,h,t){return 'Entendi, e obrigado por avisar por aqui. Antes de eu encaminhar, posso te perguntar o motivo? Se for horário, tenho vaga '+h+'. Se for outra coisa, a '+e+' tem opções de pausa e reposição. Me conta e eu já resolvo ou passo para a coordenação com tudo anotado.'},
-      s:'Etiqueta Retenção → a coordenação vê o pedido com o motivo antes de virar cancelamento.'}
+    novo:function(d){return{m:[['p','Boa noite! Minha filha tem 5 anos e nunca fez natação. Como funciona?'],
+      ['ia','Boa noite! Eu sou '+d.ia+', da consultoria aquática da **'+d.e+'** 💚'],
+      ['ia','Que legal que você tá pensando em natação pra sua filha de 5 anos!'],
+      ['ia','Aqui a gente tem **'+d.dif+'**.'],
+      ['ia','O que te motivou a buscar natação pra ela agora?']],
+      s:'A IA entende o motivo antes de falar de preço. Sem resposta → etiqueta Em Espera.'}},
+    horario:function(d){var hs=d.h.split(/\s*[,;·]\s*/).filter(Boolean).slice(0,3),vg=[2,3,1],l=hs.map(function(x,i){return '**'+x+'** · '+vg[i%3]+(vg[i%3]>1?' vagas':' vaga')}).join('\n');
+      return{m:[['p','Legal! Mas quais são os horários?'],
+      ['ia','Pra turma dela, estes horários têm vaga:'],
+      ['ia',l||'**Ter/Qui 17h20** · 2 vagas'],
+      ['ia',(d.p?'Plano 2x por semana: **R$ '+d.p+'/mês**. ':'')+'Qual encaixa melhor na rotina de vocês? 😊']],
+      s:'Horários e vagas direto do seu EVO, em tempo real.'}},
+    touca:function(d){return{m:[['p','Qual é a próxima turma dele se passar? Ele está na touca amarela.'],
+      ['ia','Se ele está na touca amarela, está no nível **Bebê III**.'],
+      ['ia','A próxima turma seria **Adaptação**, com a touca laranja. O professor confirma a mudança na próxima avaliação 😊']],
+      s:'Dúvida de aluno resolvida sem ocupar a recepção.'}},
+    cancel:function(d){return{m:[['p','Quero cancelar a matrícula do meu filho.'],
+      ['ia','Poxa, que pena! Posso te perguntar o motivo?'],
+      ['p','Mudou o horário do meu trabalho.'],
+      ['ia','Entendi. Antes de cancelar: dá pra **trancar a matrícula** por um período e ele volta depois, sem começar do zero.'],
+      ['ia','Vou te passar para a nossa equipe, que finaliza isso com você 💚']],
+      s:'Motivo registrado → a equipe assume a conversa com tudo anotado.'}}
   };
-  function mock(){if(!mO)return;var e=(mE.value||'a nossa escola').trim(),p=parseInt(mP.value,10),h=(mH.value||'terça e quinta').trim(),t=(mT.value||'quando a professora valida os objetivos do nível').trim(),k=Q[mq];
-    mO.style.opacity=.4;setTimeout(function(){mI.textContent=k.q;mO.textContent=k.a(e,isNaN(p)?'':p.toLocaleString('pt-BR'),h,t);mS.textContent=k.s;mO.style.opacity=1},150)}
-  [mE,mP,mH,mT].forEach(function(i){if(i)i.addEventListener('input',mock)});
-  document.querySelectorAll('.chip').forEach(function(c){c.addEventListener('click',function(){document.querySelectorAll('.chip').forEach(function(x){x.classList.remove('on')});c.classList.add('on');mq=c.getAttribute('data-q');mock();window.dataLayer.push({event:'mock_pergunta',pergunta:mq})})});
-  mock();
+  function mNodes(t,el){t.split('**').forEach(function(x,i){if(!x)return;var n=i%2?document.createElement('b'):document.createTextNode(x);if(i%2)n.textContent=x;el.appendChild(n)})}
+  function mBolha(it,first){var d=document.createElement('div');d.className='mc '+(it[0]==='p'?'in':'out');if(it[0]==='ia'&&first){var h=document.createElement('strong');h.className='mc-who';h.textContent=mDados().ia+' - IA:';d.appendChild(h)}it[1].split('\n').forEach(function(ln,i){if(i)d.appendChild(document.createElement('br'));mNodes(ln,d)});return d}
+  function mDados(){var ia=(mA.value||'Polwerine').trim(),p=parseInt(mP.value,10);
+    return{e:(mE.value||'nossa escola').trim(),ia:ia,dif:(mD.value||'piscina aquecida').trim(),p:isNaN(p)?'':p.toLocaleString('pt-BR'),h:(mH.value||'').trim()}}
+  var mCalmo=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
+  function mock(anima){if(!mL)return;var run=++mRun,k=Q[mq](mDados()),prev=null;mL.textContent='';mS.textContent='';
+    if(!anima||mCalmo){k.m.forEach(function(it){mL.appendChild(mBolha(it,it[0]==='ia'&&prev!=='ia'));prev=it[0]});mS.textContent=k.s;return}
+    var i=0;(function prox(){if(run!==mRun)return;if(i>=k.m.length){mS.textContent=k.s;return}var it=k.m[i++],first=it[0]==='ia'&&prev!=='ia';prev=it[0];
+      if(it[0]==='p'){mL.appendChild(mBolha(it,false));setTimeout(prox,450);return}
+      var t=document.createElement('div');t.className='mc out mc-dig';t.textContent='digitando…';mL.appendChild(t);
+      setTimeout(function(){if(run!==mRun)return;mL.replaceChild(mBolha(it,first),t);setTimeout(prox,250)},Math.min(1100,350+it[1].length*9))})()}
+  [mE,mA,mD,mP,mH].forEach(function(i){if(i)i.addEventListener('input',function(){mock(false)})});
+  document.querySelectorAll('.chip').forEach(function(c){c.addEventListener('click',function(){document.querySelectorAll('.chip').forEach(function(x){x.classList.remove('on')});c.classList.add('on');mq=c.getAttribute('data-q');mock(true);window.dataLayer.push({event:'mock_pergunta',pergunta:mq})})});
+  mock(false);
   document.querySelectorAll('.mock input').forEach(function(i){i.addEventListener('focus',function(){window.dataLayer.push({event:'mock_interacao',campo:i.id})},{once:true})});
   /* ROI interativo */
   var rT=document.getElementById('rTicket'),rM=document.getElementById('rMat');
