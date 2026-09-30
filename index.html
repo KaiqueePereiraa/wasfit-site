@@ -518,7 +518,7 @@ body.tm-open{overflow:hidden}
 
 /* regua: o texto das secoes comeca em (largura-1120)/2+20. Entre 1320 e 1419 px (inclui o notebook de 1366)
    os nomes "metodologia", "o problema"... invadiam o texto: ali a regua mostra so os numeros. */
-@media(max-width:1419px){.ruler a span{display:none}}
+@media(max-width:1459px){.ruler a span{display:none}}
 /* ===== Ajuste de narrativa (29/09): tese "responder e so o comeco", follow-up humano, Raio-X depois da demo, IAs por jornada ===== */
 .hist{padding:120px 0 104px;background:linear-gradient(180deg,var(--navy-deep) 0,var(--navy) 30%,var(--surface-2) 100%)}
 @media(max-width:720px){.hist{padding:84px 0 72px}}
@@ -638,6 +638,19 @@ body.tm-open{overflow:hidden}
 .mc-dig{opacity:.7;font-style:italic}
 .mc b{font-weight:600}
 @media(max-width:560px){.mock .mock-2{grid-template-columns:1fr}.mc-log{min-height:260px}}
+/* fundador: cartao igual ao da MGB, com a foto ocupando a coluna inteira da esquerda */
+.founder{align-items:stretch;gap:0;background:rgba(4,18,27,.45);border-radius:var(--radius);overflow:hidden}
+.founder picture{flex:0 0 132px;display:block}
+.founder picture img,.founder>img{width:100%;height:100%;min-height:100%;border-radius:0;border:0;object-fit:cover;object-position:50% 12%}
+.founder>div{padding:16px 18px;align-self:center}
+@media(max-width:560px){.founder picture{flex-basis:118px}.founder>div{padding:14px 14px}}
+/* quem somos: texto | foto das unidades; embaixo, Felipe e MGB lado a lado, mesma altura */
+.quem .wrap{align-items:start}
+.quem .photo{align-self:center}
+.quem-cards{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.quem-cards .founder,.quem-cards .seal{margin-top:0}
+.quem-cards .seal{padding:18px 20px}
+@media(max-width:860px){.quem-cards{grid-template-columns:1fr;gap:14px}}
 </style>
 <!-- voltaram do site anterior: preview no WhatsApp/Twitter, ícone do iPhone, cor da barra e referrer -->
 <link rel="apple-touch-icon" href="/assets/img/icon-512.png">
@@ -670,7 +683,7 @@ body.tm-open{overflow:hidden}
   <a href="#topo" data-sec="topo" style="top:0%"><b>0 m</b><span>superfície</span></a>
   <a href="#problema" data-sec="problema" style="top:20%"><b>2,5 m</b><span>o problema</span></a>
   <a href="#prova" data-sec="prova" style="top:40%"><b>5 m</b><span>prova real</span></a>
-  <a href="#quem" data-sec="quem" style="top:60%"><b>7,5 m</b><span>quem construiu</span></a>
+  <a href="#quem" data-sec="quem" style="top:60%"><b>7,5 m</b><span>quem somos</span></a>
   <a href="#preco" data-sec="preco" style="top:80%"><b>10 m</b><span>preço</span></a>
   <a href="#faq" data-sec="faq" style="top:100%"><b>12 m</b><span>perguntas</span></a>
 </nav>
@@ -849,14 +862,16 @@ body.tm-open{overflow:hidden}
       <h2>Ela já vem pronta <em>porque a gente já usa</em></h2>
       <p>São onze anos operando fitness e natação. O WasFit nasceu porque a gente precisava resolver o próprio problema: lead perdido no fim de semana, recepção afogada no sábado de matrícula, aluno que some e ninguém percebe. Foram dois anos preenchendo esses mesmos campos, testando e corrigindo a IA em duas escolas de natação, uma academia e um cross. É por isso que ela já chega pronta: você não compra uma ferramenta vazia, compra a que a gente já usa.</p>
       
-      <div class="founder rv">
-        <img src="/assets/img/felipe.jpg" alt="Felipe, fundador da WasFit" data-hide-se-faltar>
-        <div><b>Felipe Oliveira · fundador</b><p>11 anos operando fitness e natação no Espírito Santo. Se você precisar de gente, é quem está do outro lado do WhatsApp comercial. Para o dia a dia, a IA de suporte responde 24 h e a plataforma tem vídeos curtos de cada tela.</p></div>
-      </div>
-      <div class="seal"><img src="/assets/img/mgb-credenciado.png" alt="Estabelecimento credenciado Metodologia Gustavo Borges"><small>As nossas escolas são credenciadas na Metodologia Gustavo Borges e rodam no EVO. A IA foi treinada dentro delas. Se a sua escola usa outra metodologia ou outro sistema, ela aprende o seu vocabulário na primeira semana.</small></div>
     </div>
     <div class="photo rv">
       <picture><source srcset="/assets/img/unidade-positiva.webp" type="image/webp"><img src="/assets/img/unidade-positiva.jpg" alt="Colagem de fotos de uma das nossas unidades: piscina coberta e aquecida, aula com crianças de touca, fachada e mascotes da metodologia na parede" loading="lazy" decoding="async"></picture>
+    </div>
+    <div class="quem-cards">
+      <div class="founder rv">
+        <picture><source srcset="/assets/img/felipe.webp" type="image/webp"><img src="/assets/img/felipe.jpg" width="360" height="540" alt="Felipe Oliveira, fundador da WasFit" loading="lazy" decoding="async" data-hide-se-faltar></picture>
+        <div><b>Felipe Oliveira · fundador</b><p>11 anos operando fitness e natação no Espírito Santo. Se você precisar de gente, é quem está do outro lado do WhatsApp comercial. Para o dia a dia, a IA de suporte responde 24 h e a plataforma tem vídeos curtos de cada tela.</p></div>
+      </div>
+      <div class="seal rv"><img src="/assets/img/mgb-credenciado.png" alt="Estabelecimento credenciado Metodologia Gustavo Borges"><small>As nossas escolas são credenciadas na Metodologia Gustavo Borges e rodam no EVO. A IA foi treinada dentro delas. Se a sua escola usa outra metodologia ou outro sistema, ela aprende o seu vocabulário na primeira semana.</small></div>
     </div>
   </div>
 </section>
