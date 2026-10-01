@@ -684,6 +684,13 @@ body.tm-open{overflow:hidden}
   .fund-list li{font-size:15.5px}
 }
 @media(max-width:380px){.fund-minha{display:none}}
+.fund-preco{display:inline-flex;align-items:baseline;gap:6px;margin:0 2px;white-space:nowrap}
+.fund-preco s{color:#C3D0DC;font-weight:600;text-decoration-thickness:1.5px;text-decoration-color:#FF6B6B}
+.fund-preco strong{font-family:var(--display);text-transform:uppercase;font-size:13px;letter-spacing:.04em;color:var(--grad-ink);background:var(--grad);padding:2px 8px;border-radius:6px}
+.faq details .faq-list{list-style:none;display:grid;gap:10px;margin:0 0 16px;max-width:820px}
+.faq-list li{position:relative;padding-left:20px;color:var(--muted);line-height:1.5}
+.faq-list li::before{content:"";position:absolute;left:2px;top:.62em;width:7px;height:7px;border-radius:50%;background:var(--teal)}
+.faq-list b{color:#fff}
 </style>
 <!-- voltaram do site anterior: preview no WhatsApp/Twitter, ícone do iPhone, cor da barra e referrer -->
 <link rel="apple-touch-icon" href="/assets/img/icon-512.png">
@@ -1020,7 +1027,7 @@ body.tm-open{overflow:hidden}
         <ul class="fund-list">
           <li><b>Preço congelado.</b> O valor do seu plano hoje (R$ 597/mês no Escola) continua o mesmo enquanto você for cliente, sem os reajustes da mensalidade.</li>
           <li><b>12 meses de IA incluídos.</b> 6 milhões de tokens de conversa por mês<a class="ast" href="#limite-ia" aria-label="ver o limite de uso da IA">*</a>.</li>
-          <li><b>Reunião de implantação com a nossa equipe.</b> A gente configura junto com você e tira as dúvidas da sua equipe.</li>
+          <li><b>Reunião de implantação com a nossa equipe</b> <span class="fund-preco"><s>R$ 1.500</s> <strong>grátis</strong></span> A gente conecta o seu EVO, configura os disparos automáticos e tira as dúvidas da sua equipe.</li>
         </ul>
       </div>
       <div class="fund-r">
@@ -1052,7 +1059,7 @@ body.tm-open{overflow:hidden}
           <h3>Rede</h3><div class="sub">Para 2 ou mais unidades · tudo do Escola, em cada unidade, com painel unificado</div>
           <div class="price"><b id="redePrice">R$ 997</b><span>/mês</span></div>
           <div class="units"><button type="button" id="uMinus" aria-label="menos uma unidade">−</button><output id="uOut">2 unidades</output><button type="button" id="uPlus" aria-label="mais uma unidade">+</button></div>
-          <div class="impl">R$ 997 para 2 unidades, + R$ 400 por unidade adicional.</div><div class="impl"><b>Sem implantação. Créditos da IA inclusos por 12 meses, na conta da rede<a class="ast" href="#limite-ia" aria-label="ver o limite de uso da IA">*</a>.</b></div>
+          <div class="impl">R$ 997 para 2 unidades, + R$ 400 por unidade adicional.</div><div class="impl"><b>Créditos da IA inclusos por 12 meses, na conta da rede<a class="ast" href="#limite-ia" aria-label="ver o limite de uso da IA">*</a>.</b></div>
           <a class="btn btn-ghost" data-evt="clique_plano" data-plano="rede" data-loc="preco" href="https://app.wasfit.com.br/">Começar 7 dias grátis · Rede</a>
         </div>
       </div>
@@ -1076,6 +1083,14 @@ body.tm-open{overflow:hidden}
       <details><summary>Serve para centro aquático e hidroginástica?</summary><p>Sim. A IA foi treinada em escola de natação, mas o atendimento, a venda de experimental, a cobrança e a rematrícula funcionam do mesmo jeito para hidro e para turmas de adulto. No ajuste da primeira semana ela aprende o vocabulário da sua operação.</p></details>
       <details><summary>Por que dois números? Preciso trocar o meu?</summary><p>Não precisa trocar. Você mantém o número que os seus alunos já conhecem para a conversa do dia a dia. O segundo é um número verificado e protegido pela API oficial da Meta, usado só para comunicação em escala (campanhas, avisos, rematrícula), porque é o canal que a Meta garante e que não coloca em risco o número da recepção. Os dois aparecem no mesmo painel, para a mesma equipe.</p></details>
       <details><summary>O que está incluído no uso da IA?</summary><p>6 milhões de tokens de conversa por mês, por 12 meses, já dentro da mensalidade. Se chegar perto do fim, você recebe um aviso e recarrega na plataforma. Mensagens de campanha pela API oficial da Meta são cobradas pela Meta, à parte.</p></details>
+      <details><summary>O que é a reunião de implantação?</summary><p>É uma reunião por vídeo com a nossa equipe, depois que você assina, para deixar tudo funcionando com acompanhamento. Nela a gente:</p>
+        <ul class="faq-list">
+          <li><b>Conecta o seu EVO</b> e mapeia as atividades da escola (natação infantil, adulto, hidro…), para a IA saber quem é aluno de quê.</li>
+          <li><b>Mostra os disparos pelo EVO:</b> cobrança, vencimento, rematrícula, ausência e aniversário. O que cada um faz e quando sai.</li>
+          <li><b>Explica o número oficial da Meta:</b> o segundo número, verificado, usado nas mensagens em escala, separado do WhatsApp do dia a dia.</li>
+          <li><b>Tira as dúvidas da sua equipe</b> antes de a IA começar a atender.</li>
+        </ul>
+        <p>A implantação acompanhada é um serviço opcional de R$ 1.500. <b style="color:#fff">Para as 20 escolas fundadoras, ela sai de graça.</b> Se preferir fazer sozinho, o cadastro guiado continua sem taxa.</p></details>
       <details><summary>Como funcionam os 7 dias grátis?</summary><p>Você cria a conta sem cartão, preenche os dados, conecta o WhatsApp e usa a IA de verdade por sete dias, com as suas famílias. No fim, se quiser continuar, coloca o pagamento. Se não quiser, a conta encerra sozinha; ninguém cobra e ninguém liga.</p></details>
       <details><summary>Posso cancelar quando quiser?</summary><p>Pode, no mês que quiser, sem multa. Não existe contrato de permanência nem taxa de implantação.</p></details>
       <details><summary>Já uso outra plataforma. Preciso começar do zero?</summary><p>Não. Você cadastra a escola, conecta o seu número e a IA começa. Se quiser trazer histórico, etiquetas ou base de outra ferramenta, a gente combina isso depois que você já estiver dentro.</p></details>
