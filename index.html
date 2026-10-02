@@ -6,7 +6,7 @@
 <!-- CSP também vai por cabeçalho (.htaccess/_headers/netlify.toml). Esta <meta> é a única
      proteção no GitHub Pages, que não lê aqueles arquivos. Os hashes são dos <script>
      inline DESTA página: se editar qualquer um deles, recalcule. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'sha256-Hg1a4n1Ywa1JbUXFk9h5HvqunCRBdX+SGUEdU36X3bc=' 'sha256-djPdT5J1kuWFwawDhtbzz0YHt/63i3CUBG3CyUjLa4c=' 'sha256-Du+OJKJSbdUgz5nrHeWWINvez6XKDDU/tyj/5c2uvwo=' 'sha256-t3mwj/gsy6/5G6NLRbLW6RZRIgAFmrieKavJc29LQgU='; connect-src 'self' https://script.google.com https://v1.api.wasfit.com.br; media-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'sha256-Hg1a4n1Ywa1JbUXFk9h5HvqunCRBdX+SGUEdU36X3bc=' 'sha256-djPdT5J1kuWFwawDhtbzz0YHt/63i3CUBG3CyUjLa4c=' 'sha256-Du+OJKJSbdUgz5nrHeWWINvez6XKDDU/tyj/5c2uvwo=' 'sha256-sYsmM6amL03kGSSe9X5HBKit8bD3VNWYDbkPaYWlI28='; connect-src 'self' https://script.google.com https://v1.api.wasfit.com.br; media-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests">
 <!-- sem cadeado nunca: quem chega por http:// vai para https:// (o Cloudflare ainda nao redireciona sozinho) -->
 <script>if(location.protocol==='http:'&&/(^|\.)wasfit\.com\.br$/.test(location.hostname))location.replace('https:'+location.href.slice(5));</script>
 <title>WasFit · a IA de WhatsApp que fala a língua da sua escola de natação</title>
@@ -1435,6 +1435,8 @@ body.tm-open{overflow:hidden}
     document.querySelectorAll('[data-agendar]').forEach(function(b){b.addEventListener('click',function(e){e.preventDefault();abrir(b.getAttribute('data-loc'))})});
     ag.querySelectorAll('[data-ag-close]').forEach(function(b){b.addEventListener('click',fechar)});
     document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!ag.hidden)fechar()});
+    /* link direto: wasfit.com.br/?agendar=1 abre esta janela (para mandar no WhatsApp, bio, campanha) */
+    if(p.get('agendar'))setTimeout(function(){abrir('link_externo')},400);
     fone.addEventListener('input',function(){
       var v=fone.value.replace(/\D/g,'');if(v.length>11&&v.indexOf('55')===0)v=v.slice(2);v=v.substring(0,11);
       if(v.length>10)v=v.replace(/^(\d{2})(\d{5})(\d{4})$/,'($1) $2-$3');else if(v.length>6)v=v.replace(/^(\d{2})(\d{4})(\d*)$/,'($1) $2-$3');else if(v.length>2)v=v.replace(/^(\d{2})(\d*)$/,'($1) $2');
