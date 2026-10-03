@@ -6,7 +6,7 @@
 <!-- CSP também vai por cabeçalho (.htaccess/_headers/netlify.toml). Esta <meta> é a única
      proteção no GitHub Pages, que não lê aqueles arquivos. Os hashes são dos <script>
      inline DESTA página: se editar qualquer um deles, recalcule. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'sha256-Hg1a4n1Ywa1JbUXFk9h5HvqunCRBdX+SGUEdU36X3bc=' 'sha256-djPdT5J1kuWFwawDhtbzz0YHt/63i3CUBG3CyUjLa4c=' 'sha256-Du+OJKJSbdUgz5nrHeWWINvez6XKDDU/tyj/5c2uvwo=' 'sha256-sYsmM6amL03kGSSe9X5HBKit8bD3VNWYDbkPaYWlI28='; connect-src 'self' https://script.google.com https://v1.api.wasfit.com.br; media-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'sha256-Hg1a4n1Ywa1JbUXFk9h5HvqunCRBdX+SGUEdU36X3bc=' 'sha256-djPdT5J1kuWFwawDhtbzz0YHt/63i3CUBG3CyUjLa4c=' 'sha256-Du+OJKJSbdUgz5nrHeWWINvez6XKDDU/tyj/5c2uvwo=' 'sha256-Yhx8bUOsVRHAjY5Mf42HyBQtq0riyEudxZCNs+nr194='; connect-src 'self' https://script.google.com https://v1.api.wasfit.com.br; media-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests">
 <!-- sem cadeado nunca: quem chega por http:// vai para https:// (o Cloudflare ainda nao redireciona sozinho) -->
 <script>if(location.protocol==='http:'&&/(^|\.)wasfit\.com\.br$/.test(location.hostname))location.replace('https:'+location.href.slice(5));</script>
 <title>WasFit · a IA de WhatsApp que fala a língua da sua escola de natação</title>
@@ -691,6 +691,14 @@ body.tm-open{overflow:hidden}
 .faq-list li{position:relative;padding-left:20px;color:var(--muted);line-height:1.5}
 .faq-list li::before{content:"";position:absolute;left:2px;top:.62em;width:7px;height:7px;border-radius:50%;background:var(--teal)}
 .faq-list b{color:#fff}
+.fund-sub-list{list-style:none;display:grid;gap:6px;margin:8px 0 6px}
+.fund-sub-list li{position:relative;padding-left:16px;font-size:15px;color:#DCEFF5;line-height:1.45}
+.fund-sub-list li::before{content:"";position:absolute;left:2px;top:.6em;width:6px;height:6px;border-radius:50%;background:var(--teal)}
+.fund-list .fund-sub-list li{padding-left:16px}
+.fund-list .fund-sub-list li::before{content:"";width:6px;height:6px;top:9px;left:2px;background:var(--teal)}
+.fund-nota{display:block;font-size:13px;color:var(--muted-dark);font-style:italic}
+.selo-ic{display:inline-block;margin-top:10px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--mint);border:1px dashed rgba(107,255,207,.5);border-radius:6px;padding:3px 8px;text-decoration:none}
+.tagbox .selo-ic{display:table;margin:0 auto 8px}
 </style>
 <!-- voltaram do site anterior: preview no WhatsApp/Twitter, ícone do iPhone, cor da barra e referrer -->
 <link rel="apple-touch-icon" href="/assets/img/icon-512.png">
@@ -803,7 +811,7 @@ body.tm-open{overflow:hidden}
 
     <ol class="hist-steps">
       <li class="rv"><div class="hs-top"><span class="hs-n">1</span><em class="hs-who bot">IA</em></div><b>O interessado chama no WhatsApp.</b><p>A IA responde, entende o que ele procura e conduz a conversa.</p></li>
-      <li class="rv"><div class="hs-top"><span class="hs-n">2</span><em class="hs-who bot">IA</em></div><b>A IA identifica o momento da oportunidade.</b><p>Se o plano foi apresentado e a pessoa ainda não decidiu, a oportunidade recebe a etiqueta certa.</p></li>
+      <li class="rv"><div class="hs-top"><span class="hs-n">2</span><em class="hs-who bot">IA</em></div><b>A IA identifica o momento da oportunidade.</b><p>Se o plano foi apresentado e a pessoa ainda não decidiu, a oportunidade recebe a etiqueta certa.</p><a class="selo-ic" href="#faq">com a Implantação Completa</a></li>
       <li class="rv"><div class="hs-top"><span class="hs-n">3</span><em class="hs-who">Kanban</em></div><b>A oportunidade aparece organizada no Kanban.</b><p>A equipe enxerga quem está esperando retorno, quem agendou experimental e quem precisa de ação humana.</p></li>
       <li class="rv"><div class="hs-top"><span class="hs-n">4</span><em class="hs-who eq">Equipe</em></div><b>A equipe entra no momento certo.</b><p>Em vez de procurar conversas perdidas no WhatsApp, a recepção sabe exatamente quem precisa ser chamado.</p></li>
     </ol>
@@ -823,7 +831,7 @@ body.tm-open{overflow:hidden}
         <div class="m out"><i class="who">IA de atendimento</i>Tenho 2x por semana, terça e quinta, às 17h ou 18h. R$ 250/mês. Qual horário funciona melhor para vocês?</div>
         <div class="gap">22:55 · a Mariana para de responder</div>
         <div class="tagbox">
-          <small>A IA identificou que a oportunidade ficou sem decisão</small>
+          <small>A IA identificou que a oportunidade ficou sem decisão</small><span class="selo-ic">com a Implantação Completa</span>
           <span class="tag y">Etiqueta aplicada · Em Espera</span>
           <p>O plano já foi apresentado. Agora a oportunidade precisa do primeiro follow-up da equipe.</p>
         </div>
@@ -1027,7 +1035,13 @@ body.tm-open{overflow:hidden}
         <ul class="fund-list">
           <li><b>Preço congelado.</b> O valor do seu plano hoje (R$ 597/mês no Escola) continua o mesmo enquanto você for cliente, sem os reajustes da mensalidade.</li>
           <li><b>12 meses de IA incluídos.</b> 6 milhões de tokens de conversa por mês<a class="ast" href="#limite-ia" aria-label="ver o limite de uso da IA">*</a>.</li>
-          <li><b>Reunião de implantação com a nossa equipe</b> <span class="fund-preco"><s>R$ 1.500</s> <strong>grátis</strong></span> A gente conecta o seu EVO, configura os disparos automáticos e tira as dúvidas da sua equipe.</li>
+          <li><b>Implantação Completa</b> <span class="fund-preco"><s>R$ 1.500</s> <strong>grátis</strong></span> Libera:
+            <ul class="fund-sub-list">
+              <li><b>Grade ao vivo do EVO:</b> turma, professor e vagas livres. Quem pergunta já vê quais turmas estão cheias.</li>
+              <li><b>Kanban automático:</b> a IA coloca as etiquetas sozinha.</li>
+              <li><b>EVO e número da Meta conectados</b> pela nossa equipe.</li>
+            </ul>
+            <span class="fund-nota">Fora da oferta, só pagando à parte.</span></li>
         </ul>
       </div>
       <div class="fund-r">
@@ -1044,7 +1058,7 @@ body.tm-open{overflow:hidden}
     <div class="price-grid">
       <div class="plan hi rv">
         <span class="rec">Recomendado para começar</span>
-        <h3>Escola</h3><div class="sub">Para escolas com 1 unidade · sem fidelidade · sem implantação</div>
+        <h3>Escola</h3><div class="sub">Para escolas com 1 unidade · sem fidelidade</div>
         <div class="price"><b>R$ 597</b><span>/mês</span></div>
         <div class="impl"><b style="color:#fff">7 dias grátis, sem cartão.</b> Depois, R$ 597/mês. <b>Uso da IA incluído por 12 meses<a class="ast" href="#limite-ia" aria-label="ver o limite de uso da IA">*</a>.</b></div>
         <ul>
@@ -1083,16 +1097,15 @@ body.tm-open{overflow:hidden}
       <details><summary>Serve para centro aquático e hidroginástica?</summary><p>Sim. A IA foi treinada em escola de natação, mas o atendimento, a venda de experimental, a cobrança e a rematrícula funcionam do mesmo jeito para hidro e para turmas de adulto. No ajuste da primeira semana ela aprende o vocabulário da sua operação.</p></details>
       <details><summary>Por que dois números? Preciso trocar o meu?</summary><p>Não precisa trocar. Você mantém o número que os seus alunos já conhecem para a conversa do dia a dia. O segundo é um número verificado e protegido pela API oficial da Meta, usado só para comunicação em escala (campanhas, avisos, rematrícula), porque é o canal que a Meta garante e que não coloca em risco o número da recepção. Os dois aparecem no mesmo painel, para a mesma equipe.</p></details>
       <details><summary>O que está incluído no uso da IA?</summary><p>6 milhões de tokens de conversa por mês, por 12 meses, já dentro da mensalidade. Se chegar perto do fim, você recebe um aviso e recarrega na plataforma. Mensagens de campanha pela API oficial da Meta são cobradas pela Meta, à parte.</p></details>
-      <details><summary>O que é a reunião de implantação?</summary><p>É uma reunião por vídeo com a nossa equipe, depois que você assina, para deixar tudo funcionando com acompanhamento. Nela a gente:</p>
+      <details><summary>O que é a Implantação Completa?</summary><p>É uma reunião por vídeo com a nossa equipe, depois que você assina, que liga duas funções da IA:</p>
         <ul class="faq-list">
-          <li><b>Conecta o seu EVO</b> e mapeia as atividades da escola (natação infantil, adulto, hidro…), para a IA saber quem é aluno de quê.</li>
-          <li><b>Mostra os disparos pelo EVO:</b> cobrança, vencimento, rematrícula, ausência e aniversário. O que cada um faz e quando sai.</li>
-          <li><b>Explica o número oficial da Meta:</b> o segundo número, verificado, usado nas mensagens em escala, separado do WhatsApp do dia a dia.</li>
-          <li><b>Tira as dúvidas da sua equipe</b> antes de a IA começar a atender.</li>
+          <li><b>Grade ao vivo do EVO:</b> a gente puxa as atividades da sua escola no EVO, e a IA passa a mostrar ao pai cada turma com o professor, as vagas livres e quantos já estão matriculados. Quem pergunta já vê quais turmas estão cheias.</li>
+          <li><b>Kanban automático:</b> a gente configura as frases que fazem a IA colocar cada etiqueta sozinha (Em Espera, Experimental Agendada…). A recepção só abre o Kanban e vê quem chamar.</li>
+          <li><b>Conexões:</b> conectamos com você o EVO e o número oficial da Meta, e damos dicas para a sua operação.</li>
         </ul>
-        <p>A implantação acompanhada é um serviço opcional de R$ 1.500. <b style="color:#fff">Para as 20 escolas fundadoras, ela sai de graça.</b> Se preferir fazer sozinho, o cadastro guiado continua sem taxa.</p></details>
+        <p>Sem ela, a WasFit entra no ar do mesmo jeito em 30 minutos: a IA usa a grade fixa que você cadastra e as etiquetas do Kanban são colocadas pela sua equipe. A Implantação Completa custa R$ 1.500. <b style="color:#fff">Para as 20 escolas fundadoras, sai de graça.</b></p></details>
       <details><summary>Como funcionam os 7 dias grátis?</summary><p>Você cria a conta sem cartão, preenche os dados, conecta o WhatsApp e usa a IA de verdade por sete dias, com as suas famílias. No fim, se quiser continuar, coloca o pagamento. Se não quiser, a conta encerra sozinha; ninguém cobra e ninguém liga.</p></details>
-      <details><summary>Posso cancelar quando quiser?</summary><p>Pode, no mês que quiser, sem multa. Não existe contrato de permanência nem taxa de implantação.</p></details>
+      <details><summary>Posso cancelar quando quiser?</summary><p>Pode, no mês que quiser, sem multa. Não existe contrato de permanência nem taxa de cadastro.</p></details>
       <details><summary>Já uso outra plataforma. Preciso começar do zero?</summary><p>Não. Você cadastra a escola, conecta o seu número e a IA começa. Se quiser trazer histórico, etiquetas ou base de outra ferramenta, a gente combina isso depois que você já estiver dentro.</p></details>
       <details><summary>Os dados da minha escola e dos alunos ficam seguros?</summary><p>Os dados são da sua escola e continuam sendo. A gente usa só para operar a ferramenta. Nada é vendido nem compartilhado com terceiros, o acesso fica restrito a quem opera a sua conta, e se um dia você sair, leva a sua base e o histórico com você.</p></details>
     </div>
@@ -1366,7 +1379,7 @@ body.tm-open{overflow:hidden}
       ['ia','Pra turma dela, estes horários têm vaga:'],
       ['ia',l||'**Ter/Qui 17h20** · 2 vagas'],
       ['ia',(d.p?'Plano 2x por semana: **R$ '+d.p+'/mês**. ':'')+'Qual encaixa melhor na rotina de vocês? 😊']],
-      s:'Horários e vagas direto do seu EVO, em tempo real.'}},
+      s:'Horários e vagas direto do seu EVO, em tempo real. Com a Implantação Completa.'}},
     touca:function(d){return{m:[['p','Qual é a próxima turma dele se passar? Ele está na touca amarela.'],
       ['ia','Se ele está na touca amarela, está no nível **Bebê III**.'],
       ['ia','A próxima turma seria **Adaptação**, com a touca laranja. O professor confirma a mudança na próxima avaliação 😊']],
