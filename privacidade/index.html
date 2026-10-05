@@ -6,9 +6,10 @@
 <!-- CSP também vai por cabeçalho (.htaccess/_headers/netlify.toml). Esta <meta> é a única
      proteção no GitHub Pages, que não lê aqueles arquivos. Os hashes são dos <script>
      inline DESTA página: se editar qualquer um deles, recalcule. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'sha256-Hg1a4n1Ywa1JbUXFk9h5HvqunCRBdX+SGUEdU36X3bc='; connect-src 'self' https://script.google.com https://v1.api.wasfit.com.br; media-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self' https://www.facebook.com; frame-src https://www.facebook.com; img-src 'self' data: https://www.facebook.com; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' https://connect.facebook.net 'sha256-Hg1a4n1Ywa1JbUXFk9h5HvqunCRBdX+SGUEdU36X3bc='; connect-src 'self' https://script.google.com https://v1.api.wasfit.com.br https://www.facebook.com https://connect.facebook.net; media-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests">
 <!-- sem cadeado nunca: quem chega por http:// vai para https:// (o Cloudflare ainda nao redireciona sozinho) -->
 <script>if(location.protocol==='http:'&&/(^|\.)wasfit\.com\.br$/.test(location.hostname))location.replace('https:'+location.href.slice(5));</script>
+<script src="/assets/js/meta-pixel.js"></script>
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Política de Privacidade · WasFit</title>
 <meta name="description" content="Como a WasFit trata os dados da sua escola e dos seus alunos, à luz da LGPD.">
@@ -40,7 +41,7 @@
 <main class="container">
   <article class="doc">
     <h1>Política de Privacidade</h1>
-    <p class="doc-meta">Vigência: 1º de setembro de 2026 · Última atualização: setembro de 2026</p>
+    <p class="doc-meta">Vigência: 1º de setembro de 2026 · Última atualização: outubro de 2026</p>
 
     <p class="doc-intro">Esta Política explica como a WasFit coleta, usa, compartilha e protege dados pessoais no fornecimento da sua plataforma de atendimento por WhatsApp para escolas de natação. Ela se aplica ao site <a href="https://wasfit.com.br">wasfit.com.br</a> e ao serviço contratado pelas escolas clientes. O tratamento observa a Lei nº 13.709/2018 (LGPD).</p>
 
@@ -82,7 +83,7 @@
     <p>Alguns dos provedores acima, em especial a Meta e ferramentas de medição, podem tratar dados fora do Brasil. Nesses casos, adotamos as salvaguardas previstas na LGPD (art. 33), como cláusulas contratuais e a verificação de que o provedor oferece grau de proteção adequado.</p>
 
     <h2>6. Cookies e tecnologias semelhantes</h2>
-    <p>O site funciona sem cookies de terceiros por padrão. Quando a medição está ativa, são usados cookies e identificadores para análise de audiência e atribuição de campanhas. Você pode bloquear cookies nas configurações do seu navegador; isso pode afetar partes não essenciais do site.</p>
+    <p>O site usa o <strong>Pixel da Meta</strong> para medir visitas e saber quais campanhas trazem interessados. Ele usa cookies e identificadores do navegador e registra ações como visitar a página, abrir ou enviar os formulários de “Testar a IA” e “Agendar raio-x”, concluir o raio-x e clicar para o WhatsApp ou para o cadastro, junto com a origem da visita (parâmetros UTM). Os dados que você digita nos formulários (nome, telefone, Instagram) <strong>não</strong> são enviados ao Pixel. Você pode bloquear cookies nas configurações do seu navegador e gerenciar anúncios da Meta nas configurações da sua conta; isso não afeta o funcionamento do site.</p>
 
     <h2>7. Por quanto tempo guardamos</h2>
     <p>Dados de contato do site são mantidos enquanto houver interesse comercial ativo e, depois, pelo prazo necessário para defesa de direitos. Dados de leads e alunos são mantidos enquanto durar o contrato da escola com a WasFit; encerrado o contrato, a escola pode exportar a base e os dados são eliminados ou anonimizados em prazo razoável, salvo obrigação legal de retenção.</p>
