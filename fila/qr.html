@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://zgsmhzgvlcfwhbhhjigw.supabase.co; script-src 'self' https://cdnjs.cloudflare.com; upgrade-insecure-requests">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QR da Fila · WasFit</title>
+<meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  @page { size: A4; margin: 0; }
+  body { display: grid; place-items: center; padding: 24px 16px; }
+  .cartaz { width: min(100%, 560px); text-align: center; padding: 40px 28px; border-radius: 28px; background: radial-gradient(500px 300px at 50% 0%, color-mix(in srgb, #16EA9E 18%, transparent), transparent 70%), linear-gradient(180deg, #14223F, #01040a); border: 1px solid var(--borda); }
+  .cartaz .marca { justify-content: center; font-size: 30px; }
+  h1 { font-size: clamp(36px, 9vw, 56px); margin: 22px 0 8px; }
+  p { color: var(--suave); font-size: 18px; margin: 0 0 26px; }
+  #qr { background: #fff; padding: 18px; border-radius: 20px; display: inline-block; }
+  #qr img, #qr canvas { display: block; width: min(320px, 70vw) !important; height: auto !important; }
+  .passos { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; margin-top: 26px; font-size: 14px; color: var(--texto); }
+  .passos span b { color: var(--lima); font-family: "JetBrains Mono", monospace; margin-right: 6px; }
+  .url { margin-top: 18px; font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--suave); word-break: break-all; }
+  .imprimir { margin-top: 20px; }
+  @media print {
+    body { background: #01040a; -webkit-print-color-adjust: exact; print-color-adjust: exact; min-height: 100vh; }
+    .imprimir { display: none; }
+    .cartaz { border: 0; }
+  }
+</style>
+</head>
+<body>
+  <div>
+    <div class="cartaz">
+      <img src="img/logo-nome.png" alt="WasFit" style="height:84px">
+      <h1>Entre na <em>fila</em></h1>
+      <img src="img/wavi.png" alt="" style="width:150px;display:block;margin:-4px auto 6px;filter:drop-shadow(0 0 20px rgba(22,234,158,.4))">
+      <p>Escaneie, deixe seus dados e circule pela feira.<br>Te chamamos no WhatsApp quando for a sua vez.</p>
+      <div id="qr"></div>
+      <div class="passos">
+        <span><b>01</b>Escaneie</span>
+        <span><b>02</b>Cadastre-se</span>
+        <span><b>03</b>Aguarde o WhatsApp</span>
+      </div>
+      <div class="url" id="url"></div>
+    </div>
+    <div style="text-align:center"><button class="imprimir" id="imprimir">Imprimir cartaz</button></div>
+  </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="js/qr.js"></script>
+</body>
+</html>

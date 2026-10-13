@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://zgsmhzgvlcfwhbhhjigw.supabase.co; script-src 'self'; upgrade-insecure-requests">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Painel da Fila · WasFit</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#01040a">
+<link rel="icon" href="img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  main { max-width: 1200px; margin: 0 auto; padding: 16px 16px 60px; }
+  .topo { display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .topo .acoes { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .topo select { width: auto; padding: 9px 12px; font-size: 14px; }
+  .topo button { padding: 9px 14px; font-size: 14px; }
+
+  .stats { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin-bottom: 16px; }
+  .stat { background: var(--cartao); border: 1px solid var(--borda); border-radius: 14px; padding: 12px 14px; }
+  .stat b { display: block; font-family: "Poppins", sans-serif; font-weight: 800; font-size: 28px; line-height: 1.1; }
+  .stat span { font-size: 12px; color: var(--suave); }
+
+  #chamar-proximo { width: 100%; font-size: 22px; padding: 20px; margin-bottom: 18px; font-family: "Poppins", sans-serif; font-weight: 800; letter-spacing: .01em; box-shadow: 0 0 40px color-mix(in srgb, #16EA9E 25%, transparent); }
+
+  .colunas { display: grid; grid-template-columns: 1.1fr 1fr; gap: 16px; align-items: start; }
+  .bloco h2 { font-size: 13px; margin: 4px 0 10px; color: var(--suave); display: flex; gap: 8px; align-items: center; }
+  .bloco h2 .n { background: var(--borda); color: var(--texto); border-radius: 999px; padding: 1px 9px; font-size: 12px; }
+  .bloco + .bloco { margin-top: 18px; }
+  .vazio { color: #5f8c99; font-size: 14px; padding: 14px; border: 1.5px dashed var(--borda); border-radius: 14px; text-align: center; }
+
+  .pessoa { background: var(--cartao); border: 1.5px solid var(--borda); border-radius: 14px; padding: 14px; margin-bottom: 10px; }
+  .pessoa.chamado { border-color: var(--amarelo); }
+  .pessoa.atrasado { border-color: var(--vermelho); background: color-mix(in srgb, var(--vermelho) 12%, var(--cartao)); }
+  .pessoa.atendendo { border-color: var(--azul); }
+  .linha1 { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+  .nome { font-weight: 800; font-size: 18px; }
+  .tempo { font-family: "JetBrains Mono", monospace; font-size: 18px; white-space: nowrap; }
+  .atrasado .tempo { color: var(--vermelho); }
+  .det { font-size: 13px; color: var(--suave); margin-top: 3px; overflow-wrap: anywhere; }
+  .det a { color: var(--azul); text-decoration: none; }
+  .tag { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 6px; background: color-mix(in srgb, var(--amarelo) 20%, transparent); color: var(--amarelo); margin-left: 6px; vertical-align: 2px; }
+  .botoes { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .botoes button { padding: 11px 14px; font-size: 15px; flex: 1 1 auto; }
+
+  .fila-item { display: grid; grid-template-columns: 38px 1fr auto; gap: 10px; align-items: center; background: var(--cartao); border: 1px solid var(--borda); border-radius: 12px; padding: 10px 12px; margin-bottom: 8px; }
+  .pos { font-family: "Poppins", sans-serif; font-weight: 800; font-size: 20px; color: var(--lima); text-align: center; }
+  .fila-item .nome { font-size: 16px; }
+  .fila-item .mini { display: flex; gap: 6px; }
+  .fila-item .mini button { padding: 8px 10px; font-size: 13px; }
+
+  details { margin-top: 18px; }
+  summary { cursor: pointer; color: var(--suave); font-size: 14px; padding: 8px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--borda); }
+  th { color: var(--suave); font-weight: 600; }
+  .tabela { overflow-x: auto; }
+
+  #login { max-width: 392px; margin: 12vh auto 0; padding: 0 16px; }
+  #login h1 { font-size: 30px; margin: 18px 0 16px; }
+  #login button { width: 100%; }
+  .conexao { font-size: 12px; color: var(--suave); }
+  .conexao.ruim { color: var(--vermelho); }
+  #aviso { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); background: var(--texto); color: var(--fundo); padding: 12px 18px; border-radius: 12px; font-weight: 600; font-size: 14px; max-width: calc(100% - 32px); box-shadow: 0 10px 30px #0008; }
+
+  .stat b { white-space: nowrap; }
+  @media (max-width: 860px) {
+    main { padding-bottom: 110px; }
+    .colunas { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+    .stats .stat:nth-child(n+4) { display: none; }
+    .stat { padding: 10px 12px; }
+    .stat b { font-size: 22px; }
+    .topo .acoes button { padding: 8px 12px; font-size: 13px; }
+    /* ação principal sempre ao alcance do polegar */
+    #chamar-proximo {
+      position: fixed; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom));
+      width: auto; z-index: 20; margin: 0; font-size: 19px; padding: 18px;
+      box-shadow: 0 10px 30px #000a, 0 0 40px color-mix(in srgb, #16EA9E 30%, transparent);
+    }
+    #chamar-proximo:disabled { opacity: 1; filter: grayscale(.7) brightness(.7); }
+    .fila-item .mini button { padding: 10px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<section id="login" class="oculto">
+  <div class="cartao">
+    <span class="etiqueta">Painel do stand</span>
+    <img src="img/logo-nome.png" alt="WasFit" style="height:70px;display:block;margin:18px 0 6px"><h1 style="font-size:24px">Painel da <em>fila</em></h1>
+    <form id="form-login">
+      <div class="campo"><label for="pin">PIN do painel</label><input id="pin" type="password" inputmode="numeric" autocomplete="current-password"></div>
+      <div class="campo"><label for="atendente-login">Quem é você?</label><input id="atendente-login" placeholder="Seu nome"></div>
+      <p class="erro" id="erro-login"></p>
+      <button type="submit">Entrar</button>
+    </form>
+  </div>
+</section>
+
+<main id="app" class="oculto">
+  <div class="topo">
+    <div class="marca">
+      <img src="img/logo.png" alt="WasFit">
+      Fila do stand <span class="etiqueta" style="margin-left:6px">EIN 2026</span>
+    </div>
+    <div class="acoes">
+      <span class="conexao" id="conexao">conectando…</span>
+      <span class="det" id="eu"></span>
+      <button class="secundario" id="exportar">Exportar CSV</button>
+      <button class="secundario" id="sair">Sair</button>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b id="s-aguardando">–</b><span>na fila</span></div>
+    <div class="stat"><b id="s-espera">–</b><span>espera média</span></div>
+    <div class="stat"><b id="s-atendidos">–</b><span>atendidos hoje</span></div>
+    <div class="stat"><b id="s-duracao">–</b><span>duração do atendimento</span></div>
+    <div class="stat"><b id="s-desist">–</b><span>desistências hoje</span></div>
+  </div>
+
+  <button id="chamar-proximo">Chamar próximo</button>
+
+  <div class="colunas">
+    <div>
+      <div class="bloco">
+        <h2 class="mono">Chamados · aguardando chegar <span class="n" id="n-chamados">0</span></h2>
+        <div id="chamados"></div>
+      </div>
+      <div class="bloco">
+        <h2 class="mono">Em atendimento <span class="n" id="n-atendendo">0</span></h2>
+        <div id="atendendo"></div>
+      </div>
+    </div>
+    <div class="bloco">
+      <h2 class="mono">Fila <span class="n" id="n-fila">0</span></h2>
+      <div id="fila"></div>
+    </div>
+  </div>
+
+  <details>
+    <summary>Encerrados hoje (<span id="n-fim">0</span>)</summary>
+    <div class="tabela"><table>
+      <thead><tr><th>Nome</th><th>Escola</th><th>Status</th><th>Esperou</th><th>Atendimento</th><th>Atendente</th><th></th></tr></thead>
+      <tbody id="encerrados"></tbody>
+    </table></div>
+  </details>
+</main>
+
+<div id="aviso" class="oculto"></div>
+
+<script src="config.js"></script>
+<script src="js/painel.js"></script>
+</body>
+</html>
