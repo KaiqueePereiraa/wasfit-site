@@ -35,6 +35,7 @@
     /* conversa direta com a WasFit no WhatsApp */
     clique_whatsapp:    function(d){return['t','Contact',{content_name:'WhatsApp',local:d.local||''}]},
     raiox_whatsapp:     function(d){return['t','Contact',{content_name:'WhatsApp apos raio-x (pagina)'}]},
+    raiox_agendar:      function(d){return['t','Contact',{content_name:'Agenda apos raio-x (pagina)',score:d.score}]},
     clique_reuniao:     function(d){return /^agendar_/.test(d.local||'')?['t','Contact',{content_name:'WhatsApp apos agendar',local:d.local}]:null}, /* abrir a janela ja conta em abriu_agendar */
     /* intencao (abriu a janela, ainda nao preencheu) */
     abriu_agendar:      function(d){return['c','AbriuAgendar',{local:d.local||''}]},

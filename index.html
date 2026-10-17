@@ -6,7 +6,7 @@
 <!-- CSP também vai por cabeçalho (.htaccess/_headers/netlify.toml). Esta <meta> é a única
      proteção no GitHub Pages, que não lê aqueles arquivos. Os hashes são dos <script>
      inline DESTA página: se editar qualquer um deles, recalcule. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self' https://www.facebook.com; frame-src https://www.facebook.com; img-src 'self' data: https://www.facebook.com; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' https://connect.facebook.net 'sha256-Hg1a4n1Ywa1JbUXFk9h5HvqunCRBdX+SGUEdU36X3bc=' 'sha256-djPdT5J1kuWFwawDhtbzz0YHt/63i3CUBG3CyUjLa4c=' 'sha256-Du+OJKJSbdUgz5nrHeWWINvez6XKDDU/tyj/5c2uvwo=' 'sha256-Yhx8bUOsVRHAjY5Mf42HyBQtq0riyEudxZCNs+nr194='; connect-src 'self' https://script.google.com https://v1.api.wasfit.com.br https://www.facebook.com https://connect.facebook.net; media-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self' https://www.facebook.com; frame-src https://www.facebook.com; img-src 'self' data: https://www.facebook.com; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' https://connect.facebook.net 'sha256-Hg1a4n1Ywa1JbUXFk9h5HvqunCRBdX+SGUEdU36X3bc=' 'sha256-djPdT5J1kuWFwawDhtbzz0YHt/63i3CUBG3CyUjLa4c=' 'sha256-Du+OJKJSbdUgz5nrHeWWINvez6XKDDU/tyj/5c2uvwo=' 'sha256-F7bXfNoZS24TVJ0nNEz5p5WqnZdMkgPXTcaMBiw5Ja0='; connect-src 'self' https://script.google.com https://v1.api.wasfit.com.br https://www.facebook.com https://connect.facebook.net; media-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests">
 <!-- sem cadeado nunca: quem chega por http:// vai para https:// (o Cloudflare ainda nao redireciona sozinho) -->
 <script>if(location.protocol==='http:'&&/(^|\.)wasfit\.com\.br$/.test(location.hostname))location.replace('https:'+location.href.slice(5));</script>
 <script src="/assets/js/meta-pixel.js"></script>
@@ -1161,7 +1161,7 @@ body.tm-open{overflow:hidden}
 
 <!-- ============ AGENDAR CHAMADA · janela igual a do "Testar a IA" ============
      Todo botao com data-agendar abre aqui. Envia para a planilha e para a
-     plataforma (WEBHOOK.raiox, o mesmo do /raio-x/) e so depois mostra o WhatsApp. -->
+     plataforma (WEBHOOK.raiox, o mesmo do /raio-x/) e depois leva para a agenda (AGENDAR). -->
 <div class="tm" id="ag" hidden>
   <div class="tm-bg" data-ag-close></div>
   <div class="tm-box" role="dialog" aria-modal="true" aria-labelledby="agTitle">
@@ -1169,7 +1169,7 @@ body.tm-open{overflow:hidden}
     <div class="tm-step" id="agForm">
       <span class="label">Chamada de vídeo · 30 min</span>
       <h2 id="agTitle">Vamos olhar a sua escola <em>juntos</em></h2>
-      <p>Deixe seus dados. A gente confirma o melhor horário com você no WhatsApp.</p>
+      <p>Deixe seus dados e escolha o melhor horário na próxima tela. Se precisar de ajuda ou der algo errado, a gente te manda uma mensagem no WhatsApp. É só responder por lá.</p>
       <p class="ag-rx" id="agRx" hidden></p>
       <form id="agFormEl" novalidate>
         <div class="tm-f"><label for="agNome">Seu nome</label><input id="agNome" name="nome" type="text" autocomplete="name" placeholder="Ana" required></div>
@@ -1177,26 +1177,13 @@ body.tm-open{overflow:hidden}
         <div class="tm-f"><label for="agInsta">Instagram da escola</label><input id="agInsta" name="instagram" type="text" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="@acquavida" required></div>
         <div class="tm-f"><label for="agCidade">Cidade / UF</label><input id="agCidade" name="cidade" type="text" placeholder="Vitória / ES" required></div>
         <div class="ag-2">
-          <div class="tm-f"><label for="agAlunos">Alunos ativos</label><select id="agAlunos" name="alunos"><option>até 150</option><option>150 a 400</option><option>400 a 800</option><option>mais de 800</option></select></div>
+          <div class="tm-f"><label for="agAlunos">Alunos ativos</label><select id="agAlunos" name="alunos"><option>0 a 150</option><option>150 a 300</option><option>300 a 500</option><option>mais de 500</option></select></div>
           <div class="tm-f"><label for="agCargo">Você é</label><select id="agCargo" name="cargo"><option>Dono(a) / gestor(a)</option><option>Coordenador(a)</option><option>Professor(a)</option><option>Recepção</option></select></div>
         </div>
         <div class="tm-hp" aria-hidden="true"><label for="agSite">Não preencha</label><input id="agSite" name="website" type="text" tabindex="-1" autocomplete="off"></div>
-        <button class="btn btn-primary" type="submit" id="agSend"><span>Quero agendar a chamada</span><i class="tm-spin" hidden></i></button>
+        <button class="btn btn-primary" type="submit" id="agSend"><span>Confirmar e escolher o horário</span><i class="tm-spin" hidden></i></button>
         <p class="tm-fine">Ao enviar, você autoriza a WasFit a usar estes dados para marcar a conversa. Nada de lista, nada de spam. Veja a <a href="/privacidade/">política de privacidade</a>.</p>
       </form>
-    </div>
-    <div class="tm-step" id="agOk" hidden>
-      <div class="tm-ico">✓</div>
-      <h2>Pronto! <em>Olha o seu WhatsApp.</em></h2>
-      <p>A gente acabou de te mandar uma mensagem no número que você deixou. É só responder por lá e escolher o melhor horário para a chamada de 30 min.</p>
-      <p class="tm-fine" style="margin-top:18px">Não chegou em alguns minutos? Chame a gente direto:</p>
-      <a class="btn btn-ghost" id="agWa" data-evt="clique_reuniao" data-loc="agendar_nao_chegou" href="#" target="_blank" rel="noopener" style="width:100%;margin-top:8px">Chamar a WasFit no WhatsApp</a>
-    </div>
-    <div class="tm-step" id="agErr" hidden>
-      <div class="tm-ico err">!</div>
-      <h2>Quase lá</h2>
-      <p>Deu instabilidade aqui e a nossa mensagem pode não chegar. Chame a gente direto no WhatsApp que marcamos o horário na hora. Os seus dados já vão prontos.</p>
-      <a class="btn btn-primary" id="agWa2" data-evt="clique_reuniao" data-loc="agendar_erro" href="#" target="_blank" rel="noopener" style="width:100%;margin-top:18px">Chamar a WasFit no WhatsApp</a>
     </div>
   </div>
 </div>
@@ -1259,6 +1246,7 @@ body.tm-open{overflow:hidden}
   });
   /* ===== CONFIG ===== */
   var WA_COMERCIAL='5527998932954';          // WhatsApp da WasFit (raio-x, planos, geral)
+  var AGENDAR='https://app.wasfit.com.br/agendar/wasfit-ia'; // agenda da reuniao de 30 min (fim da janela de agendar)
   var WA_DEMO='5527998932954';               // Decisão 06/09: a demonstração atende no MESMO número do comercial. Se um dia
                                              // apontar para a IA de uma escola, trocar aqui, em /testar/ e em /raio-x/.
   /* ===== WEBHOOKS DA PLATAFORMA =====
@@ -1429,18 +1417,18 @@ body.tm-open{overflow:hidden}
     window.dataLayer.push({event:'raiox_home',score:n,vazamentos:vaz,evo:rxA[5]?1:0})}
   /* agendar chamada: todo [data-agendar] abre a janela #ag (igual a do "Testar a IA").
      Vai para a planilha e para a plataforma no formato do /raio-x/ (WEBHOOK.raiox);
-     se a pessoa respondeu o raio-x da home, o resultado vai junto. So depois do
-     envio aparece o WhatsApp para confirmar o horario. */
+     se a pessoa respondeu o raio-x da home, o resultado vai junto. Depois do
+     envio a pessoa segue para a agenda e escolhe o horario la. */
   (function(){
     var ag=document.getElementById('ag'),f=document.getElementById('agFormEl');if(!ag||!f)return;
-    var elF=document.getElementById('agForm'),elOk=document.getElementById('agOk'),rxInfo=document.getElementById('agRx'),
+    var elF=document.getElementById('agForm'),rxInfo=document.getElementById('agRx'),
         send=document.getElementById('agSend'),spin=send.querySelector('.tm-spin'),rot=send.querySelector('span'),fone=document.getElementById('agFone'),ultimo=null,origemClique='';
     var CH=['origem','registro','followup','etapa','noite'];
     function arr(v){v=(v||'').trim().replace(/^https?:\/\//i,'').replace(/^www\./i,'').replace(/^instagram\.com\//i,'').replace(/[/?#].*$/,'').replace(/^@+/,'');return v?'@'+v.substring(0,80):''}
     function rx(){if(Object.keys(rxA).length<6)return null;var n=0,fu=[];for(var i=0;i<5;i++){if(rxA[i])n++;else fu.push(CH[i])}return{n:n,furos:fu,evo:rxA[5]?'sim':'não',t:document.getElementById('rxT').textContent}}
     function abrir(loc){
       ultimo=document.activeElement;origemClique=loc||'';
-      elF.hidden=false;elOk.hidden=true;document.getElementById('agErr').hidden=true;f.reset();send.disabled=false;spin.hidden=true;rot.textContent='Quero agendar a chamada';
+      elF.hidden=false;f.reset();send.disabled=false;spin.hidden=true;rot.textContent='Confirmar e escolher o horário';
       [].forEach.call(f.querySelectorAll('input'),function(i){i.setAttribute('aria-invalid','false')});
       var r=rx();rxInfo.hidden=!r;if(r)rxInfo.innerHTML='<b>Seu raio-x vai junto:</b> '+r.n+'/5 · '+r.t.toLowerCase();
       ag.hidden=false;document.body.classList.add('tm-open');
@@ -1465,7 +1453,7 @@ body.tm-open{overflow:hidden}
       var d=L.telefone.replace(/\D/g,''),bad=[];
       [['nome',!!L.nome],['telefone',d.length===10||d.length===11],['instagram',!!arr(L.instagram)],['cidade',!!L.cidade]].forEach(function(c){f.elements[c[0]].setAttribute('aria-invalid',c[1]?'false':'true');if(!c[1])bad.push(c[0])});
       if(bad.length){f.elements[bad[0]].focus();return}
-      send.disabled=true;spin.hidden=false;rot.textContent='Enviando…';
+      send.disabled=true;spin.hidden=false;rot.textContent='Abrindo a agenda…';
       var r=rx(),D={customer:{name:L.nome,phone:'55'+d},source:'site-wasfit',contexto:'raio-x',local:'home',etapa:'agendar',origem_clique:origemClique,
         id:'agh-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8),
         instagram:arr(L.instagram),escola:arr(L.instagram),cidade:L.cidade,alunos:L.alunos,cargo:L.cargo,
@@ -1473,16 +1461,16 @@ body.tm-open{overflow:hidden}
         data_hora:new Date().toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo'})};
       ['utm_source','utm_medium','utm_campaign','utm_content'].forEach(function(k){D[k]=utm[k]||''});
       var payload={data:D};
-      var msg='Oi! Quero agendar a chamada de vídeo de 30 min com a WasFit.\nEscola: '+D.instagram+' ('+L.cidade+')\nNome: '+L.nome+' · '+L.cargo+' · '+L.alunos+' alunos'+(r?'\nRaio-x: '+r.n+'/5 · '+r.t+'\nFuros: '+(r.furos.join(', ')||'nenhum')+'\nEVO: '+r.evo:'')+origem;
-      var wurl='https://wa.me/'+WA_COMERCIAL+'?text='+encodeURIComponent(msg);document.getElementById('agWa').href=wurl;document.getElementById('agWa2').href=wurl;
       var feito=false;
       function fim(st){if(feito)return;feito=true;D.status_plataforma=st;
-        if(SHEET_ENDPOINT){try{fetch(SHEET_ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)})}catch(x){}}
-        elF.hidden=true;if(st==='ok')elOk.hidden=false;else document.getElementById('agErr').hidden=false;
-        window.dataLayer.push({event:'agendar_lead',local:origemClique,status:st})}
+        if(SHEET_ENDPOINT){try{fetch(SHEET_ENDPOINT,{method:'POST',mode:'no-cors',keepalive:true,headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)})}catch(x){}}
+        window.dataLayer.push({event:'agendar_lead',local:origemClique,status:st});
+        /* a URL da agenda não leva dado pessoal: os dados já foram pelo webhook */
+        var q=new URLSearchParams({utm_source:utm.utm_source||'site',utm_medium:utm.utm_medium||'home',utm_campaign:utm.utm_campaign||origemClique||'agendar'});
+        setTimeout(function(){location.href=AGENDAR+'?'+q.toString()},350)}
       if(!WEBHOOK.raiox){fim('sem webhook');return}
       setTimeout(function(){fim('sem resposta')},4000);
-      fetch(WEBHOOK_BASE+WEBHOOK.raiox,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+      fetch(WEBHOOK_BASE+WEBHOOK.raiox,{method:'POST',keepalive:true,headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
         .then(function(res){if(!res.ok)throw new Error('HTTP '+res.status);fim('ok')})
         .catch(function(err){console.error('webhook agendar:',err);fim('FALHOU')});
     });
