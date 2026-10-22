@@ -6,7 +6,7 @@
 <!-- CSP também vai por cabeçalho (.htaccess/_headers/netlify.toml). Esta <meta> é a única
      proteção no GitHub Pages, que não lê aqueles arquivos. Os hashes são dos <script>
      inline DESTA página: se editar qualquer um deles, recalcule. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self' https://www.facebook.com; frame-src https://www.facebook.com; img-src 'self' data: https://www.facebook.com; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' https://connect.facebook.net 'sha256-Hg1a4n1Ywa1JbUXFk9h5HvqunCRBdX+SGUEdU36X3bc=' 'sha256-djPdT5J1kuWFwawDhtbzz0YHt/63i3CUBG3CyUjLa4c=' 'sha256-Du+OJKJSbdUgz5nrHeWWINvez6XKDDU/tyj/5c2uvwo=' 'sha256-F7bXfNoZS24TVJ0nNEz5p5WqnZdMkgPXTcaMBiw5Ja0='; connect-src 'self' https://script.google.com https://v1.api.wasfit.com.br https://www.facebook.com https://connect.facebook.net; media-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self' https://www.facebook.com; frame-src https://www.facebook.com; img-src 'self' data: https://www.facebook.com; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' https://connect.facebook.net 'sha256-Hg1a4n1Ywa1JbUXFk9h5HvqunCRBdX+SGUEdU36X3bc=' 'sha256-djPdT5J1kuWFwawDhtbzz0YHt/63i3CUBG3CyUjLa4c=' 'sha256-Du+OJKJSbdUgz5nrHeWWINvez6XKDDU/tyj/5c2uvwo=' 'sha256-3IXC4buZY5U95D2fsgtcPVvZlK6eGpedtOf/5aQrPso='; connect-src 'self' https://script.google.com https://v1.api.wasfit.com.br https://www.facebook.com https://connect.facebook.net; media-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests">
 <!-- sem cadeado nunca: quem chega por http:// vai para https:// (o Cloudflare ainda nao redireciona sozinho) -->
 <script>if(location.protocol==='http:'&&/(^|\.)wasfit\.com\.br$/.test(location.hostname))location.replace('https:'+location.href.slice(5));</script>
 <script src="/assets/js/meta-pixel.js"></script>
@@ -1145,7 +1145,7 @@ body.tm-open{overflow:hidden}
       <div class="badges"><img src="/assets/img/mgb-credenciado.png" alt=""><span>Treinada na Metodologia Gustavo Borges</span></div>
     </div>
     <div><h4>Produto</h4><a href="#prova">Prova real</a><a href="#comecar">Como começar</a><a href="#testar">Testar a IA</a><a href="/raio-x/">Raio-x da escola</a><a href="#ias">As IAs</a><a href="#preco">Preço</a><a href="#faq">Perguntas frequentes</a><a href="https://app.wasfit.com.br/">Começar 7 dias grátis</a><a href="https://app.wasfit.com.br/login">Entrar na plataforma</a></div>
-    <div><h4>Contato</h4><a class="js-wa" data-evt="clique_whatsapp" data-loc="footer" data-msg="geral" href="#">WhatsApp · (27) 99893-2954</a><a href="mailto:adm.wasfit@gmail.com">adm.wasfit@gmail.com</a><a href="https://instagram.com/wasfit.ia" rel="noopener">Instagram</a><h4 style="margin-top:18px">Empresa</h4><a href="/privacidade/">Política de privacidade</a><a href="/termos/">Termos de uso</a></div>
+    <div><h4>Contato</h4><a class="js-wa" data-evt="clique_whatsapp" data-loc="footer" data-msg="geral" href="#">WhatsApp · (27) 99893-2954</a><a href="mailto:sac@wasfit.com.br">sac@wasfit.com.br</a><a href="https://instagram.com/wasfit.ia" rel="noopener">Instagram</a><h4 style="margin-top:18px">Empresa</h4><a href="/privacidade/">Política de privacidade</a><a href="/termos/">Termos de uso</a></div>
   </div>
   <div class="copy">© 2026 WasFit · Serra/ES · wasfit.com.br</div>
 </footer>
@@ -1246,7 +1246,7 @@ body.tm-open{overflow:hidden}
   });
   /* ===== CONFIG ===== */
   var WA_COMERCIAL='5527998932954';          // WhatsApp da WasFit (raio-x, planos, geral)
-  var AGENDAR='https://app.wasfit.com.br/agendar/wasfit-ia'; // agenda da reuniao de 30 min (fim da janela de agendar)
+  var AGENDAR='https://calendar.google.com/calendar/appointments/schedules/AcZssZ0KJa0X-j-pherfO22YOs_bavWtAvvFJZgQ5fhVu0fOy0HKq3r2KG7fL51N3ZEuQA-YLC46j979'; // pagina de agendamento do Raio-X no Google Agenda (fim da janela de agendar)
   var WA_DEMO='5527998932954';               // Decisão 06/09: a demonstração atende no MESMO número do comercial. Se um dia
                                              // apontar para a IA de uma escola, trocar aqui, em /testar/ e em /raio-x/.
   /* ===== WEBHOOKS DA PLATAFORMA =====
@@ -1459,6 +1459,8 @@ body.tm-open{overflow:hidden}
         instagram:arr(L.instagram),escola:arr(L.instagram),cidade:L.cidade,alunos:L.alunos,cargo:L.cargo,
         score:r?r.n+'/5':'não respondeu',vazamentos:r?5-r.n:'',furos:r?(r.furos.join(', ')||'nenhum'):'',usa_evo:r?r.evo:'',resultado:r?r.t:'',
         data_hora:new Date().toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo'})};
+      /* cada resposta do raio-x vira um campo do cadastro no WasFit (resp_origem, resp_registro...) */
+      ['origem','registro','followup','etapa','noite','evo'].forEach(function(k,i){D['resp_'+k]=r?(rxA[i]?'Sim':'Não'):''});
       ['utm_source','utm_medium','utm_campaign','utm_content'].forEach(function(k){D[k]=utm[k]||''});
       var payload={data:D};
       var feito=false;
@@ -1466,8 +1468,7 @@ body.tm-open{overflow:hidden}
         if(SHEET_ENDPOINT){try{fetch(SHEET_ENDPOINT,{method:'POST',mode:'no-cors',keepalive:true,headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)})}catch(x){}}
         window.dataLayer.push({event:'agendar_lead',local:origemClique,status:st});
         /* a URL da agenda não leva dado pessoal: os dados já foram pelo webhook */
-        var q=new URLSearchParams({utm_source:utm.utm_source||'site',utm_medium:utm.utm_medium||'home',utm_campaign:utm.utm_campaign||origemClique||'agendar'});
-        setTimeout(function(){location.href=AGENDAR+'?'+q.toString()},350)}
+        setTimeout(function(){location.href=AGENDAR},350)}
       if(!WEBHOOK.raiox){fim('sem webhook');return}
       setTimeout(function(){fim('sem resposta')},4000);
       fetch(WEBHOOK_BASE+WEBHOOK.raiox,{method:'POST',keepalive:true,headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
