@@ -6,7 +6,7 @@
 <!-- CSP também vai por cabeçalho (.htaccess/_headers/netlify.toml). Esta <meta> é a única
      proteção no GitHub Pages, que não lê aqueles arquivos. Os hashes são dos <script>
      inline DESTA página: se editar qualquer um deles, recalcule. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self' https://www.facebook.com; frame-src https://www.facebook.com; img-src 'self' data: https://www.facebook.com; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' https://connect.facebook.net 'sha256-Hg1a4n1Ywa1JbUXFk9h5HvqunCRBdX+SGUEdU36X3bc=' 'sha256-8SzQWASgseuFeRUD7hmIwMR7tIG97Q2i7gg5dK7fVPw='; connect-src 'self' https://script.google.com https://v1.api.wasfit.com.br https://www.facebook.com https://connect.facebook.net; media-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self' https://www.facebook.com; frame-src https://www.facebook.com; img-src 'self' data: https://www.facebook.com; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' https://connect.facebook.net 'sha256-Hg1a4n1Ywa1JbUXFk9h5HvqunCRBdX+SGUEdU36X3bc=' 'sha256-d4PtDs7LiHqGhftmHWNmPJMp7ZQbZST+zI5l9JmzoHM='; connect-src 'self' https://script.google.com https://v1.api.wasfit.com.br https://www.facebook.com https://connect.facebook.net; media-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests">
 <!-- sem cadeado nunca: quem chega por http:// vai para https:// (o Cloudflare ainda nao redireciona sozinho) -->
 <script>if(location.protocol==='http:'&&/(^|\.)wasfit\.com\.br$/.test(location.hostname))location.replace('https:'+location.href.slice(5));</script>
 <script src="/assets/js/meta-pixel.js"></script>
@@ -37,9 +37,13 @@ p.sub{color:var(--muted);font-size:15.5px}
 .f{margin-top:14px}
 .f label{display:block;font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
 .f label span{text-transform:none;letter-spacing:0;opacity:.7}
-.f input{width:100%;background:var(--surface-2);border:1px solid rgba(255,255,255,.14);color:#fff;font:inherit;font-size:16px;padding:13px 15px;border-radius:12px;outline:0}
-.f input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(21,234,158,.2)}
-.f input[aria-invalid="true"]{border-color:#FF6B6B}
+.f input,.f select{width:100%;background:var(--surface-2);border:1px solid rgba(255,255,255,.14);color:#fff;font:inherit;font-size:16px;padding:13px 15px;border-radius:12px;outline:0}
+.f input:focus,.f select:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(21,234,158,.2)}
+.f input[aria-invalid="true"],.f select[aria-invalid="true"]{border-color:#FF6B6B}
+.f select:invalid{color:var(--muted-dark)}
+.f select option{color:#fff}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+@media(max-width:420px){.f2{grid-template-columns:1fr}}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;font-family:var(--display);text-transform:uppercase;font-size:17px;padding:16px 24px;border-radius:12px;text-decoration:none;border:0;cursor:pointer;margin-top:18px}
 .btn-primary{background:var(--grad);color:var(--grad-ink);box-shadow:0 8px 28px rgba(21,234,158,.28)}
@@ -66,7 +70,11 @@ p.sub{color:var(--muted);font-size:15.5px}
     <form id="form" novalidate>
       <div class="f"><label for="nome">Seu nome</label><input id="nome" type="text" autocomplete="name" placeholder="Ana" required></div>
       <div class="f"><label for="fone">Seu WhatsApp</label><input id="fone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(27) 99999-9999" required></div>
-      <div class="f"><label for="insta">Instagram da escola <span>(opcional)</span></label><input id="insta" type="text" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="@acquavida"></div>
+      <div class="f"><label for="insta">Instagram da escola</label><input id="insta" type="text" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="@acquavida" required></div>
+      <div class="f2">
+        <div class="f"><label for="cargo">Você é</label><select id="cargo" required><option value="" selected disabled>Escolha</option><option>Dono(a) / gestor(a)</option><option>Coordenador(a)</option><option>Professor(a)</option><option>Recepção</option></select></div>
+        <div class="f"><label for="alunos">Alunos ativos</label><select id="alunos" required><option value="" selected disabled>Escolha</option><option>0 a 150</option><option>150 a 300</option><option>300 a 500</option><option>mais de 500</option></select></div>
+      </div>
       <div class="hp" aria-hidden="true"><label for="site">Não preencha</label><input id="site" type="text" tabindex="-1" autocomplete="off"></div>
       <button class="btn btn-primary" type="submit" id="send"><span id="sendTxt">Quero ver a IA me chamando</span><i class="spin" id="spin" hidden></i></button>
       <p class="fine">Ao enviar, você autoriza a WasFit a usar o seu número só para a IA te chamar nesta demonstração. Veja a <a href="/privacidade/">política de privacidade</a>.</p>
@@ -122,7 +130,7 @@ p.sub{color:var(--muted);font-size:15.5px}
   }
 
   var form=document.getElementById('form'),nome=document.getElementById('nome'),fone=document.getElementById('fone'),
-      insta=document.getElementById('insta'),hp=document.getElementById('site'),
+      insta=document.getElementById('insta'),cargo=document.getElementById('cargo'),alunos=document.getElementById('alunos'),hp=document.getElementById('site'),
       send=document.getElementById('send'),spin=document.getElementById('spin'),txt=document.getElementById('sendTxt');
 
   /* aceita "@x", "x", "instagram.com/x" e "https://www.instagram.com/x/" */
@@ -145,10 +153,10 @@ p.sub{color:var(--muted);font-size:15.5px}
   form.addEventListener('submit',function(e){
     e.preventDefault();
     if(hp.value)return;
-    var n=nome.value.trim().substring(0,120),d=fone.value.replace(/\D/g,'');
-    nome.setAttribute('aria-invalid',n?'false':'true');
-    fone.setAttribute('aria-invalid',(d.length===10||d.length===11)?'false':'true');
-    if(!n||(d.length!==10&&d.length!==11)){(!n?nome:fone).focus();return}
+    var n=nome.value.trim().substring(0,120),d=fone.value.replace(/\D/g,''),ig=insta.value.replace(/[@\s]/g,'');
+    var ruins=[[nome,!n],[fone,d.length!==10&&d.length!==11],[insta,!ig],[cargo,!cargo.value],[alunos,!alunos.value]]
+      .filter(function(c){c[0].setAttribute('aria-invalid',c[1]?'true':'false');return c[1]});
+    if(ruins.length){ruins[0][0].focus();return}
 
     send.disabled=true;spin.hidden=false;txt.textContent='Enviando…';
     var payload={data:{
@@ -157,6 +165,8 @@ p.sub{color:var(--muted);font-size:15.5px}
       contexto:'testar-a-ia',
       instagram:arroba(insta.value),
       escola:arroba(insta.value),   /* espelho temporário até reimplantar o Apps Script */
+      cargo:cargo.value,
+      alunos:alunos.value,
       utm_source:utmSource,utm_medium:'',utm_campaign:'',utm_content:'',
       data_hora:new Date().toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo'})
     }};

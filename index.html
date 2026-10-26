@@ -6,7 +6,7 @@
 <!-- CSP também vai por cabeçalho (.htaccess/_headers/netlify.toml). Esta <meta> é a única
      proteção no GitHub Pages, que não lê aqueles arquivos. Os hashes são dos <script>
      inline DESTA página: se editar qualquer um deles, recalcule. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self' https://www.facebook.com; frame-src https://www.facebook.com; img-src 'self' data: https://www.facebook.com; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' https://connect.facebook.net 'sha256-Hg1a4n1Ywa1JbUXFk9h5HvqunCRBdX+SGUEdU36X3bc=' 'sha256-djPdT5J1kuWFwawDhtbzz0YHt/63i3CUBG3CyUjLa4c=' 'sha256-Du+OJKJSbdUgz5nrHeWWINvez6XKDDU/tyj/5c2uvwo=' 'sha256-3IXC4buZY5U95D2fsgtcPVvZlK6eGpedtOf/5aQrPso='; connect-src 'self' https://script.google.com https://v1.api.wasfit.com.br https://www.facebook.com https://connect.facebook.net; media-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self' https://www.facebook.com; frame-src https://www.facebook.com; img-src 'self' data: https://www.facebook.com; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' https://connect.facebook.net 'sha256-Hg1a4n1Ywa1JbUXFk9h5HvqunCRBdX+SGUEdU36X3bc=' 'sha256-djPdT5J1kuWFwawDhtbzz0YHt/63i3CUBG3CyUjLa4c=' 'sha256-Du+OJKJSbdUgz5nrHeWWINvez6XKDDU/tyj/5c2uvwo=' 'sha256-OjvgxMFG3YoAkzJ4n5xpmPJhOwzxbXLunQQCVygDtp8='; connect-src 'self' https://script.google.com https://v1.api.wasfit.com.br https://www.facebook.com https://connect.facebook.net; media-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests">
 <!-- sem cadeado nunca: quem chega por http:// vai para https:// (o Cloudflare ainda nao redireciona sozinho) -->
 <script>if(location.protocol==='http:'&&/(^|\.)wasfit\.com\.br$/.test(location.hostname))location.replace('https:'+location.href.slice(5));</script>
 <script src="/assets/js/meta-pixel.js"></script>
@@ -605,6 +605,9 @@ body.tm-open{overflow:hidden}
 .ias-close p:last-child{color:var(--muted);max-width:640px;margin:0 auto;font-size:clamp(16px,1.3vw,18px)}
 .tm-f select{width:100%;background:var(--surface-2);border:1px solid rgba(255,255,255,.14);color:#fff;font:inherit;font-size:16px;padding:13px 15px;border-radius:12px;outline:0}
 .tm-f select:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(21,234,158,.2)}
+.tm-f select[aria-invalid="true"]{border-color:#FF6B6B}
+.tm-f select:invalid{color:var(--muted-dark)}
+.tm-f select option{color:#fff}
 .ag-2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
 @media(max-width:420px){.ag-2{grid-template-columns:1fr}}
 #agFormEl .btn{width:100%;margin-top:18px;gap:10px}
@@ -1210,8 +1213,12 @@ body.tm-open{overflow:hidden}
           <input id="tmFone" name="telefone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(27) 99999-9999" required>
         </div>
         <div class="tm-f">
-          <label for="tmInsta">Instagram da escola <span>(opcional)</span></label>
-          <input id="tmInsta" name="instagram" type="text" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="@acquavida">
+          <label for="tmInsta">Instagram da escola</label>
+          <input id="tmInsta" name="instagram" type="text" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="@acquavida" required>
+        </div>
+        <div class="ag-2">
+          <div class="tm-f"><label for="tmCargo">Você é</label><select id="tmCargo" name="cargo" required><option value="" selected disabled>Escolha</option><option>Dono(a) / gestor(a)</option><option>Coordenador(a)</option><option>Professor(a)</option><option>Recepção</option></select></div>
+          <div class="tm-f"><label for="tmAlunos">Alunos ativos</label><select id="tmAlunos" name="alunos" required><option value="" selected disabled>Escolha</option><option>0 a 150</option><option>150 a 300</option><option>300 a 500</option><option>mais de 500</option></select></div>
         </div>
         <div class="tm-hp" aria-hidden="true"><label for="tmSite">Não preencha</label><input id="tmSite" name="website" type="text" tabindex="-1" autocomplete="off"></div>
         <button class="btn btn-primary" type="submit" id="tmSend"><span>Quero ver a IA me chamando</span><i class="tm-spin" hidden></i></button>
@@ -1514,6 +1521,7 @@ body.tm-open{overflow:hidden}
     var tm=document.getElementById('tm'),form=document.getElementById('tmFormEl'),
         elForm=document.getElementById('tmForm'),elOk=document.getElementById('tmOk'),elErr=document.getElementById('tmErr'),
         nome=document.getElementById('tmNome'),fone=document.getElementById('tmFone'),insta=document.getElementById('tmInsta'),
+        cargo=document.getElementById('tmCargo'),alunos=document.getElementById('tmAlunos'),
         hp=document.getElementById('tmSite'),send=document.getElementById('tmSend'),spin=send.querySelector('.tm-spin'),
         rotulo=send.querySelector('span'),ultimo=null;
 
@@ -1523,7 +1531,7 @@ body.tm-open{overflow:hidden}
     function abrir(origem){
       ultimo=document.activeElement;
       elForm.hidden=false;elOk.hidden=true;elErr.hidden=true;
-      form.reset();fone.setAttribute('aria-invalid','false');nome.setAttribute('aria-invalid','false');
+      form.reset();[nome,fone,insta,cargo,alunos].forEach(function(el){el.setAttribute('aria-invalid','false')});
       send.disabled=false;spin.hidden=true;rotulo.textContent='Quero ver a IA me chamando';
       tm.hidden=false;tm.setAttribute('data-origem',origem||'');document.body.classList.add('tm-open');
       setTimeout(function(){nome.focus()},60);
@@ -1561,10 +1569,12 @@ body.tm-open{overflow:hidden}
       e.preventDefault();
       if(hp.value)return;                              // armadilha de robô: preencheu, é bot
       var n=nome.value.trim().substring(0,120),
-          d=fone.value.replace(/\D/g,'');
-      nome.setAttribute('aria-invalid',n?'false':'true');
-      fone.setAttribute('aria-invalid',(d.length===10||d.length===11)?'false':'true');
-      if(!n||(d.length!==10&&d.length!==11)){(!n?nome:fone).focus();return}
+          d=fone.value.replace(/\D/g,''),
+          ig=insta.value.replace(/[@\s]/g,'');
+      /* tudo obrigatório: marca os vazios e foca o primeiro */
+      var ruins=[[nome,!n],[fone,d.length!==10&&d.length!==11],[insta,!ig],[cargo,!cargo.value],[alunos,!alunos.value]]
+        .filter(function(c){c[0].setAttribute('aria-invalid',c[1]?'true':'false');return c[1]});
+      if(ruins.length){ruins[0][0].focus();return}
 
       send.disabled=true;spin.hidden=false;rotulo.textContent='Enviando…';
       var payload={data:{
@@ -1575,6 +1585,8 @@ body.tm-open{overflow:hidden}
         /* espelho temporário: o Apps Script implantado ainda lê "escola".
            Remover depois que a planilha for reimplantada com o campo novo. */
         escola:arroba(insta.value),
+        cargo:cargo.value,
+        alunos:alunos.value,
         origem_clique:document.querySelector('#tm').getAttribute('data-origem')||'',
         data_hora:new Date().toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo'})
       }};
