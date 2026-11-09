@@ -6,7 +6,7 @@
 <!-- CSP também vai por cabeçalho (.htaccess/_headers/netlify.toml). Esta <meta> é a única
      proteção no GitHub Pages, que não lê aqueles arquivos. Os hashes são dos <script>
      inline DESTA página: se editar qualquer um deles, recalcule. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self' https://www.facebook.com; frame-src https://www.facebook.com; img-src 'self' data: https://www.facebook.com; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' https://connect.facebook.net 'sha256-Hg1a4n1Ywa1JbUXFk9h5HvqunCRBdX+SGUEdU36X3bc=' 'sha256-djPdT5J1kuWFwawDhtbzz0YHt/63i3CUBG3CyUjLa4c=' 'sha256-Du+OJKJSbdUgz5nrHeWWINvez6XKDDU/tyj/5c2uvwo=' 'sha256-OjvgxMFG3YoAkzJ4n5xpmPJhOwzxbXLunQQCVygDtp8='; connect-src 'self' https://script.google.com https://v1.api.wasfit.com.br https://www.facebook.com https://connect.facebook.net; media-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self' https://www.facebook.com; frame-src https://www.facebook.com; img-src 'self' data: https://www.facebook.com; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' https://connect.facebook.net 'sha256-Hg1a4n1Ywa1JbUXFk9h5HvqunCRBdX+SGUEdU36X3bc=' 'sha256-djPdT5J1kuWFwawDhtbzz0YHt/63i3CUBG3CyUjLa4c=' 'sha256-Du+OJKJSbdUgz5nrHeWWINvez6XKDDU/tyj/5c2uvwo=' 'sha256-FoOJNjEBbQwf6E3k2o6YcL2Fbfnf9QYTjhFDwwYI3XI='; connect-src 'self' https://script.google.com https://v1.api.wasfit.com.br https://www.facebook.com https://connect.facebook.net; media-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests">
 <!-- sem cadeado nunca: quem chega por http:// vai para https:// (o Cloudflare ainda nao redireciona sozinho) -->
 <script>if(location.protocol==='http:'&&/(^|\.)wasfit\.com\.br$/.test(location.hostname))location.replace('https:'+location.href.slice(5));</script>
 <script src="/assets/js/meta-pixel.js"></script>
@@ -751,7 +751,7 @@ body.tm-open{overflow:hidden}
         <a class="btn btn-primary" data-evt="clique_cadastro" data-loc="hero" href="https://app.wasfit.com.br/">Começar 7 dias grátis</a>
         <a class="btn btn-ghost js-wa" data-evt="clique_testar" data-loc="hero" data-msg="testar" data-num="demo" href="#">Testar a IA agora</a>
       </div>
-      <p class="cta-note"><b style="color:#fff">7 dias grátis, sem cartão.</b> Depois, R$ 597/mês, sem fidelidade, com o uso da IA já incluído. Leva 30 minutos para colocar no ar. Se não gostar, cancela em um clique.</p>
+      <p class="cta-note"><b style="color:#fff">7 dias grátis, sem cartão.</b> Depois, R$ 897/mês, sem fidelidade. Leva 30 minutos para colocar no ar. Se não gostar, cancela em um clique.</p>
       <div class="stats"><span>4 unidades próprias</span><span>11 anos de operação</span><span>No ar em 30 min</span></div>
       <div class="event"><img src="/assets/img/ein-simbolo.png" alt=""> Lançamento no EIN 2026 · 15–17 de outubro · São Paulo</div>
     </div>
@@ -982,7 +982,7 @@ body.tm-open{overflow:hidden}
       <div class="steps3 rv">
         <div class="st"><b>1</b><div><h3>Preencha os dados da escola</h3><p>Nome, endereço, planos e valores, turmas e horários, regras de touca, nível e experimental. Cadastro guiado, campo a campo. Errou? Edita a qualquer hora.</p></div></div>
         <div class="st"><b>2</b><div><h3>Conecte o WhatsApp e o EVO</h3><p>No fim do cadastro o sistema pede a conexão. O WhatsApp é o número que os seus alunos já conhecem; o EVO é um link de API que você copia lá dentro. Não usa EVO? Pula.</p></div></div>
-        <div class="st"><b>3</b><div><h3>As IAs começam a atender</h3><p>Atendimento e Vendas no ar na hora, com os créditos da IA já inclusos: nada para contratar à parte. As outras oito ligam quando o EVO conecta. Dúvida? IA de suporte 24 h no WhatsApp.</p></div></div>
+        <div class="st"><b>3</b><div><h3>As IAs começam a atender</h3><p>Atendimento e Vendas no ar na hora. As outras oito ligam quando o EVO conecta. Dúvida? IA de suporte 24 h no WhatsApp.</p></div></div>
       </div>
       <div class="mock rv" id="mock">
         <div class="mock-h"><span>Experimente: preencha como se fosse a sua escola</span><i>ao vivo</i></div>
@@ -1019,8 +1019,8 @@ body.tm-open{overflow:hidden}
       <div class="roi-n">
         <div><span>1 matrícula</span><b id="r1">R$ 3.000</b><small id="r1s">R$ 250 × 12 meses, em receita contratada</small></div>
         <div><span>No ano</span><b id="r2">R$ 36.000</b><small id="r2s">12 matrículas × R$ 3.000</small></div>
-        <div><span>12 meses de WasFit</span><b>R$ 7.164</b><small>R$ 597 × 12</small></div>
-        <div class="net"><span>Sobra</span><b id="r3">R$ 28.836</b><small>de receita contratada acima do custo.</small></div>
+        <div><span>12 meses de WasFit</span><b>R$ 10.764</b><small>R$ 897 × 12</small></div>
+        <div class="net"><span>Sobra</span><b id="r3">R$ 25.236</b><small>de receita contratada acima do custo.</small></div>
       </div>
       <p class="roi-fine">A WasFit foi construída para atuar em cada oportunidade que chega à sua escola, todos os dias. <a href="#preco">Ver os planos ↓</a><br><small>Cenário ilustrativo com o ticket informado e contrato de 12 meses. A WasFit não garante resultados comerciais.</small></p>
     </div>
@@ -1030,44 +1030,16 @@ body.tm-open{overflow:hidden}
 <!-- ============ PREÇO · 10 m ============ -->
 <section class="preco crest" style="--crest:var(--navy)" id="preco" data-say="Sem fidelidade. Se eu não entregar, você cancela.">
   <div class="wrap">
-    <div class="offer-bar rv"><img src="/assets/img/ein-lockup.png" alt="EIN, Encontro Internacional de Natação"><span class="label" style="margin:0;color:var(--muted)">Lançamento oficial · 15–17 de outubro · Senac Santo Amaro, SP</span></div>
-    <div class="fund rv">
-      <div class="fund-l">
-        <span class="label">Oferta de lançamento · EIN 2026</span>
-        <h2>Seja uma das <em>20 escolas fundadoras.</em></h2>
-        <p class="fund-sub">Quem entrar até 31 de outubro garante:</p>
-        <ul class="fund-list">
-          <li><b>Preço congelado.</b> O valor do seu plano hoje (R$ 597/mês no Escola) continua o mesmo enquanto você for cliente, sem os reajustes da mensalidade.</li>
-          <li><b>12 meses de IA incluídos.</b> 6 milhões de tokens de conversa por mês<a class="ast" href="#limite-ia" aria-label="ver o limite de uso da IA">*</a>.</li>
-          <li><b>Implantação Completa</b> <span class="fund-preco"><s>R$ 1.500</s> <strong>grátis</strong></span> 4 semanas com a nossa equipe, uma reunião por vídeo por semana. Já na primeira semana você sai com:
-            <ul class="fund-sub-list">
-              <li><b>Grade ao vivo do EVO:</b> turma, professor e vagas livres. Quem pergunta já vê quais turmas estão cheias.</li>
-              <li><b>Kanban automático:</b> a IA coloca as etiquetas sozinha.</li>
-              <li><b>EVO e número da Meta conectados</b> pela nossa equipe.</li>
-            </ul>
-            <span class="fund-nota" style="font-style:normal;color:#DCEFF5">Nas semanas seguintes: ajuste fino, treinamento da equipe e acompanhamento.</span>
-            <span class="fund-nota">Fora da oferta, só pagando à parte.</span></li>
-        </ul>
-      </div>
-      <div class="fund-r">
-        <p class="fund-why"><b>Por que só 20?</b> Cada escola fundadora recebe acompanhamento de perto, e manter esse preço tem um custo para a gente. Com 20 escolas, damos conta das duas coisas.</p>
-        <div class="vagas">
-          <div><b id="vagasT">7 de 20 vagas disponíveis</b><br><small>até 31/10/2026</small></div>
-          <div class="bar" id="vagasB"><i id="vagasBar" style="width:65%"></i></div>
-        </div>
-        <a class="btn btn-primary" data-evt="clique_cadastro" data-loc="oferta_fundador" href="https://app.wasfit.com.br/"><span>Garantir <span class="fund-minha">minha </span>vaga de fundador</span></a>
-        <p class="fund-after">Depois de 31/10, a mensalidade passa a ter reajustes e os tokens da IA passam a ser cobrados à parte.</p>
-      </div>
-    </div>
-
+    <span class="label">Planos</span>
+    <h2 class="rv" style="margin-bottom:28px">Comece com 7 dias grátis. <em>Sem fidelidade.</em></h2>
     <div class="price-grid">
       <div class="plan hi rv">
         <span class="rec">Recomendado para começar</span>
         <h3>Escola</h3><div class="sub">Para escolas com 1 unidade · sem fidelidade</div>
-        <div class="price"><b>R$ 597</b><span>/mês</span></div>
-        <div class="impl"><b style="color:#fff">7 dias grátis, sem cartão.</b> Depois, R$ 597/mês. <b>Uso da IA incluído por 12 meses<a class="ast" href="#limite-ia" aria-label="ver o limite de uso da IA">*</a>.</b></div>
+        <div class="price"><b>R$ 897</b><span>/mês</span></div>
+        <div class="impl"><b style="color:#fff">7 dias grátis, sem cartão.</b> Depois, R$ 897/mês. Uso da IA cobrado à parte<a class="ast" href="#limite-ia" aria-label="ver como é cobrado o uso da IA">*</a>.</div>
         <ul>
-          <li>Cadastro guiado: preenche, conecta, pronto</li><li><b style="color:#fff">Créditos da IA inclusos por 12 meses<a class="ast" href="#limite-ia" aria-label="ver o limite de uso da IA">*</a></b></li><li>Todas as 10 IAs do ciclo do aluno</li><li>2 números da escola: um para a conversa do dia a dia, outro verificado na API oficial da Meta para comunicação em escala</li><li>Kanban de leads com a etapa visível</li><li>Etiquetas, filtros e origem de cada contato</li><li>Integração nativa com o EVO</li><li>No ar em 30 minutos</li><li>IA de suporte 24 h + vídeos de cada tela</li>
+          <li>Cadastro guiado: preenche, conecta, pronto</li><li>Todas as 10 IAs do ciclo do aluno</li><li>2 números da escola: um para a conversa do dia a dia, outro verificado na API oficial da Meta para comunicação em escala</li><li>Kanban de leads com a etapa visível</li><li>Etiquetas, filtros e origem de cada contato</li><li>Integração nativa com o EVO</li><li>No ar em 30 minutos</li><li>IA de suporte 24 h + vídeos de cada tela</li>
         </ul>
         <a class="btn btn-primary" data-evt="clique_plano" data-plano="escola" data-loc="preco" href="https://app.wasfit.com.br/">Começar 7 dias grátis</a>
         <div class="fine">Leva 30 minutos. Se não gostar, cancela em um clique. Os dados da sua escola são seus.</div>
@@ -1076,14 +1048,14 @@ body.tm-open{overflow:hidden}
       <div>
         <div class="plan rede rv">
           <h3>Rede</h3><div class="sub">Para 2 ou mais unidades · tudo do Escola, em cada unidade, com painel unificado</div>
-          <div class="price"><b id="redePrice">R$ 997</b><span>/mês</span></div>
+          <div class="price"><b id="redePrice">R$ 1.297</b><span>/mês</span></div>
           <div class="units"><button type="button" id="uMinus" aria-label="menos uma unidade">−</button><output id="uOut">2 unidades</output><button type="button" id="uPlus" aria-label="mais uma unidade">+</button></div>
-          <div class="impl">R$ 997 para 2 unidades, + R$ 400 por unidade adicional.</div><div class="impl"><b>Créditos da IA inclusos por 12 meses, na conta da rede<a class="ast" href="#limite-ia" aria-label="ver o limite de uso da IA">*</a>.</b></div>
+          <div class="impl">R$ 1.297 para 2 unidades, + R$ 400 por unidade adicional.</div><div class="impl">Uso da IA cobrado à parte, na conta da rede<a class="ast" href="#limite-ia" aria-label="ver como é cobrado o uso da IA">*</a>.</div>
           <a class="btn btn-ghost" data-evt="clique_plano" data-plano="rede" data-loc="preco" href="https://app.wasfit.com.br/">Começar 7 dias grátis · Rede</a>
         </div>
       </div>
     </div>
-    <p class="price-note rv" id="limite-ia">* O uso da IA incluído vai até 6 milhões de tokens de conversa por mês, por conta. Na Rede, o limite é o mesmo para a conta inteira, não importa quantas unidades estejam nela. Se chegar perto do limite, você recebe um aviso e pode recarregar na plataforma.</p>
+    <p class="price-note rv" id="limite-ia">* O uso da IA não vem incluído na mensalidade: você recarrega créditos na plataforma e paga pelo que a IA usar. Quando o saldo estiver acabando, você recebe um aviso. A Implantação Completa é opcional e custa R$ 1.500, pagamento único.</p>
     
   </div>
 </section>
@@ -1101,7 +1073,7 @@ body.tm-open{overflow:hidden}
       <details><summary>Minha escola não usa a Metodologia Gustavo Borges. Serve?</summary><p>Serve. A IA nasceu dentro de escolas MGB, por isso já chega sabendo touca, nível, experimental e reposição. Se a sua escola usa outra metodologia, o vocabulário dela entra no ajuste da primeira semana: a gente lê as conversas reais e alinha nomes de níveis, turmas e regras. O que não muda é o que faz a diferença: responder na hora, qualificar e não deixar lead sem próximo passo.</p></details>
       <details><summary>Serve para centro aquático e hidroginástica?</summary><p>Sim. A IA foi treinada em escola de natação, mas o atendimento, a venda de experimental, a cobrança e a rematrícula funcionam do mesmo jeito para hidro e para turmas de adulto. No ajuste da primeira semana ela aprende o vocabulário da sua operação.</p></details>
       <details><summary>Por que dois números? Preciso trocar o meu?</summary><p>Não precisa trocar. Você mantém o número que os seus alunos já conhecem para a conversa do dia a dia. O segundo é um número verificado e protegido pela API oficial da Meta, usado só para comunicação em escala (campanhas, avisos, rematrícula), porque é o canal que a Meta garante e que não coloca em risco o número da recepção. Os dois aparecem no mesmo painel, para a mesma equipe.</p></details>
-      <details><summary>O que está incluído no uso da IA?</summary><p>6 milhões de tokens de conversa por mês, por 12 meses, já dentro da mensalidade. Se chegar perto do fim, você recebe um aviso e recarrega na plataforma. Mensagens de campanha pela API oficial da Meta são cobradas pela Meta, à parte.</p></details>
+      <details><summary>Como é cobrado o uso da IA?</summary><p>À parte da mensalidade. Você recarrega créditos na plataforma e paga pelo que a IA usar. Quando o saldo estiver acabando, você recebe um aviso. Mensagens de campanha pela API oficial da Meta são cobradas pela Meta, também à parte.</p></details>
       <details><summary>O que é a Implantação Completa?</summary><p>São 4 semanas de acompanhamento com a nossa equipe depois que você assina, com uma reunião por vídeo por semana:</p>
         <ul class="faq-list">
           <li><b>Semana 1 · Ativação completa:</b> conectamos o EVO e o número oficial da Meta. A IA passa a mostrar ao pai cada turma com o professor, as vagas livres e quantos já estão matriculados. E configuramos as frases que fazem a IA colocar cada etiqueta do Kanban sozinha (Em Espera, Experimental Agendada…).</li>
@@ -1109,7 +1081,7 @@ body.tm-open{overflow:hidden}
           <li><b>Semana 3 · Treinamento da equipe:</b> a recepção aprende a acompanhar os atendimentos, assumir conversas quando precisar e usar o Kanban no dia a dia.</li>
           <li><b>Semana 4 · Acompanhamento:</b> revisamos o uso, tiramos as dúvidas que surgiram e fazemos os últimos ajustes.</li>
         </ul>
-        <p>Sem ela, a WasFit entra no ar do mesmo jeito em 30 minutos: a IA usa a grade fixa que você cadastra e as etiquetas do Kanban são colocadas pela sua equipe. A Implantação Completa custa R$ 1.500. <b style="color:#fff">Para as 20 escolas fundadoras, sai de graça.</b></p></details>
+        <p>Sem ela, a WasFit entra no ar do mesmo jeito em 30 minutos: a IA usa a grade fixa que você cadastra e as etiquetas do Kanban são colocadas pela sua equipe. A Implantação Completa custa R$ 1.500, pagamento único.</p></details>
       <details><summary>Como funcionam os 7 dias grátis?</summary><p>Você cria a conta sem cartão, preenche os dados, conecta o WhatsApp e usa a IA de verdade por sete dias, com as suas famílias. No fim, se quiser continuar, coloca o pagamento. Se não quiser, a conta encerra sozinha; ninguém cobra e ninguém liga.</p></details>
       <details><summary>Posso cancelar quando quiser?</summary><p>Pode, no mês que quiser, sem multa. Não existe contrato de permanência nem taxa de cadastro.</p></details>
       <details><summary>Já uso outra plataforma. Preciso começar do zero?</summary><p>Não. Você cadastra a escola, conecta o seu número e a IA começa. Se quiser trazer histórico, etiquetas ou base de outra ferramenta, a gente combina isso depois que você já estiver dentro.</p></details>
@@ -1278,7 +1250,7 @@ body.tm-open{overflow:hidden}
     testar:'Oi! Vim pelo site da WasFit e quero conhecer a escola. Minha filha tem 5 anos e nunca fez natação. Como funciona?',
     raiox:'Oi! Fiz o raio-x no site da WasFit e quero agendar a reunião de raio-x de 30 min por vídeo.',
     reuniao:'Oi! Vim pelo site da WasFit e quero agendar a reunião de raio-x de 30 min por vídeo.',
-    escola:'Oi! Quero garantir a condição de lançamento do EIN no plano Escola (R$ 597/mês).',
+    escola:'Oi! Quero contratar o plano Escola da WasFit.',
     rede:'Oi! Quero montar o plano Rede da WasFit. Minha rede tem {{u}} unidades.',
     geral:'Oi! Vim pelo site da WasFit e quero entender como funciona.'
   };
@@ -1302,12 +1274,10 @@ body.tm-open{overflow:hidden}
   if(share){share.href='https://wa.me/?text='+encodeURIComponent(shareText);share.target='_blank';share.rel='noopener';share.addEventListener('click',function(){track(share)})}
   /* rede */
   var out=document.getElementById('uOut'),price=document.getElementById('redePrice');
-  function render(){out.textContent=units+' unidades';price.textContent='R$ '+(997+(units-2)*400).toLocaleString('pt-BR');document.querySelectorAll('.js-wa[data-msg=rede]').forEach(function(a){a.href=waUrl('rede')})}
+  function render(){out.textContent=units+' unidades';price.textContent='R$ '+(1297+(units-2)*400).toLocaleString('pt-BR');document.querySelectorAll('.js-wa[data-msg=rede]').forEach(function(a){a.href=waUrl('rede')})}
   document.getElementById('uMinus').onclick=function(){if(units>2){units--;render()}};
   document.getElementById('uPlus').onclick=function(){if(units<12){units++;render()}};
   render();
-  /* vagas: /vagas.json {"restam":17} editável sem deploy */
-  if(location.protocol!=='file:')fetch('/vagas.json',{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){var n=Math.max(0,Math.min(20,parseInt(j.restam,10)));if(!isNaN(n)){document.getElementById('vagasT').textContent=n?n+' de 20 vagas disponíveis':'Vagas de fundador esgotadas';document.getElementById('vagasBar').style.width=((20-n)/20*100)+'%'}}).catch(function(){});
   /* reveal + mascote */
   var secs=document.querySelectorAll('section[id]'),links=document.querySelectorAll('.ruler a');var fx=document.getElementById('waviFx'),say=document.getElementById('waviSay');
   /* No mobile o balao so vive enquanto a faixa embaixo dele estiver livre (as ondas entre secoes).
@@ -1406,7 +1376,7 @@ body.tm-open{overflow:hidden}
   document.querySelectorAll('.mock input').forEach(function(i){i.addEventListener('focus',function(){window.dataLayer.push({event:'mock_interacao',campo:i.id})},{once:true})});
   /* ROI interativo */
   var rT=document.getElementById('rTicket'),rM=document.getElementById('rMat');
-  function roi(){if(!rT)return;var t=Math.max(0,parseInt(rT.value,10)||0),m=Math.max(0,parseInt(rM.value,10)||0),a=t*12,y=a*12*m,net=y-7164,f=function(n){return 'R$ '+n.toLocaleString('pt-BR')};
+  function roi(){if(!rT)return;var t=Math.max(0,parseInt(rT.value,10)||0),m=Math.max(0,parseInt(rM.value,10)||0),a=t*12,y=a*12*m,net=y-10764,f=function(n){return 'R$ '+n.toLocaleString('pt-BR')};
     document.getElementById('r1').textContent=f(a);document.getElementById('r1s').textContent=f(t)+' × 12 meses, em receita contratada';
     document.getElementById('r2').textContent=f(y);document.getElementById('r2s').textContent=(12*m)+' matrículas × '+f(a);
     var r3=document.getElementById('r3');r3.textContent=(net<0?'− ':'')+f(Math.abs(net));r3.parentNode.querySelector('small').textContent=net>=0?'de receita contratada acima do custo.':'ainda não cobre o custo com esses números.'}
