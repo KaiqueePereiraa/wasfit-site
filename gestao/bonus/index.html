@@ -1,0 +1,3448 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bônus — Wasfit gestão</title>
+<link rel="icon" href="../assets/wasfit/favicon-64.png">
+<script>try{if(localStorage.getItem('wasfit_tema')==='escuro')document.documentElement.dataset.tema='escuro'}catch(e){}</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/marca.css?v=20261126222023">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--fonte);background:var(--bg);color:var(--dark);min-height:100vh;-webkit-font-smoothing:antialiased}
+.logo-img{display:block;object-fit:contain;object-position:left center}
+
+/* ── LOGIN ── */
+#login-screen{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:var(--grad-dark);position:relative;overflow:hidden;padding:24px;
+}
+/* acento diagonal verde — assinatura da marca Positiva */
+#login-screen::before{
+  content:"";position:absolute;top:50%;left:-10%;width:120%;height:140px;
+  background:var(--grad-brand);opacity:.22;
+  transform:translateY(-50%) rotate(-9deg);filter:blur(2px);
+}
+#login-screen::after{
+  content:"";position:absolute;top:0;right:0;width:42%;height:100%;
+  background:radial-gradient(circle at 80% 20%,rgba(190,245,117,.10),transparent 60%);
+}
+.login-box{
+  position:relative;z-index:2;
+  background:var(--white);border-radius:24px;padding:52px 44px;
+  width:100%;max-width:430px;
+  box-shadow:0 30px 80px rgba(0,0,0,.4),0 0 0 1px rgba(255,255,255,.04);
+}
+.login-logo{text-align:center;margin-bottom:36px}
+.login-logo .logo-mark{
+  height:90px;margin:0 auto 20px;display:flex;
+  justify-content:center;align-items:center;
+}
+.login-logo .logo-mark .logo-img{height:90px;width:auto}
+.login-logo h1{
+  font-size:24px;font-weight:900;color:var(--dark);
+  font-style:italic;letter-spacing:1px;text-transform:uppercase;
+}
+.login-logo p{
+  color:var(--mid);font-size:11px;margin-top:6px;
+  text-transform:uppercase;letter-spacing:3px;font-weight:700;
+}
+.login-logo .divider-line{
+  width:48px;height:4px;background:var(--grad-brand);
+  border-radius:4px;margin:18px auto 0;
+}
+.form-group{margin-bottom:18px}
+.form-group label{display:block;font-weight:700;font-size:13px;color:var(--navy);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.form-group input{
+  width:100%;padding:12px 16px;border:2px solid var(--gray);border-radius:10px;
+  font-family:inherit;font-size:15px;color:var(--dark);
+  transition:border-color .2s;outline:none;
+}
+.form-group input:focus{border-color:var(--navy)}
+.btn-login{
+  width:100%;padding:15px;background:var(--dark);color:var(--white);
+  border:none;border-radius:12px;font-family:inherit;font-size:15px;
+  font-weight:800;cursor:pointer;transition:.2s;margin-top:10px;
+  text-transform:uppercase;letter-spacing:1px;position:relative;overflow:hidden;
+}
+.btn-login::after{
+  content:"";position:absolute;left:0;bottom:0;width:100%;height:4px;
+  background:var(--grad-brand);transform:scaleX(0);transform-origin:left;
+  transition:transform .3s;
+}
+.btn-login:hover{background:var(--navy);transform:translateY(-1px)}
+.btn-login:hover::after{transform:scaleX(1)}
+.login-error{
+  color:var(--danger);font-size:13px;text-align:center;
+  margin-top:12px;display:none;
+}
+
+/* ── APP ── */
+#app{display:none}
+.header{
+  background:var(--dark);padding:0 32px;height:66px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+  box-shadow:0 2px 16px rgba(33,43,55,.25);
+}
+.header::after{
+  content:"";position:absolute;left:0;bottom:0;width:100%;height:3px;
+  background:var(--grad-brand);
+}
+.header-logo{display:flex;align-items:center;gap:14px}
+.header-logo .mark{
+  height:42px;display:flex;align-items:center;
+}
+.header-logo .mark .logo-img{height:42px;width:auto}
+.header-logo .wordmark{
+  color:var(--white);font-weight:900;font-size:17px;
+  font-style:italic;letter-spacing:1px;
+}
+.header-logo .month{
+  color:var(--dark);font-size:12px;margin-left:6px;font-weight:800;
+  background:var(--green);padding:4px 12px;border-radius:20px;
+}
+.header-right{display:flex;align-items:center;gap:16px}
+.user-badge{
+  display:flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.1);padding:6px 14px;border-radius:20px;
+}
+.user-badge .avatar{
+  width:28px;height:28px;background:var(--green);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:900;color:var(--dark);
+}
+.user-badge .uname{color:var(--white);font-size:13px;font-weight:700}
+.user-badge .urole{color:var(--gray);font-size:11px}
+.btn-logout{
+  background:transparent;border:1.5px solid rgba(255,255,255,.3);
+  color:var(--white);padding:6px 14px;border-radius:8px;
+  font-family:inherit;font-size:13px;cursor:pointer;transition:.2s;
+}
+.btn-logout:hover{background:rgba(255,255,255,.1)}
+
+/* ── TABS ── */
+.tabs-bar{
+  background:var(--white);border-bottom:1px solid #e8eaed;
+  padding:0 32px;display:flex;gap:4px;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;
+}
+.tabs-bar::-webkit-scrollbar{display:none}
+.tab-btn{
+  padding:16px 20px;border:none;background:transparent;
+  font-family:inherit;font-size:14px;font-weight:700;color:var(--mid);
+  cursor:pointer;border-bottom:3px solid transparent;transition:.2s;
+  white-space:nowrap;
+}
+.tab-btn:hover{color:var(--navy)}
+.tab-btn.active{color:var(--dark);border-bottom-color:var(--green)}
+.tab-btn .badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:20px;height:20px;background:var(--green);color:var(--dark);
+  border-radius:50%;font-size:10px;font-weight:900;margin-left:6px;
+}
+
+/* ── CONTENT ── */
+.content{padding:28px 32px;max-width:1400px;margin:0 auto}
+
+/* ── KPI CARDS ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:28px}
+.kpi-card{
+  background:var(--white);border-radius:var(--radius);padding:24px;
+  box-shadow:var(--shadow);position:relative;overflow:hidden;
+  transition:transform .2s,box-shadow .2s;
+}
+.kpi-card::before{
+  content:"";position:absolute;left:0;top:0;width:4px;height:100%;
+  background:var(--grad-brand);
+}
+.kpi-card:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(33,43,55,.14)}
+.kpi-card.highlight{background:var(--grad-dark)}
+.kpi-card.highlight::before{background:var(--grad-brand)}
+.kpi-card.highlight .kpi-label{color:var(--gray)}
+.kpi-card.highlight .kpi-value{color:var(--green)}
+.kpi-card.highlight .kpi-sub{color:var(--gray)}
+.kpi-label{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--mid);margin-bottom:8px}
+.kpi-value{font-size:32px;font-weight:900;color:var(--dark);letter-spacing:-.5px}
+.kpi-sub{font-size:13px;color:var(--mid);margin-top:4px;font-weight:600}
+
+/* ── CHARTS GRID ── */
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px}
+@media(max-width:900px){.charts-grid{grid-template-columns:1fr}}
+.chart-card{background:var(--white);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
+.chart-card h3{font-size:15px;font-weight:800;color:var(--dark);margin-bottom:16px;padding-left:12px;border-left:3px solid;border-image:var(--grad-brand) 1}
+.chart-card canvas{max-height:260px}
+
+/* ── TABLE ── */
+.table-card{background:var(--white);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);margin-bottom:28px}
+.table-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.table-header h3{font-size:15px;font-weight:800;color:var(--dark)}
+.search-box{
+  padding:8px 14px;border:1.5px solid var(--gray);border-radius:8px;
+  font-family:inherit;font-size:13px;outline:none;width:220px;
+}
+.search-box:focus{border-color:var(--navy)}
+.data-table{width:100%;border-collapse:collapse}
+.data-table th{
+  text-align:left;padding:10px 12px;font-size:12px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.5px;color:var(--mid);
+  border-bottom:2px solid #e8eaed;
+}
+.data-table td{
+  padding:12px 12px;font-size:14px;border-bottom:1px solid #f0f2f5;
+  vertical-align:middle;
+}
+.data-table tr:hover td{background:#f8f9fa}
+.data-table tr.mine td{background:#f0fff4}
+.data-table tr.mine td{border-left:3px solid var(--green)}
+.data-table tr.split-pair td{border-bottom:none}
+.data-table tr.split-sub td{border-top:1px dashed #e8eaed;padding-top:6px;padding-bottom:12px}
+.data-table tr.split-sub td:first-child::before{content:'↳ ';color:var(--gray)}
+.data-table tr.split-sub + tr:not(.split-sub) td{border-top:2px solid #e8eaed}
+.tag{
+  display:inline-flex;align-items:center;padding:3px 10px;
+  border-radius:20px;font-size:12px;font-weight:700;
+}
+.tag-new{background:#e8f5e9;color:#2e7d32}
+.tag-renewal{background:#e3f2fd;color:#1565c0}
+.tag-disputed{background:#fff3e0;color:#e65100}
+.tag-resolved{background:#f3e5f5;color:#6a1b9a}
+.tag-coord{background:#fce4ec;color:#880e4f;font-size:11px}
+.tag-type{background:#ede7f6;color:#4527a0}
+.btn-dispute{
+  padding:4px 10px;background:transparent;border:1.5px solid var(--gray);
+  border-radius:6px;font-family:inherit;font-size:12px;font-weight:700;
+  color:var(--mid);cursor:pointer;transition:.2s;
+}
+.btn-dispute:hover{border-color:var(--warning);color:var(--warning)}
+.btn-sm{
+  padding:4px 10px;border:none;border-radius:6px;
+  font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;
+}
+.btn-approve{background:#e8f5e9;color:#2e7d32}
+.btn-transfer{background:#fff3e0;color:#e65100}
+.btn-reject{background:#ffebee;color:#c62828}
+
+/* ── RANKING TABLE ── */
+.ranking-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f0f2f5}
+.rank-pos{font-size:18px;font-weight:900;color:var(--gray);width:28px;text-align:center}
+.rank-pos.top{color:var(--green)}
+.rank-name{flex:1;font-weight:700;font-size:15px}
+.rank-bar-wrap{width:160px;height:8px;background:#f0f2f5;border-radius:4px;overflow:hidden}
+.rank-bar{height:100%;background:var(--grad-brand);border-radius:4px;transition:width .6s}
+.rank-val{font-size:15px;font-weight:900;color:var(--dark);min-width:80px;text-align:right}
+.rank-detail{font-size:12px;color:var(--mid)}
+
+/* ── DISPUTES ── */
+.dispute-card{
+  background:var(--white);border-radius:var(--radius);padding:20px;
+  box-shadow:var(--shadow);margin-bottom:12px;
+  border-left:4px solid var(--warning);
+}
+.dispute-card.resolved{border-left-color:var(--success)}
+.dispute-meta{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.dispute-reason{font-size:14px;color:var(--dark);margin:8px 0}
+.dispute-decision{
+  background:#f8f9fa;border-radius:8px;padding:10px 14px;
+  font-size:13px;color:var(--mid);margin-top:8px;
+}
+.dispute-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+
+/* ── ADMIN PANEL ── */
+.admin-section{background:var(--white);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);margin-bottom:24px}
+.admin-section h3{font-size:16px;font-weight:800;color:var(--dark);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #f0f2f5}
+.user-list{display:grid;gap:10px}
+.user-row{
+  display:flex;align-items:center;gap:12px;padding:12px 16px;
+  background:#f8f9fa;border-radius:10px;
+}
+.user-avatar{
+  width:40px;height:40px;background:var(--navy);border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:900;color:var(--white);font-size:14px;
+}
+.user-info{flex:1}
+.user-info .un{font-weight:700;font-size:14px}
+.user-info .up{font-size:12px;color:var(--mid)}
+.btn-del{
+  padding:6px 12px;background:#ffebee;color:#c62828;border:none;
+  border-radius:6px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;
+}
+.btn-edit-pw{
+  padding:6px 12px;background:#e3f2fd;color:#1565c0;border:none;
+  border-radius:6px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;margin-right:6px;
+}
+.add-user-form{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.add-user-form input{
+  flex:1;min-width:140px;padding:10px 14px;border:1.5px solid var(--gray);
+  border-radius:8px;font-family:inherit;font-size:14px;outline:none;
+}
+.add-user-form input:focus{border-color:var(--navy)}
+.btn-add{
+  padding:10px 20px;background:var(--dark);color:var(--white);border:none;
+  border-radius:8px;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;
+}
+
+/* ── TOGGLE SWITCH ── */
+.toggle-switch{display:inline-block;width:44px;height:24px;background:#ccc;border-radius:12px;position:relative;transition:.2s;flex-shrink:0}
+.toggle-switch::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.toggle-switch.on{background:var(--green)}
+.toggle-switch.on::after{left:22px}
+
+/* ── MODAL ── */
+.modal-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);
+  z-index:1000;align-items:center;justify-content:center;
+}
+.modal-overlay.open{display:flex}
+.modal{
+  background:var(--white);border-radius:16px;padding:32px;
+  width:100%;max-width:500px;max-height:90vh;overflow-y:auto;
+  box-shadow:0 20px 60px rgba(0,0,0,.3);
+}
+.modal h3{font-size:18px;font-weight:800;margin-bottom:20px;color:var(--dark)}
+.modal textarea{
+  width:100%;padding:12px 14px;border:1.5px solid var(--gray);border-radius:8px;
+  font-family:inherit;font-size:14px;resize:vertical;min-height:100px;outline:none;
+}
+.modal textarea:focus{border-color:var(--navy)}
+.modal-info{
+  background:#f8f9fa;border-radius:8px;padding:12px 14px;
+  font-size:13px;color:var(--mid);margin-bottom:16px;
+}
+.modal-info strong{color:var(--dark)}
+.modal-actions{display:flex;gap:10px;margin-top:16px;justify-content:flex-end}
+.btn-cancel{
+  padding:10px 20px;background:#f0f2f5;color:var(--mid);border:none;
+  border-radius:8px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;
+}
+.btn-primary{
+  padding:10px 20px;background:var(--dark);color:var(--white);border:none;
+  border-radius:8px;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;
+}
+
+/* ── SECTION NAV ── */
+.section-nav{
+  display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;
+}
+.sec-btn{
+  padding:8px 18px;border:1.5px solid var(--gray);border-radius:20px;
+  background:transparent;font-family:inherit;font-size:13px;font-weight:700;
+  color:var(--mid);cursor:pointer;transition:.2s;
+}
+.sec-btn:hover{border-color:var(--navy);color:var(--navy)}
+.sec-btn.active{background:var(--dark);color:var(--white);border-color:var(--dark)}
+
+/* ── MY HIGHLIGHT ── */
+.my-highlight-bar{
+  background:var(--grad-dark);position:relative;overflow:hidden;
+  border-radius:var(--radius);padding:26px 28px;margin-bottom:24px;
+  display:flex;align-items:center;gap:24px;flex-wrap:wrap;
+}
+.my-highlight-bar::after{
+  content:"";position:absolute;right:-5%;top:50%;width:55%;height:90px;
+  background:var(--grad-brand);opacity:.16;
+  transform:translateY(-50%) rotate(-9deg);
+}
+.my-highlight-bar>*{position:relative;z-index:1}
+.my-highlight-bar .mh-item{text-align:center}
+.my-highlight-bar .mh-val{font-size:28px;font-weight:900;color:var(--green)}
+.my-highlight-bar .mh-lbl{font-size:12px;color:var(--gray);font-weight:700;text-transform:uppercase}
+.my-highlight-bar .divider{width:1px;height:48px;background:rgba(255,255,255,.15)}
+.my-highlight-bar .mh-name{font-size:18px;font-weight:900;color:var(--white);flex:1}
+
+/* ── EMPTY STATE ── */
+.empty-state{
+  text-align:center;padding:60px 20px;color:var(--mid);
+}
+.empty-state .icon{font-size:48px;margin-bottom:12px}
+.empty-state p{font-size:15px}
+
+/* ── MISC ── */
+.section-panel{display:none}
+.section-panel.active{display:block}
+.page-title{font-size:23px;font-weight:900;color:var(--dark);margin-bottom:4px;letter-spacing:-.3px}
+.page-title::after{content:"";display:block;width:42px;height:4px;background:var(--grad-brand);border-radius:4px;margin-top:10px}
+.page-sub{font-size:14px;color:var(--mid);margin-bottom:24px}
+select{
+  padding:8px 14px;border:1.5px solid var(--gray);border-radius:8px;
+  font-family:inherit;font-size:13px;color:var(--dark);background:var(--white);
+  outline:none;cursor:pointer;
+}
+select:focus{border-color:var(--navy)}
+.flex-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.coordinator-notice{
+  background:#f0fff4;border:1.5px solid #c8e6c9;border-radius:10px;
+  padding:10px 16px;font-size:13px;color:#2e7d32;margin-bottom:20px;
+  font-weight:600;
+}
+</style>
+<style id="wasfit-bonus">
+/* WasFit Gestão (26/11/2026): visual do app.wasfit.com.br por cima do Bônus, com modo claro e escuro (tokens em ../shared/marca.css). */
+#login-screen{background:var(--fundo)}
+#login-screen::before,#login-screen::after{display:none}
+.login-box{background:var(--superficie);border:1px solid var(--borda);box-shadow:0 20px 60px rgba(0,0,0,.08)}
+.marca-wasfit{height:34px;width:auto;margin:0 auto 14px;display:block}
+.login-logo h1{font-style:normal;text-transform:none;letter-spacing:-.4px;font-weight:700;color:var(--texto)}
+.login-logo p{text-transform:none;letter-spacing:0;font-weight:400;color:var(--suave)}
+.header{background:var(--fundo);border-bottom:1px solid var(--borda);box-shadow:none}
+.header::after{display:none}
+.wasfit-logo{height:30px;width:auto;display:block}
+.header-logo .wordmark{color:var(--texto);font-style:normal;font-weight:600;font-size:15px;letter-spacing:0;border-left:1px solid var(--borda);padding-left:14px}
+.header-logo .month{background:color-mix(in oklch,var(--primaria) 20%,transparent);color:var(--primaria-forte);font-weight:600}
+.user-badge{background:var(--superficie);border:1px solid var(--borda)}
+.user-badge .avatar{background:var(--primaria);color:var(--primaria-texto)}
+.user-badge .uname{color:var(--texto)}
+.user-badge .urole{color:var(--suave)}
+.btn-logout{border:1px solid var(--borda);color:var(--texto)}
+.btn-logout:hover{background:var(--lateral-ativo)}
+.tema-btn{width:38px;height:38px;border-radius:12px;border:1px solid var(--borda);background:transparent;color:var(--texto);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.tema-btn svg{width:19px;height:19px}
+.tabs-bar{background:var(--fundo);border-bottom:1px solid var(--borda)}
+.kpi-card,.chart-card,.table-card,.admin-section,.modal-overlay .modal,.dispute-card{background:var(--superficie);border:1px solid var(--borda);box-shadow:var(--shadow);color:var(--texto)}
+.kpi-label,.data-table th{text-transform:none;letter-spacing:0;font-weight:600}
+.page-title{font-style:normal;text-transform:none;letter-spacing:-.5px;font-weight:700}
+.data-table tr:hover td{background:var(--muted)}
+.data-table tr.mine td{background:color-mix(in oklch,var(--primaria) 9%,transparent)}
+.data-table td,.data-table th{border-color:var(--borda)}
+.rank-bar-wrap{background:var(--muted)}
+.sec-btn.active{background:var(--texto);color:var(--superficie);border-color:var(--texto)}
+.btn-login,.btn-primary{background:var(--primaria);color:var(--primaria-texto)}
+input,select,textarea{background:var(--superficie);color:var(--texto);border-color:var(--borda)}
+.kpi-card.highlight,.my-highlight-bar{--white:#fff;color:#fff}
+:root[data-tema="escuro"] .tag-new,:root[data-tema="escuro"] .btn-approve{background:color-mix(in oklch,var(--primaria) 18%,transparent);color:var(--primaria-forte)}
+:root[data-tema="escuro"] .tag-renewal{background:color-mix(in oklch,var(--info) 18%,transparent);color:oklch(75% .12 258)}
+:root[data-tema="escuro"] .tag-disputed,:root[data-tema="escuro"] .btn-transfer{background:color-mix(in oklch,var(--warning) 18%,transparent);color:var(--warning)}
+:root[data-tema="escuro"] .tag-resolved,:root[data-tema="escuro"] .tag-type{background:color-mix(in oklch,#8b5cf6 20%,transparent);color:#c4b5fd}
+:root[data-tema="escuro"] .tag-coord{background:color-mix(in oklch,#ec4899 18%,transparent);color:#f9a8d4}
+:root[data-tema="escuro"] .btn-reject{background:color-mix(in oklch,var(--danger) 18%,transparent);color:oklch(72% .17 27)}
+:root[data-tema="escuro"] .dispute-reason,:root[data-tema="escuro"] .dispute-decision,:root[data-tema="escuro"] .user-row,:root[data-tema="escuro"] .modal-info,:root[data-tema="escuro"] .btn-cancel,:root[data-tema="escuro"] .coordinator-notice{background:var(--muted);color:var(--texto);border-color:var(--borda)}
+:root[data-tema="escuro"] .toggle-switch{background:var(--borda)}
+:root[data-tema="escuro"] .toggle-switch.on{background:var(--primaria)}
+:root[data-tema="escuro"] [style*="background:#f8f9fa"],:root[data-tema="escuro"] [style*="background:#f0f2f5"],:root[data-tema="escuro"] [style*="background:#fff"]{background:var(--muted)!important;color:var(--texto)!important}
+/* Revisão de design 26/11: sem faixa colorida na lateral dos cartões (igual à Central), contraste e valores sem quebrar */
+.kpi-card::before,.kpi-card.highlight::before{display:none}
+.kpi-card.highlight .kpi-label,.kpi-card.highlight .kpi-sub,.my-highlight-bar .mh-lbl{color:var(--texto-sobre-escuro)}
+.tag-disputed,.btn-transfer{color:var(--texto-aviso)}
+.rank-pos{color:var(--suave)}
+.kpi-value{white-space:nowrap;font-size:clamp(24px,2.6vw,32px);font-variant-numeric:tabular-nums}
+.btn-primary:active,.btn-login:active,.sec-btn:active{transform:scale(.97)}
+.chart-card h3{border-left:0;padding-left:0;border-image:none;font-weight:700}
+.data-table tr.mine td{border-left:0}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ CARREGANDO ══════════════════ -->
+<!-- O login é feito na página inicial do site (Supabase Auth); aqui só esperamos os dados. -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <img class="marca-wasfit so-claro" src="../assets/wasfit/wasfit-logo-light.webp" alt="WasFit"><img class="marca-wasfit so-escuro" src="../assets/wasfit/wasfit-logo-dark.webp" alt="WasFit">
+      <h1>Wasfit gestão</h1>
+      <p id="carregando-msg">Carregando o bônus…</p>
+      <div class="divider-line"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ APP ══════════════════ -->
+<div id="app">
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-logo">
+      <img class="wasfit-logo so-claro" src="../assets/wasfit/wasfit-logo-light.webp" alt="WasFit"><img class="wasfit-logo so-escuro" src="../assets/wasfit/wasfit-logo-dark.webp" alt="WasFit">
+      <span class="wordmark" id="conta-nome-bonus">Bônus</span>
+      <span class="month" id="hdr-month"></span>
+    </div>
+    <div class="header-right">
+      <button class="tema-btn" id="tema-bonus" type="button" aria-label="Modo claro / escuro" title="Modo claro / escuro"><svg class="so-claro" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="so-escuro" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+      <div class="user-badge">
+        <div class="avatar" id="hdr-avatar"></div>
+        <div>
+          <div class="uname" id="hdr-name"></div>
+          <div class="urole" id="hdr-role"></div>
+        </div>
+      </div>
+      <a class="btn-logout" id="btn-trocar" href="../index.html" style="text-decoration:none" hidden>Trocar de área</a>
+      <button class="btn-logout" onclick="doLogout()">Sair</button>
+    </div>
+  </header>
+
+  <!-- TABS (unidades) -->
+  <div class="tabs-bar" id="tabs-bar"></div>
+
+  <!-- MAIN CONTENT -->
+  <div class="content">
+    <!-- Seção Nav -->
+    <div class="section-nav" id="section-nav"></div>
+    <div id="aviso-contestacao"></div>
+
+    <!-- Paineis de Seção -->
+    <div id="panel-overview"  class="section-panel"></div>
+    <div id="panel-weekly"    class="section-panel"></div>
+    <div id="panel-sales"     class="section-panel"></div>
+    <div id="panel-ranking"   class="section-panel"></div>
+    <div id="panel-disputes"  class="section-panel"></div>
+    <div id="panel-compare"   class="section-panel"></div>
+    <div id="panel-admin"     class="section-panel"></div>
+  </div>
+</div>
+
+<!-- ══════════════════ MODAL DISPUTA ══════════════════ -->
+<div class="modal-overlay" id="modal-dispute">
+  <div class="modal">
+    <h3>Contestar Venda</h3>
+    <div class="modal-info" id="dispute-sale-info"></div>
+    <p style="font-size:13px;font-weight:700;color:var(--mid);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">Motivo da contestação</p>
+    <textarea id="dispute-reason" placeholder="Explique por que esta venda deveria ser creditada a você..."></textarea>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('modal-dispute')">Cancelar</button>
+      <button class="btn-primary" onclick="submitDispute()">Enviar Contestação</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL RESOLVER DISPUTA (COORD) -->
+<div class="modal-overlay" id="modal-resolve">
+  <div class="modal">
+    <h3>Resolver Disputa</h3>
+    <div class="modal-info" id="resolve-info"></div>
+    <p style="font-size:13px;font-weight:700;color:var(--mid);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">Justificativa da decisão</p>
+    <textarea id="resolve-reason" placeholder="Descreva o motivo da sua decisão..."></textarea>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('modal-resolve')">Cancelar</button>
+      <button class="btn-sm btn-transfer" onclick="resolveDispute('transfer')" style="padding:10px 16px">Transferir venda</button>
+      <button class="btn-sm btn-approve" onclick="resolveDispute('keep')" style="padding:10px 16px">Manter original</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ADICIONAR/EDITAR VENDA (COORD) -->
+<div class="modal-overlay" id="modal-add-sale">
+  <div class="modal" style="max-width:580px">
+    <h3 id="add-sale-title">Adicionar Venda Manualmente</h3>
+    <p id="add-sale-sub" style="font-size:13px;color:var(--mid);margin-bottom:20px">Use para incluir vendas que não apareceram nos relatórios.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="form-group" style="margin-bottom:0">
+        <label>Aluno *</label>
+        <input type="text" id="add-student" placeholder="Nome completo">
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label>Consultor</label>
+        <select id="add-consultant" style="width:100%;padding:12px 16px;border:2px solid var(--gray);border-radius:10px;font-family:inherit;font-size:15px;outline:none">
+          <option value="">— Sem consultor —</option>
+        </select>
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label>Tipo *</label>
+        <select id="add-type" onchange="syncAddCommissionDefault()" style="width:100%;padding:12px 16px;border:2px solid var(--gray);border-radius:10px;font-family:inherit;font-size:15px;outline:none">
+          <option value="new">Novo</option>
+          <option value="renewal">Rematrícula</option>
+        </select>
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label>Unidade *</label>
+        <select id="add-unit" style="width:100%;padding:12px 16px;border:2px solid var(--gray);border-radius:10px;font-family:inherit;font-size:15px;outline:none">
+        </select>
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label>Data *</label>
+        <input type="text" id="add-date" placeholder="dd/mm/aaaa">
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label>Bônus (R$) *</label>
+        <input type="text" id="add-commission" placeholder="Ex: 20 ou 17,50">
+      </div>
+      <div class="form-group" style="margin-bottom:0;grid-column:1/-1">
+        <label>Contrato</label>
+        <input type="text" id="add-contract" placeholder="Descrição do contrato">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('modal-add-sale')">Cancelar</button>
+      <button class="btn-primary" id="add-sale-submit" onclick="submitAddSale()">Adicionar Venda</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DEFESA DE DISPUTA -->
+<div class="modal-overlay" id="modal-defense">
+  <div class="modal">
+    <h3>⚔️ Defender Minha Venda</h3>
+    <div class="modal-info" id="defense-sale-info"></div>
+    <div style="background:#fff3e0;border-radius:8px;padding:10px 14px;font-size:13px;color:#e65100;margin-bottom:14px">
+      <strong>Contestação:</strong> <span id="defense-claim-reason"></span>
+    </div>
+    <p style="font-size:13px;font-weight:700;color:var(--mid);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">Sua defesa</p>
+    <textarea id="defense-reason" placeholder="Explique por que esta venda deve permanecer com você..."></textarea>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('modal-defense')">Cancelar</button>
+      <button class="btn-primary" onclick="submitDefense()">Enviar Defesa</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETALHE DA SEMANA (Semanal) -->
+<div class="modal-overlay" id="modal-week-detail">
+  <div class="modal" style="max-width:800px">
+    <h3 id="week-detail-title">Detalhe da semana</h3>
+    <div class="modal-info" id="week-detail-info"></div>
+    <div id="week-detail-body"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('modal-week-detail')">Fechar</button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+// ══════════════════════════════════════════════
+//  SUPABASE — operações por linha (concurrency-safe)
+// ══════════════════════════════════════════════
+const SB_URL = "https://rolmzfaaivyhycugljlm.supabase.co";
+const SB_KEY = "sb_publishable_GzqkJ2H0PY2EP66M-agnDg_6B-p-QWF";
+const db = supabase.createClient(SB_URL, SB_KEY);
+
+// Os ids de comissão dividida (cadastro/conversão) usam sufixo -cad/-conv/-full/-ren;
+// o id "limpo" (matrícula/aluno) é o mesmo sufixo removido — evita precisar de coluna extra no Supabase.
+function saleIdFromLine(lineId) {
+  return String(lineId || '').replace(/-(cad|conv|full|ren)$/, '');
+}
+
+// O papel (cadastro/conversão/etc) também vem do sufixo do line_id — evita precisar de
+// coluna extra no Supabase para guardar isso em vendas manuais/editadas.
+function roleFromLineId(lineId) {
+  const m = /-(cad|conv|full|ren)$/.exec(String(lineId || ''));
+  if (!m) return null;
+  return {cad:'cadastro', conv:'conversao', full:'completo', ren:'consultor'}[m[1]];
+}
+
+// Rótulo do tipo de venda contestada — deriva do sufixo do sale_id (mesma lógica de
+// roleFromLineId), pra quem vai analisar a disputa saber se é cadastro/conversão/rematrícula
+// sem precisar abrir a venda original.
+function disputeTypeLabel(saleId) {
+  return {
+    cadastro: 'Cadastro', conversao: 'Conversão',
+    completo: 'Completo (100%)', consultor: 'Rematrícula / renovação (100%)',
+  }[roleFromLineId(saleId)] || 'Não identificado';
+}
+
+function dbRowToDispute(r) {
+  return {
+    _localId: r.local_id,
+    saleId: r.sale_id, unit: r.unit, unit_label: r.unit_label,
+    originalConsultant: r.original_consultant, claimant: r.claimant,
+    reason: r.reason, defense: r.defense, defendedAt: r.defended_at,
+    status: r.status, action: r.action, resolution: r.resolution,
+    resolvedBy: r.resolved_by, resolvedAt: r.resolved_at,
+    createdAt: r.created_at_str, month: r.month, displayId: saleIdFromLine(r.sale_id),
+  };
+}
+
+function dbRowToDeduction(r) {
+  return {
+    _localId: r.local_id, consultant: r.consultant, unit: r.unit, unit_label: r.unit_label,
+    amount: Number(r.amount), reason: r.reason, month: r.month,
+    createdBy: r.created_by, createdAt: r.created_at_str,
+  };
+}
+
+function dbRowToManual(r) {
+  return {
+    id: saleIdFromLine(r.id), line_id: r.id, student: r.student, consultant: r.consultant,
+    type: r.type, role: roleFromLineId(r.id) || (r.consultant ? 'completo' : null), commission: r.commission, date: r.sale_date,
+    contract: r.contract, unit: r.unit, unit_label: r.unit_label,
+    month: r.month, _manual: true,
+  };
+}
+
+// Sync completo: busca as 3 tabelas e atualiza estado local
+async function syncFromSupabase() {
+  try {
+    const [{ data: dbD }, { data: dbU }, { data: dbM }] = await Promise.all([
+      db.from('disputes').select('*').eq('month', MONTH),
+      db.from('unassigned_sales').select('*').eq('month', MONTH),
+      db.from('manual_sales').select('*').eq('month', MONTH),
+    ]);
+    disputes = (dbD || []).filter(r => unidadePermitida(r.unit)).map(dbRowToDispute);
+    const overrides = {
+      unassigned: (dbU || []).filter(r => unidadePermitida(r.unit)).map(r => ({ id: r.sale_id, unit: r.unit })),
+      added: (dbM || []).filter(r => unidadePermitida(r.unit)).map(dbRowToManual),
+    };
+    localStorage.setItem(DISPUTES_KEY,  JSON.stringify(disputes));
+    localStorage.setItem(OVERRIDES_KEY, JSON.stringify(overrides));
+  } catch(e) { console.warn('Supabase sync failed', e); }
+
+  // Descontos por não conformidade — em try separado: se a tabela ainda não existir
+  // (migração não rodada), não deve derrubar a sincronização de disputas/vendas acima.
+  try {
+    const { data: dbDed } = await db.from('deductions').select('*').eq('month', MONTH);
+    deductions = (dbDed || []).filter(r => unidadePermitida(r.unit)).map(dbRowToDeduction);
+    localStorage.setItem(DEDUCTIONS_KEY, JSON.stringify(deductions));
+  } catch(e) { console.warn('Deductions sync failed (rode a migração deductions?)', e); }
+
+  // Configuração de visibilidade — em try separado: se a tabela app_settings ainda não
+  // existir, não deve derrubar a sincronização de disputas/vendas acima.
+  try {
+    const { data: dbS } = await db.from('app_settings').select('*').eq('key', 'sales_visible_to_consultants');
+    if (dbS && dbS[0]) {
+      salesVisibleToConsultants = dbS[0].value !== 'false';
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify({salesVisibleToConsultants}));
+    }
+  } catch(e) { console.warn('Settings sync failed (rode a migração app_settings?)', e); }
+}
+
+async function setSalesVisibility(visible) {
+  salesVisibleToConsultants = visible;
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify({salesVisibleToConsultants}));
+  buildSectionNav();
+  renderAdmin();
+  if (session.role !== 'coordinator' && activeSection === 'sales' && !visible) {
+    switchSection('overview');
+  }
+  const res = await db.from('app_settings').upsert(
+    { key: 'sales_visible_to_consultants', value: visible ? 'true' : 'false' },
+    { onConflict: 'key' }
+  );
+  checkSbResult(res, 'configuração de visibilidade');
+}
+
+// Toda escrita no Supabase passa por aqui — se falhar (RLS, coluna incompatível, rede),
+// avisa visivelmente em vez de deixar a mudança parecer salva só localmente.
+function checkSbResult(res, label) {
+  if (res && res.error) {
+    console.warn('Supabase write failed:', label, res.error);
+    showSyncToast('⚠ Não sincronizou: ' + label);
+  }
+  return res;
+}
+
+// Operações individuais — disputes
+async function sbAddDispute(d) {
+  const res = await db.from('disputes').insert({
+    local_id: d._localId, sale_id: d.saleId, unit: d.unit,
+    unit_label: d.unit_label, original_consultant: d.originalConsultant,
+    claimant: d.claimant, reason: d.reason, status: d.status,
+    created_at_str: d.createdAt, month: d.month,
+  });
+  return checkSbResult(res, 'contestação');
+}
+async function sbUpdateDispute(d) {
+  const res = await db.from('disputes').update({
+    defense: d.defense, defended_at: d.defendedAt,
+    status: d.status, action: d.action, resolution: d.resolution,
+    resolved_by: d.resolvedBy, resolved_at: d.resolvedAt,
+  }).eq('local_id', d._localId);
+  return checkSbResult(res, 'disputa');
+}
+
+// Operações individuais — vendas sem dono
+async function sbUnassignSale(id, unit) {
+  const res = await db.from('unassigned_sales').upsert({ sale_id: id, unit, month: MONTH }, { onConflict: 'sale_id,unit' });
+  return checkSbResult(res, 'remoção de dono');
+}
+async function sbReassignSale(id, unit) {
+  const res = await db.from('unassigned_sales').delete().eq('sale_id', id).eq('unit', unit);
+  return checkSbResult(res, 'reatribuição');
+}
+
+// Operações individuais — vendas manuais
+async function sbAddManualSale(s) {
+  // A coluna "id" no Supabase guarda o line_id (chave única por linha de comissão) —
+  // upsert: um "Editar Venda" reenvia o mesmo line_id para sobrescrever a entrada anterior.
+  const res = await db.from('manual_sales').upsert({
+    id: s.line_id, student: s.student, consultant: s.consultant,
+    type: s.type, commission: s.commission, sale_date: s.date,
+    contract: s.contract, unit: s.unit, unit_label: s.unit_label, month: s.month,
+  }, { onConflict: 'id' });
+  return checkSbResult(res, 'venda/edição');
+}
+async function sbDeleteManualSale(id) {
+  const res = await db.from('manual_sales').delete().eq('id', id);
+  return checkSbResult(res, 'exclusão');
+}
+
+// Operações individuais — descontos por não conformidade
+async function sbAddDeduction(d) {
+  const res = await db.from('deductions').insert({
+    local_id: d._localId, consultant: d.consultant, unit: d.unit, unit_label: d.unit_label,
+    amount: d.amount, reason: d.reason, month: d.month,
+    created_by: d.createdBy, created_at_str: d.createdAt,
+  });
+  return checkSbResult(res, 'desconto');
+}
+async function sbDeleteDeduction(localId) {
+  const res = await db.from('deductions').delete().eq('local_id', localId);
+  return checkSbResult(res, 'remoção de desconto');
+}
+
+
+// Realtime: qualquer mudança em qualquer tabela re-sincroniza e re-renderiza
+function setupRealtime() {
+  db.channel('positiva-realtime')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'disputes' }, handleRemoteChange)
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'unassigned_sales' }, handleRemoteChange)
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'manual_sales' }, handleRemoteChange)
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'deductions' }, handleRemoteChange)
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'app_settings' }, handleRemoteChange)
+    .subscribe();
+}
+
+let _realtimeTimer = null;
+async function handleRemoteChange() {
+  clearTimeout(_realtimeTimer);
+  _realtimeTimer = setTimeout(async () => {
+    await syncFromSupabase();
+    users = await loadUsers();
+    destroyCharts();
+    buildSectionNav();
+    if (session.role !== 'coordinator' && activeSection === 'sales' && !salesVisibleToConsultants) {
+      activeSection = 'overview';
+    }
+    renderSection(activeSection);
+    showSyncToast('🔄 Atualizado em tempo real');
+  }, 400);
+}
+
+function showSyncToast(msg) {
+  let el = document.getElementById('sync-badge');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'sync-badge';
+    el.style.cssText = 'position:fixed;bottom:18px;right:18px;padding:8px 16px;border-radius:20px;font-size:12px;font-weight:700;z-index:9999;transition:opacity .4s';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.style.background = msg.includes('🔄') ? 'var(--navy)' : 'var(--success)';
+  el.style.color = '#fff';
+  el.style.opacity = '1';
+  clearTimeout(el._timer);
+  el._timer = setTimeout(() => { el.style.opacity = '0'; }, 2500);
+}
+
+// ══════════════════════════════════════════════
+//  DADOS — vêm do Supabase depois do login (carregarPublicacao); nada fica no HTML
+// ══════════════════════════════════════════════
+let RAW_SALES  = [];
+let RAW_SALES_TODAS = [];   // sem o filtro de unidade do coordenador: a meta da Acqua (v3) junta Laranjeiras + República
+let MONTH      = '';
+let UNIT_KEYS  = [];
+let UNIT_LABELS= {};
+let ALL_MONTHS = [];
+let DEFAULT_CONSULTANT = '';
+// Coordenador de unidade: só as unidades marcadas no perfil (null = todas — super admin e consultores).
+let UNIDADES_PERMITIDAS = null;
+const unidadePermitida = (u) => !UNIDADES_PERMITIDAS || UNIDADES_PERMITIDAS.includes(u);
+
+// Lê a publicação do mês pedido (?mes=Outubro/2026) ou a mais recente, e as vendas dela. Desde 17/11/2026 o mês atual
+// é publicado sozinho toda madrugada pela EVO (função evo-bonus); os meses anteriores continuam disponíveis no seletor.
+let PUBLICACOES = [];
+async function carregarPublicacao() {
+  const { data: pubs, error } = await db.from('bonus_publicacoes').select('*').order('publicado_em', { ascending: false });
+  if (error || !pubs || !pubs.length) return false;
+  const pedido = new URLSearchParams(location.search).get('mes');
+  const pub = pubs.find(p => p.mes === pedido) || pubs[0];
+  PUBLICACOES = pubs.map(p => ({ mes: p.mes, em: p.publicado_em }));
+  const vendas = [];
+  for (let de = 0; ; de += 1000) {
+    const { data, error: e } = await db.from('vendas').select('dados').eq('mes', pub.mes).order('ordem').range(de, de + 999);
+    if (e) return false;
+    vendas.push(...data.map(r => r.dados));
+    if (data.length < 1000) break;
+  }
+  RAW_SALES = vendas.filter(v => unidadePermitida(v.unit));
+  RAW_SALES_TODAS = vendas;
+  MONTH = pub.mes;
+  UNIT_KEYS = pub.unidades.filter(unidadePermitida);
+  UNIT_LABELS = pub.rotulos;
+  ALL_MONTHS = pub.meses;
+  DEFAULT_CONSULTANT = pub.default_consultant;
+  OVERRIDES_KEY = 'positiva_overrides_' + MONTH.replace('/','_');
+  activeMonth = ALL_MONTHS[ALL_MONTHS.length - 1] || MONTH;
+  return true;
+}
+
+// ══════════════════════════════════════════════
+//  DISPLAY NAME HELPER
+// ══════════════════════════════════════════════
+// Retorna "PrimeiroNome Sobrenome" para diferenciar homônimos
+function shortName(fullName) {
+  if (!fullName) return '—';
+  if (fullName === DEFAULT_CONSULTANT) return DEFAULT_CONSULTANT;   // sempre por extenso, maiúsculo
+  const parts = fullName.trim().split(/\s+/);
+  if (parts.length <= 2) return parts.map(p => p[0] + p.slice(1).toLowerCase()).join(' ');
+  const first = parts[0][0] + parts[0].slice(1).toLowerCase();
+  const last  = parts[parts.length - 1][0] + parts[parts.length - 1].slice(1).toLowerCase();
+  return first + ' ' + last;
+}
+
+// ══════════════════════════════════════════════
+//  STORAGE HELPERS
+// ══════════════════════════════════════════════
+const USERS_KEY     = 'positiva_users';       // cache: só login/nome/papel (sem hash)
+const SESSION_KEY   = 'positiva_session';
+const DISPUTES_KEY   = 'positiva_disputes';
+const DEDUCTIONS_KEY = 'positiva_deductions';
+let OVERRIDES_KEY = '';   // definido em carregarPublicacao()
+const SETTINGS_KEY  = 'positiva_settings'; // global, não é por mês
+
+// Usuários agora ficam no Supabase Auth (Central de Tarefas → Configurações).
+async function loadUsers() { return {}; }
+
+function saveUsers(u) { localStorage.setItem(USERS_KEY, JSON.stringify(u)); }
+
+function loadDisputes() {
+  const saved = localStorage.getItem(DISPUTES_KEY);
+  return saved ? JSON.parse(saved).filter(d => unidadePermitida(d.unit)) : [];
+}
+function saveDisputesLocal(d) { localStorage.setItem(DISPUTES_KEY, JSON.stringify(d)); }
+
+function loadDeductions() {
+  const saved = localStorage.getItem(DEDUCTIONS_KEY);
+  return saved ? JSON.parse(saved).filter(d => unidadePermitida(d.unit)) : [];
+}
+function saveDeductionsLocal(d) { localStorage.setItem(DEDUCTIONS_KEY, JSON.stringify(d)); }
+
+function loadOverrides() {
+  const saved = localStorage.getItem(OVERRIDES_KEY);
+  const o = saved ? JSON.parse(saved) : { unassigned: [], added: [] };
+  return { ...o, unassigned: (o.unassigned || []).filter(x => unidadePermitida(x.unit)), added: (o.added || []).filter(x => unidadePermitida(x.unit)) };
+}
+function saveOverridesLocal(o) { localStorage.setItem(OVERRIDES_KEY, JSON.stringify(o)); }
+
+function loadSettings() {
+  const saved = localStorage.getItem(SETTINGS_KEY);
+  return saved ? JSON.parse(saved) : { salesVisibleToConsultants: true };
+}
+
+// ══════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════
+let session     = null;
+let salesVisibleToConsultants = loadSettings().salesVisibleToConsultants;
+let users       = {};
+let disputes    = [];
+let deductions  = [];   // descontos de bônus por não conformidade (Seção 6/7 da política)
+let activeUnit  = null;
+let activeMonth = '';     // definido em carregarPublicacao()
+let activeSection = 'overview';
+let pendingDisputeSale = null;
+let pendingResolveIdx  = null;
+let pendingDefenseIdx  = null;
+let pendingPwLogin     = null;
+let chartRanking = null;
+let chartCompare = null;
+let chartTimeline = null;
+let chartCmp1 = null;
+let chartCmp2 = null;
+
+// ══════════════════════════════════════════════
+//  AUTH
+// ══════════════════════════════════════════════
+async function doLogout() {
+  await db.auth.signOut();
+  location.replace('../index.html');
+}
+
+// ══════════════════════════════════════════════
+//  BOOT APP
+// ══════════════════════════════════════════════
+async function bootApp() {
+  users = await loadUsers();
+
+  // Mostra app imediatamente com dados locais
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('hdr-month').textContent = MONTH;
+  // WasFit Gestão: nome da academia no topo e botão de modo claro/escuro
+  db.rpc('minha_conta').then(({ data }) => { if (data?.nome) document.getElementById('conta-nome-bonus').textContent = `${data.nome} · Bônus`; if (data?.logo_escuro) window.__contaLogo = /^https?:/.test(data.logo_escuro) ? data.logo_escuro : new URL(`../${data.logo_escuro}`, location.href).href; }).catch(() => {});
+  document.getElementById('tema-bonus')?.addEventListener('click', () => {
+    const escuro = document.documentElement.dataset.tema !== 'escuro';
+    if (escuro) document.documentElement.dataset.tema = 'escuro'; else delete document.documentElement.dataset.tema;
+    try { localStorage.setItem('wasfit_tema', escuro ? 'escuro' : 'claro'); } catch (e) { /* sem armazenamento */ }
+    try { renderSection(activeSection); } catch (e) { /* ainda carregando */ }
+  });
+  // seletor de fechamento: troca o mês inteiro do Bônus (contestações, vendas manuais e descontos são por mês)
+  if (PUBLICACOES.length > 1) {
+    const ordem = (m) => { const p = parseMonthLabel(m); return p ? p.year * 100 + p.month : 0; };
+    const meses = PUBLICACOES.map(p => p.mes).sort((a, b) => ordem(b) - ordem(a));
+    const sel = document.createElement('select');
+    sel.className = 'month';
+    sel.setAttribute('aria-label', 'Mês do bônus');
+    sel.style.cssText = 'border:none;font-family:inherit;cursor:pointer;outline:none';   // mesmo selo verde do mês (classe .month)
+    sel.innerHTML = meses.map(m => `<option value="${m}" ${m === MONTH ? 'selected' : ''} style="color:#111">${m}</option>`).join('');
+    sel.onchange = () => { location.search = '?mes=' + encodeURIComponent(sel.value); };
+    document.getElementById('hdr-month').replaceWith(sel);
+  }
+  document.getElementById('hdr-name').textContent  = String(session.name || '').toLowerCase().replace(/(^|\s)\S/g, (c) => c.toUpperCase()).replace(/ (De|Da|Do|Dos|Das|E) /g, (m) => m.toLowerCase());
+  document.getElementById('hdr-role').textContent  = session.role === 'coordinator' ? 'Coordenador' : 'Consultor';
+  document.getElementById('hdr-avatar').textContent = session.name[0];
+
+  disputes = loadDisputes();
+  deductions = loadDeductions();
+  buildTabs();
+  buildSectionNav();
+  renderSection(activeSection);
+  showSyncToast('⟳ Sincronizando...');
+
+  // Busca dados atualizados do Supabase
+  await syncFromSupabase();
+  disputes = loadDisputes();
+  deductions = loadDeductions();
+  destroyCharts();
+  buildSectionNav();
+  renderSection(activeSection);
+  showSyncToast('✓ Sincronizado');
+
+  // Ativa Realtime para atualizações automáticas
+  setupRealtime();
+}
+
+// ══════════════════════════════════════════════
+//  TABS (unidades) + seletor de mês
+// ══════════════════════════════════════════════
+function buildTabs() {
+  const bar = document.getElementById('tabs-bar');
+  bar.innerHTML = '';
+
+  if (session.role === 'coordinator') {
+    const allBtn = document.createElement('button');
+    allBtn.className = 'tab-btn active';
+    allBtn.textContent = UNIDADES_PERMITIDAS ? '🏢 Minhas unidades' : '🏢 Todas as Unidades';
+    allBtn.onclick = () => switchUnit(null, allBtn);
+    bar.appendChild(allBtn);
+
+    UNIT_KEYS.forEach((uk) => {
+      const btn = document.createElement('button');
+      btn.className = 'tab-btn';
+      btn.textContent = UNIT_LABELS[uk] || uk;
+      btn.onclick = () => switchUnit(uk, btn);
+      bar.appendChild(btn);
+    });
+    activeUnit = null;
+  } else {
+    // Consultor com vendas em mais de uma unidade precisa conseguir trocar entre elas
+    // pra ver o desempenho de cada uma separadamente — antes só existia "Meu Dashboard"
+    // (visão combinada de todas as unidades), sem nenhum jeito de isolar uma só.
+    const myUnits = [...new Set(RAW_SALES.filter(s => s.consultant === session.name).map(s => s.unit))];
+    const allBtn = document.createElement('button');
+    allBtn.className = 'tab-btn active';
+    allBtn.textContent = 'Meu Dashboard';
+    allBtn.onclick = () => switchUnit(null, allBtn);
+    bar.appendChild(allBtn);
+    if (myUnits.length > 1) {
+      myUnits.forEach(uk => {
+        const btn = document.createElement('button');
+        btn.className = 'tab-btn';
+        btn.textContent = UNIT_LABELS[uk] || uk;
+        btn.onclick = () => switchUnit(uk, btn);
+        bar.appendChild(btn);
+      });
+    }
+    activeUnit = null;
+  }
+
+  // Seletor de mês (aparece apenas se há mais de 1 mês)
+  if (ALL_MONTHS.length > 1) {
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'margin-left:auto;display:flex;align-items:center;gap:8px;padding:0 8px';
+    wrap.innerHTML = `
+      <span style="font-size:12px;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.5px">Mês:</span>
+      <select id="month-select" style="padding:6px 12px;border:1.5px solid var(--gray);border-radius:8px;font-family:inherit;font-size:13px;font-weight:700;color:var(--dark);background:var(--white);outline:none;cursor:pointer">
+        ${ALL_MONTHS.map(m=>`<option value="${m}" ${m===activeMonth?'selected':''}>${m}</option>`).join('')}
+      </select>`;
+    wrap.querySelector('#month-select').onchange = function() {
+      activeMonth = this.value;
+      destroyCharts();
+      renderSection(activeSection);
+    };
+    bar.appendChild(wrap);
+  }
+}
+
+function switchUnit(uk, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeUnit = uk;
+  destroyCharts();
+  renderSection(activeSection);
+}
+
+// ══════════════════════════════════════════════
+//  SECTION NAV
+// ══════════════════════════════════════════════
+function buildSectionNav() {
+  const nav = document.getElementById('section-nav');
+  nav.innerHTML = '';
+
+  const showSales = contestacaoAberta(MONTH);   // consultora: só do dia 1º ao 10, para o mês que fechou
+  avisoContestacao();
+
+  // Trava central: se a config de visibilidade chegar do Supabase DEPOIS de o consultor já
+  // ter entrado em "Vendas" (ex: clicou durante a janela em que o navegador ainda usava o
+  // valor antigo em cache, antes de sincronizar), o painel ficava "grudado" aberto mesmo
+  // sem o botão aparecer no menu. Corrigindo aqui, toda vez que o menu é reconstruído, cobre
+  // todos os pontos de chamada (boot, realtime, troca de config) de uma vez só.
+  if (!showSales && activeSection === 'sales') {
+    activeSection = 'overview';
+  }
+
+  const sections = [
+    {id:'overview',  label:'Visão Geral'},
+    {id:'weekly',    label:'Semanal'},
+    ...(showSales ? [{id:'sales', label:'Vendas'}] : []),
+    {id:'ranking',   label:'Ranking'},
+    {id:'disputes',  label:'Disputas'},
+  ];
+  if (ALL_MONTHS.length > 1) {
+    sections.push({id:'compare', label:'Comparar Meses'});
+  }
+  if (session.role === 'coordinator') {
+    sections.push({id:'admin', label:'Configurações'});
+  }
+
+  sections.forEach(s => {
+    const btn = document.createElement('button');
+    btn.className = 'sec-btn' + (s.id === activeSection ? ' active' : '');
+    btn.textContent = s.label;
+    if (s.id === 'disputes') {
+      const open = disputes.filter(d => d.status === 'open').length;
+      if (open > 0) btn.textContent += ` (${open})`;
+    }
+    btn.onclick = () => switchSection(s.id);
+    nav.appendChild(btn);
+  });
+}
+
+function sectionLabel(id) {
+  return {overview:'Visão',weekly:'Semanal',sales:'Vendas',ranking:'Ranking',disputes:'Disputas',compare:'Comparar',admin:'Gerenciar'}[id]||id;
+}
+
+function switchSection(id) {
+  activeSection = id;
+  const lbl = sectionLabel(id);
+  document.querySelectorAll('.sec-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent.startsWith(lbl));
+  });
+  destroyCharts();
+  renderSection(id);
+}
+
+// ══════════════════════════════════════════════
+//  FILTER SALES
+// ══════════════════════════════════════════════
+function getFilteredSales(monthOverride, opts) {
+  // allUnits: base da meta — inclui a outra unidade da Acqua mesmo para o coordenador de uma unidade só
+  // (o que aparece na tela continua filtrado pelas unidades dele: os cartões e tabelas filtram por grupo/unidade depois)
+  let sales = (opts && opts.allUnits ? RAW_SALES_TODAS.filter(s => unidadePermitida(s.unit) || ACQUA_UNITS.includes(s.unit)) : RAW_SALES).map(s => ({...s}));
+  const overrides = loadOverrides();
+  // Apply dispute transfers
+  disputes.filter(d => d.status === 'resolved' && d.action === 'transfer').forEach(d => {
+    const s = sales.find(x => x.line_id === d.saleId && x.unit === d.unit);
+    if (s) s.consultant = d.claimant;
+  });
+  // Apply unassignments
+  overrides.unassigned.forEach(({id, unit}) => {
+    const s = sales.find(x => x.line_id === id && x.unit === unit);
+    if (s) s.consultant = '';
+  });
+  // Vendas manuais/editadas: quando o id coincide com uma linha do relatório, ela é
+  // substituída (edição); ids novos são inclusões.
+  const overrideIds = new Set(overrides.added.map(s => s.line_id));
+  sales = sales.filter(s => !overrideIds.has(s.line_id));
+  sales = [...sales, ...overrides.added];
+
+  const month = monthOverride || activeMonth;
+  sales = sales.filter(s => s.month === month);
+  if (activeUnit && !(opts && opts.allUnits)) sales = sales.filter(s => s.unit === activeUnit);
+  // Vendas sem dono são excluídas de todos os cálculos e visões (exceto tabela do coordenador)
+  if (!(opts && opts.includeUnassigned)) {
+    sales = sales.filter(s => !!s.consultant);
+  }
+  return sales;
+}
+
+function salesForConsultant(name, sales) {
+  return sales.filter(s => s.consultant === name);
+}
+
+function getConsultants(sales) {
+  return [...new Set(sales.map(s => s.consultant))].filter(Boolean).sort();
+}
+
+function calcCommission(sales) {
+  return Math.round(sales.reduce((a, s) => a + s.commission, 0) * 100) / 100;
+}
+
+// Descontos por não conformidade (Seção 6/7 da política) — lançados à parte, não
+// ligados a uma venda específica, por isso não entram em `sales`/`s.commission`.
+// Reduzem só a comissão individual do consultor; o bônus de equipe não é afetado.
+function deductionTotal(consultant, unit, monthOverride) {
+  const m = monthOverride || activeMonth;
+  return deductions
+    .filter(d => d.consultant === consultant && d.month === m && (!unit || d.unit === unit))
+    .reduce((a, d) => a + Number(d.amount), 0);
+}
+function allDeductionsTotal(unit, monthOverride) {
+  const m = monthOverride || activeMonth;
+  return deductions
+    .filter(d => d.month === m && (!unit || d.unit === unit))
+    .reduce((a, d) => a + Number(d.amount), 0);
+}
+// Total líquido de uma pessoa: soma das vendas dela (já com o multiplicador da
+// semana aplicado, se `sales` vier de pricedSales) menos os descontos do mês/unidade.
+function personTotal(name, sales, unit, monthOverride) {
+  const gross = calcCommission(salesForConsultant(name, sales));
+  return Math.round((gross - deductionTotal(name, unit, monthOverride)) * 100) / 100;
+}
+
+function uniqueTypeCount(sales, type, source) {
+  return new Set(sales.filter(s=>s.type===type && (!source || s.source===source)).map(s=>s.id)).size;
+}
+
+function uniqueSaleCount(sales) {
+  return new Set(sales.map(s=>s.type+':'+s.id)).size;
+}
+
+// Cadastro e conversão são contribuições distintas de uma mesma matrícula nova — sem
+// separar por role, "Novos" mistura quem cadastrou com quem converteu e não dá pra saber
+// a contribuição real de cada consultor. Rematrícula é sempre 100% de uma pessoa só.
+// "Renovação" (source === 'filtro') é separada de "Rematrícula" (source === 'relatorio')
+// de propósito: são renovações que o relatório oficial de rematrícula não capturou,
+// reconciliadas a partir do FiltroClientes — o coordenador precisa saber quem são.
+function roleBreakdown(sales) {
+  return {
+    cad:  sales.filter(s=>s.role==='cadastro').length,
+    conv: sales.filter(s=>s.role==='conversao').length,
+    full: sales.filter(s=>s.role==='completo').length,
+    ren:  sales.filter(s=>s.type==='renewal' && s.source!=='filtro').length,
+    renF: sales.filter(s=>s.type==='renewal' && s.source==='filtro').length,
+  };
+}
+function roleBreakdownText(b) {
+  const parts = [];
+  if (b.cad)   parts.push(`${b.cad} cadastro${b.cad!==1?'s':''}`);
+  if (b.conv)  parts.push(`${b.conv} convers${b.conv!==1?'ões':'ão'}`);
+  if (b.full)  parts.push(`${b.full} venda${b.full!==1?'s':''} completa${b.full!==1?'s':''}`);
+  if (b.ren)   parts.push(`${b.ren} rematrícula${b.ren!==1?'s':''}`);
+  if (b.renF)  parts.push(`${b.renF} renovaç${b.renF!==1?'ões':'ão'}`);
+  return parts.length ? parts.join(' · ') : 'Sem vendas no período';
+}
+
+function money(v) {
+  v = Math.round(v * 100) / 100;
+  return Number.isInteger(v) ? String(v) : v.toFixed(2).replace('.', ',');
+}
+
+function roleLabel(s) {
+  if (s.extra_clt) return 'Renda extra CLT (20% a 35%)';
+  if (s.role === 'consultor') return s.kind === 'upgrade' ? 'Upgrade (100%)' : s.source === 'filtro' ? 'Renovação (100%)' : 'Rematrícula (100%)';
+  const [cad, conv] = divisaoNova(s.unit, s.month);
+  return {cadastro:`Cadastro (${cad}%)`, conversao:`Conversão (${conv}%)`, completo:'Completo (100%)'}[s.role] || '';
+}
+
+// ══════════════════════════════════════════════
+//  META SEMANAL (política 2026)
+// ══════════════════════════════════════════════
+// A semana é sempre segunda a domingo. O mês é sempre dividido em exatamente 4
+// semanas: dias soltos do início do mês entram na 1ª semana, dias soltos do fim
+// entram na 4ª — as semanas 2 e 3 são sempre semanas cheias.
+const MONTH_NAMES_PT = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
+                         'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+// Contestação só até o dia 10 (pedido de 18/11/2026): do dia 1º ao 10 de cada mês, as consultoras veem a lista de vendas
+// do MÊS QUE FECHOU e podem contestar; depois do dia 10, a aba "Vendas" some para elas e o banco recusa contestação nova
+// (gatilho disputes_no_prazo). A meta semanal continua sempre visível. Coordenação vê e contesta sempre; o liga/desliga
+// das Configurações virou exceção ("liberar fora do prazo").
+function hojeSPBonus() { return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Sao_Paulo' }).format(new Date()); }
+function mesDaJanela(hoje = hojeSPBonus()) {   // rótulo do mês aberto para contestação hoje, ou null depois do dia 10
+  const ano = +hoje.slice(0, 4), mes = +hoje.slice(5, 7), dia = +hoje.slice(8, 10);
+  if (dia > 10) return null;
+  return `${MONTH_NAMES_PT[mes === 1 ? 11 : mes - 2]}/${mes === 1 ? ano - 1 : ano}`;
+}
+function contestacaoAberta(mes) {
+  return session.role === 'coordinator' || salesVisibleToConsultants || mes === mesDaJanela();
+}
+function avisoContestacao() {
+  const el = document.getElementById('aviso-contestacao');
+  if (!el) return;
+  const janela = mesDaJanela();
+  if (session.role === 'coordinator' || !janela) { el.innerHTML = ''; return; }
+  const hoje = hojeSPBonus();
+  const prazo = `10/${hoje.slice(5, 7)}`;
+  const caixa = 'margin:0 0 14px;padding:12px 16px;border-radius:12px;background:#FFF7E6;border:1px solid #F5D9A8;font-size:14px;line-height:1.45';
+  if (MONTH === janela) {
+    el.innerHTML = `<div style="${caixa}">📣 <b>Até ${prazo}</b> você pode conferir as vendas de <b>${janela}</b> na aba <b>Vendas</b> e contestar o que estiver errado. Depois disso não dá mais para contestar.</div>`;
+  } else if (PUBLICACOES.some(p => p.mes === janela)) {
+    el.innerHTML = `<div style="${caixa}">📣 <b>Até ${prazo}</b> dá para conferir e contestar as vendas de <b>${janela}</b>. <a href="?mes=${encodeURIComponent(janela)}" style="font-weight:800">Abrir ${janela} →</a></div>`;
+  } else el.innerHTML = '';
+}
+
+function parseBRDate(str) {
+  const m = /^(\d{2})\/(\d{2})\/(\d{4})/.exec(String(str||''));
+  if (!m) return null;
+  return new Date(parseInt(m[3],10), parseInt(m[2],10)-1, parseInt(m[1],10));
+}
+
+function parseMonthLabel(label) {
+  const parts = String(label||'').split('/');
+  if (parts.length !== 2) return null;
+  const idx = MONTH_NAMES_PT.indexOf(parts[0]);
+  const year = parseInt(parts[1], 10);
+  if (idx < 0 || !year) return null;
+  return {month: idx, year};
+}
+
+// Política v2: vale para vendas de setembro/2026 em diante (meses anteriores mantêm as
+// regras antigas, pra não recalcular retroativamente o que já foi pago).
+function policyV2(label) {
+  const p = parseMonthLabel(label);
+  return !!p && (p.year * 100 + p.month + 1) >= 202609;
+}
+
+// Política v3 (aprovada nas unidades em 24/11/2026; vendas de dezembro/2026 em diante): Laranjeiras + República são UMA
+// equipe ("Acqua", 5 consultoras atendendo misturado). A meta vem das saídas da EVO (função bonus_regua): Básico = média das
+// saídas dos 3 meses anteriores ÷ consultoras ÷ 4; Entrada = Básico − 1 (30%), Básico (60%), Meta real = Básico + 1 (100%).
+// Bônus de equipe: R$ 200 com Básico × consultoras × 4 contratos, R$ 300 com Meta real × consultoras × 4 — só se a equipe
+// vender pelo menos o número de saídas do mês. Bônus da Central (função bonus_central): +5% (Bom) / +20% (Ótimo) da comissão
+// da semana, com as travas: Básico na semana + mínimo da Central em 4 de 5 dias + equipe ≥ saídas no mês. O Club não muda.
+const ACQUA_UNITS = ['laranjeiras', 'republica'];
+const GRUPO_ACQUA = 'acqua';
+const ROTULO_ACQUA = 'Acqua (Laranjeiras + República)';
+function policyV3(label) {
+  const p = parseMonthLabel(label);
+  return !!p && (p.year * 100 + p.month + 1) >= 202612;
+}
+// Club — Política de Bonificações (documento da gestão; vale para novembro/2026 inteiro, pedido de 25/11/2026): meta semanal
+// 4/7/10 contratos (50/70/100%), cada Black vale meio contrato na meta, matrícula nova 50/50, renovação/troca/upgrade pagam mas
+// não contam, bônus de equipe R$ 100–500 (49/61/71/81/91 vendas) e prêmio mensal em vale-compras pelas semanas em Super meta.
+function policyClubV3(label) {
+  const p = parseMonthLabel(label);
+  return !!p && (p.year * 100 + p.month + 1) >= 202611;
+}
+const ehClubV3 = (unit, label) => unit === 'club' && policyClubV3(label || activeMonth);
+const CLUB_V3_TIERS = [[10, 1.0], [7, 0.7], [4, 0.5], [0, 0]];
+const CLUB_V3_TIER_NAMES = [[10, 'Super meta'], [7, 'Meta real'], [4, 'Básico'], [0, 'Abaixo do básico']];
+const CLUB_V3_TEAM = { steps: [49, 61, 71, 81, 91], amounts: [100, 200, 300, 400, 500] };
+// Prêmio mensal (vale-compras do Showroom Dus2, pago à parte): R$ 200 / 300 / 450 com 2 / 3 / 4 semanas em Super meta.
+// pisoTodas: além disso, nenhuma semana pode ficar abaixo do Básico ("bater todas as metas semanais").
+const PREMIO_CLUB = { faixas: [[4, 450], [3, 300], [2, 200]], pisoTodas: true };
+// Renda extra do plano CLT Laranjeiras (Club, fora da carga horária): o contrato gera o bônus de um Seja Positiva e paga só esta
+// porcentagem, pela quantidade de contratos CLT da pessoa na semana; não conta para meta, equipe nem prêmio
+const RENDA_EXTRA_CLT = [[10, 0.35], [7, 0.30], [4, 0.25], [1, 0.20]];
+const pctRendaExtra = n => (RENDA_EXTRA_CLT.find(([min]) => n >= min) || [0, 0])[1];
+// Peso de uma venda na meta: Black do Club (nov/2026+) vale meio contrato — "a cada 2 vale 1"
+const pesoMeta = s => Number(s.goal_weight) || 1;
+const somaMeta = sales => Math.floor(sales.reduce((a, s) => a + pesoMeta(s), 0) + 1e-9);
+// Parte do cadastro / da conversão na matrícula nova
+const divisaoNova = (unit, label) => ehClubV3(unit, label) ? [50, 50] : [70, 30];
+
+const REGUAS = {};    // rótulo do mês → régua da Acqua (bonus_regua)
+const CENTRAL = {};   // rótulo do mês → pontos da Central por consultora e semana (bonus_central)
+function mesISO(label) {
+  const p = parseMonthLabel(label);
+  return p ? `${p.year}-${String(p.month + 1).padStart(2, '0')}-01` : null;
+}
+function reguaDe(label) {
+  return REGUAS[label || activeMonth] || { entrada: 2, basico: 3, meta_real: 4, equipe_200: 60, equipe_300: 80, consultoras: 5,
+    saidas_base: 52, saidas_mes: null, regua_central: 33 };
+}
+function grupoMeta(unit, label) { return policyV3(label || activeMonth) && ACQUA_UNITS.includes(unit) ? GRUPO_ACQUA : unit; }
+function unidadesDoGrupo(g) { return g === GRUPO_ACQUA ? ACQUA_UNITS : [g]; }
+function noGrupo(s, g) { return unidadesDoGrupo(g).includes(s.unit); }
+function rotuloGrupo(g) { return g === GRUPO_ACQUA ? ROTULO_ACQUA : (UNIT_LABELS[g] || g); }
+function gruposDe(units, label) { return [...new Set(units.map(u => grupoMeta(u, label)))]; }
+async function carregarReguas() {
+  const meses = [...new Set([...ALL_MONTHS, MONTH])].filter(policyV3);
+  if (!meses.length && session.role === 'coordinator') meses.push('Dezembro/2026');   // Configurações mostram a régua que vem
+  await Promise.all(meses.map(async m => {
+    try {
+      const [r, c] = await Promise.all([db.rpc('bonus_regua', { p_mes: mesISO(m) }), db.rpc('bonus_central', { p_mes: mesISO(m) })]);
+      if (r.data) REGUAS[m] = r.data;
+      if (c.data) CENTRAL[m] = c.data;
+    } catch (e) { console.warn('Régua/Central não carregou', m, e); }
+  }));
+}
+
+// Uma venda vale como unidade da meta semanal quando é do dono do cadastro (cadastro,
+// rematrícula, renovação, venda completa) E o Python não marcou `counts_goal: false`
+// (v2: renovação mês 13 e upgrade continuam pagando, mas não entram na contagem).
+function countsToGoal(s) {
+  return (s.role === 'cadastro' || s.role === 'consultor' || s.role === 'completo') && s.counts_goal !== false;
+}
+
+// Devolve os 4 intervalos [início,fim] (Date) da semana daquele mês, ou null se o
+// mês não for reconhecido (rótulo fora do padrão "Mês/Ano").
+function weekBoundsForMonth(label) {
+  const parsed = parseMonthLabel(label);
+  if (!parsed) return null;
+  const {month, year} = parsed;
+  const first = new Date(year, month, 1);
+  const last  = new Date(year, month + 1, 0);
+  const addDays = (d, n) => { const r = new Date(d); r.setDate(r.getDate()+n); return r; };
+  const mondays = [];
+  for (let d = new Date(first); d <= last; d = addDays(d, 1)) {
+    if (d.getDay() === 1) mondays.push(new Date(d));
+  }
+  if (mondays.length < 4) return null;   // não deveria acontecer (todo mês de 28+ dias tem 4 segundas)
+  const [, m2, m3, m4] = mondays;
+  return [
+    {start: first, end: addDays(m2, -1)},
+    {start: m2,    end: addDays(m3, -1)},
+    {start: m3,    end: addDays(m4, -1)},
+    {start: m4,    end: last},
+  ];
+}
+
+function weekIndexForSale(sale) {
+  const bounds = weekBoundsForMonth(sale.month);
+  const d = parseBRDate(sale.date);
+  if (!bounds || !d) return null;
+  for (let i = 0; i < bounds.length; i++) {
+    if (d >= bounds[i].start && d <= bounds[i].end) return i + 1;
+  }
+  return null;
+}
+
+// [mínimo de contratos na semana, percentual] — ordenado do maior pro menor.
+const WEEKLY_TIERS = {
+  club:        [[12, 1.0], [9, 0.7], [6, 0.5], [0, 0]],
+  laranjeiras: [[4, 1.0], [3, 0.7], [2, 0.5], [0, 0]],
+  republica:   [[4, 1.0], [3, 0.7], [2, 0.5], [0, 0]],
+};
+const WEEK_TIER_NAMES = [[12,'Super meta'],[9,'Meta real'],[6,'Básico'],[0,'Abaixo do básico']]; // club
+const WEEK_TIER_NAMES_ACQUA = [[4,'Super meta'],[3,'Meta real'],[2,'Básico'],[0,'Abaixo do básico']];
+
+const ehAcquaV3 = (unit, label) => unit === GRUPO_ACQUA || (ACQUA_UNITS.includes(unit) && policyV3(label || activeMonth));
+function weeklyTiers(unit, label) {
+  if (ehAcquaV3(unit, label)) {
+    const r = reguaDe(label);
+    return [[r.meta_real, 1.0], [r.basico, 0.6], [r.entrada, 0.3], [0, 0]];
+  }
+  if (ehClubV3(unit, label)) return CLUB_V3_TIERS;
+  return WEEKLY_TIERS[unit] || WEEKLY_TIERS.club;
+}
+function weekTierNames(unit, label) {
+  if (ehAcquaV3(unit, label)) {
+    const r = reguaDe(label);
+    return [[r.meta_real, 'Meta real'], [r.basico, 'Básico'], [r.entrada, 'Entrada'], [0, 'Abaixo da entrada']];
+  }
+  if (ehClubV3(unit, label)) return CLUB_V3_TIER_NAMES;
+  return unit === 'club' ? WEEK_TIER_NAMES : WEEK_TIER_NAMES_ACQUA;
+}
+
+function weeklyTierPct(unit, count, label) {
+  for (const [min, pct] of weeklyTiers(unit, label)) { if (count >= min) return pct; }
+  return 0;
+}
+function weekTierLabel(unit, count, label) {
+  for (const [min, name] of weekTierNames(unit, label)) { if (count >= min) return name; }
+  return 'Abaixo do básico';
+}
+// Quantos contratos faltam pra bater a PRÓXIMA faixa (0 = já está na faixa máxima).
+function weekTierNextGoal(unit, count, label) {
+  const asc = weeklyTiers(unit, label).slice().reverse();
+  for (const [min] of asc) { if (count < min) return min - count; }
+  return 0;
+}
+
+// Conta, por consultor × unidade × semana, quantos contratos "de meta" (cadastro,
+// rematrícula/dono-do-cadastro, ou venda completa manual) a pessoa teve — e converte
+// isso no percentual da faixa. A chave não inclui o papel (role) de propósito: o
+// percentual encontrado vale pra TUDO que é da pessoa naquela semana, inclusive a
+// conversão que ela ganhou fechando venda de outra pessoa (política confirmada).
+function computeWeeklyBreakdown(sales) {
+  const counts = {};
+  // `seenKeys` registra TODA combinação consultor+unidade+semana que teve QUALQUER venda
+  // (inclusive só conversão, sem nenhum cadastro/renovação) — sem isso, uma pessoa que só
+  // converteu naquela semana (0 contratos de meta) nunca teria uma chave em `counts`, e o
+  // saleWeekPct() caía no fallback de "chave não encontrada" pagando 100% por engano em vez
+  // de aplicar a faixa 0% de quem não cadastrou ninguém.
+  // v3: na Acqua a chave é o grupo (Laranjeiras + República juntas), não a unidade.
+  const seenKeys = new Map();
+  const cltIds = {};   // renda extra CLT: contratos CLT distintos da pessoa na semana
+  sales.forEach(s => {
+    if (!s.consultant) return;
+    const wk = weekIndexForSale(s);
+    if (!wk) return;
+    const g = grupoMeta(s.unit, s.month);
+    const key = s.consultant + '|' + g + '|' + wk;
+    seenKeys.set(key, {g, month: s.month});
+    if (s.extra_clt) (cltIds[key] = cltIds[key] || new Set()).add(s.type + ':' + s.id);
+    if (countsToGoal(s)) {
+      counts[key] = (counts[key] || 0) + pesoMeta(s);   // Black do Club v3 = meio contrato
+    }
+  });
+  Object.keys(counts).forEach(k => { counts[k] = Math.floor(counts[k] + 1e-9); });
+  const pctByKey = {};
+  seenKeys.forEach(({g, month}, key) => {
+    pctByKey[key] = weeklyTierPct(g, counts[key] || 0, month);
+  });
+  const cltPctByKey = {};
+  Object.keys(cltIds).forEach(k => { cltPctByKey[k] = pctRendaExtra(cltIds[k].size); });
+  return {counts, pctByKey, cltPctByKey};
+}
+
+function saleWeekPct(sale, breakdown) {
+  if (!sale.consultant) return 1;           // sem dono: não participa de meta nenhuma, mantém como está
+  const wk = weekIndexForSale(sale);
+  if (!wk) return 1;                        // data inválida/fora do mês: não penaliza, paga cheio
+  const key = sale.consultant + '|' + grupoMeta(sale.unit, sale.month) + '|' + wk;
+  if (sale.extra_clt) return breakdown.cltPctByKey[key] || 0;   // renda extra CLT: 20% a 35% do bônus de Seja
+  return breakdown.pctByKey[key] !== undefined ? breakdown.pctByKey[key] : 1;
+}
+
+// Aplica o multiplicador da meta semanal em cima da comissão-base de cada venda.
+// IMPORTANTE: a base do cálculo (`breakdown`) sempre vem do conjunto COMPLETO de
+// vendas com dono do mês/unidade ativos — nunca do subconjunto já filtrado (busca,
+// tipo, consultor) que às vezes é o que efetivamente será exibido — senão filtrar a
+// tabela de vendas mudaria a meta batida de todo mundo.
+function pricedSales(sales, monthOverride) {
+  // allUnits: na Acqua v3 a meta junta as duas unidades — a aba de uma unidade não pode mudar a faixa de ninguém
+  const base = getFilteredSales(monthOverride, {includeUnassigned: false, allUnits: true});
+  const breakdown = computeWeeklyBreakdown(base);
+  return sales.map(s => {
+    const pct = saleWeekPct(s, breakdown);
+    return {...s, commission: Math.round(s.commission * pct * 100) / 100, _base_commission: s.commission, _week_pct: pct};
+  });
+}
+
+// ══════════════════════════════════════════════
+//  BÔNUS DE EQUIPE MENSAL (política 2026)
+// ══════════════════════════════════════════════
+function teamBonusTotal(unit, count) {
+  if (unit === 'laranjeiras') {
+    if (count >= 64) return 1300 + 30*(count-63);
+    if (count >= 55) return 1000;
+    if (count >= 47) return 700;
+    if (count >= 38) return 400;
+    return 0;
+  }
+  if (unit === 'republica') {
+    if (count >= 42) return 900 + 30*(count-41);
+    if (count >= 35) return 700;
+    if (count >= 28) return 500;
+    if (count >= 22) return 250;
+    return 0;
+  }
+  if (unit === 'club') {
+    if (count >= 140) return 2000 + 60*(count-139);
+    if (count >= 120) return 1600;
+    if (count >= 100) return 1200;
+    if (count >= 80) return 600;
+    return 0;
+  }
+  return 0;
+}
+const TEAM_BONUS_STEPS = {laranjeiras:[38,47,55,64], republica:[22,28,35,42], club:[80,100,120,140]};
+function teamBonusNextGoal(unit, count) {
+  const steps = TEAM_BONUS_STEPS[unit] || TEAM_BONUS_STEPS.club;
+  for (const step of steps) { if (count < step) return step - count; }
+  return 0;   // já na faixa máxima (segue rendendo por contrato excedente)
+}
+
+// Reparte o bônus de equipe: quem cadastra (+ rematrícula/dono-do-cadastro) fica com
+// uma fatia proporcional às próprias vendas; quem converte divide o resto em partes
+// iguais. Generaliza os exemplos do documento (que citam nomes fixos) pra qualquer
+// número de pessoas em cada papel.
+// v2 (setembro/2026+): valor FIXO por pessoa (R$ 200 / 300 / 500), igual em todas as
+// unidades, pra todo mundo que vendeu na unidade no mês (cadastro OU conversão). Só
+// contam vendas novas e rematrículas — renovação, troca de contrato e upgrade ficam fora.
+const TEAM_BONUS_V2_STEPS   = {laranjeiras:[47,55,64], republica:[24,28,32], club:[72,84,98]};
+const TEAM_BONUS_V2_AMOUNTS = [200, 300, 500];
+function teamBonusPerPersonV2(unit, count) {
+  const steps = TEAM_BONUS_V2_STEPS[unit] || TEAM_BONUS_V2_STEPS.club;
+  let v = 0;
+  steps.forEach((min, i) => { if (count >= min) v = TEAM_BONUS_V2_AMOUNTS[i]; });
+  return v;
+}
+function teamBonusNextGoalV2(unit, count) {
+  const steps = TEAM_BONUS_V2_STEPS[unit] || TEAM_BONUS_V2_STEPS.club;
+  for (const step of steps) { if (count < step) return step - count; }
+  return 0;   // faixa máxima (R$ 500)
+}
+
+// v3 (Acqua, dez/2026+): uma conta só para Laranjeiras + República. "Trava da equipe" = a equipe fechou pelo menos tantos
+// contratos quanto as saídas do mês (lidas na EVO e lançadas em Configurações). Sem as saídas lançadas, fica "pendente".
+function teamBonusAcquaV3(sales, month) {
+  const m = month || activeMonth, r = reguaDe(m);
+  const groupSales = sales.filter(s => ACQUA_UNITS.includes(s.unit) && s.consultant);
+  const count = new Set(groupSales.filter(s => s.counts_goal !== false).map(s => s.unit + ':' + s.type + ':' + s.id)).size;
+  const previsto = count >= r.equipe_300 ? 300 : count >= r.equipe_200 ? 200 : 0;
+  const saidas = r.saidas_mes;
+  const trava = saidas == null ? 'pendente' : count >= saidas ? 'aberta' : 'fechada';
+  const perPerson = trava === 'aberta' ? previsto : 0;
+  // só as consultoras da Acqua recebem (coordenação e quem vendeu de passagem não entram) — lista vem da régua
+  const nomes = new Set(r.nomes || []);
+  const people = [...new Set(groupSales.map(s => s.consultant))].filter(n => n !== DEFAULT_CONSULTANT && (!nomes.size || nomes.has(n)));
+  const byPerson = {};
+  if (perPerson > 0) people.forEach(n => { byPerson[n] = perPerson; });
+  const nextGoal = count < r.equipe_200 ? r.equipe_200 - count : count < r.equipe_300 ? r.equipe_300 - count : 0;
+  return {v2: true, v3: true, count, perPerson, previsto, people: people.length, total: perPerson * people.length,
+          nextGoal, byPerson, trava, saidas, saidasBase: r.saidas_base, regua: r};
+}
+
+// Bônus da Central da semana (v3): +5% (Bom) / +20% (Ótimo) da comissão que ela ganhou na semana, nas duas unidades.
+// Devolve { nivel, pct, valor, motivo, pontos } — valor 0 quando alguma trava fecha (o motivo diz qual).
+const NIVEL_CENTRAL = { otimo: { nome: 'Ótimo', pct: 0.20 }, bom: { nome: 'Bom', pct: 0.05 }, normal: { nome: 'Normal', pct: 0 } };
+function centralDaSemana(name, wk, metaCount, earned, month) {
+  const m = month || activeMonth;
+  if (!policyV3(m)) return null;
+  const dadosC = CENTRAL[m];
+  const c = dadosC && (dadosC.consultoras || []).find(x => x.nome_bonus === name);
+  if (!c) return { nivel: null, pct: 0, valor: 0, motivo: 'sem pontos da Central', pontos: null };
+  const s = c.semanas.find(x => x.n === wk) || {};
+  const n = NIVEL_CENTRAL[s.nivel] || NIVEL_CENTRAL.normal;
+  const r = reguaDe(m);
+  const equipe = teamBonusAcquaV3(getFilteredSales(m, {includeUnassigned: false, allUnits: true}), m);
+  let motivo = '';
+  if (!n.pct) motivo = `${money(s.total ?? 0)} pontos (Bom a partir de ${money(dadosC.bom)})`;
+  else if (metaCount < r.basico) motivo = `faltou o Básico (${r.basico} contratos) na semana`;
+  else if (!s.trava_minimo) motivo = `mínimo da Central em ${s.dias_ok} de ${s.dias_validos} dias`;
+  else if (equipe.trava === 'fechada') motivo = `a equipe fechou ${equipe.count} contratos e saíram ${equipe.saidas} alunos`;
+  else if (equipe.trava === 'pendente') motivo = 'aguardando as saídas do mês para liberar';
+  const libera = n.pct > 0 && !motivo;
+  const previsto = Math.round(earned * n.pct * 100) / 100;
+  return { nivel: n.nome, pct: n.pct, valor: libera ? previsto : 0, previsto, motivo, pontos: s.total ?? 0, semana: s,
+           pendente: n.pct > 0 && equipe.trava === 'pendente' && metaCount >= r.basico && s.trava_minimo };
+}
+
+function computeTeamBonus(sales, unit, month) {
+  if (unit === GRUPO_ACQUA) return teamBonusAcquaV3(sales, month);
+  const unitSales = sales.filter(s => s.unit === unit && s.consultant);
+  if (ehClubV3(unit, month)) {
+    // só matrícula nova e rematrícula contam (Black = meio); recebe quem teve cadastro ou conversão (ou rematrícula) no mês
+    const metaLines = unitSales.filter(s => s.counts_goal !== false);
+    const porVenda = new Map();
+    metaLines.forEach(s => porVenda.set(s.type + ':' + s.id, pesoMeta(s)));
+    const count = Math.floor([...porVenda.values()].reduce((a, b) => a + b, 0) + 1e-9);
+    let perPerson = 0;
+    CLUB_V3_TEAM.steps.forEach((min, i) => { if (count >= min) perPerson = CLUB_V3_TEAM.amounts[i]; });
+    const people = [...new Set(metaLines.map(s => s.consultant))].filter(n => n !== DEFAULT_CONSULTANT);
+    const byPerson = {};
+    if (perPerson > 0) people.forEach(n => { byPerson[n] = perPerson; });
+    const prox = CLUB_V3_TEAM.steps.find(st => count < st);
+    return {v2: true, clubV3: true, count, perPerson, people: people.length, total: perPerson * people.length,
+            nextGoal: prox ? prox - count : 0, byPerson};
+  }
+  if (policyV2(month || activeMonth)) {
+    const count = uniqueSaleCount(unitSales.filter(s => s.counts_goal !== false));
+    const perPerson = teamBonusPerPersonV2(unit, count);
+    // O consultor padrão (SUPORTEEVO - IA) é só um marcador de "sem dono", não uma pessoa.
+    const people = [...new Set(unitSales.map(s => s.consultant))].filter(n => n !== DEFAULT_CONSULTANT);
+    const byPerson = {};
+    if (perPerson > 0) people.forEach(n => { byPerson[n] = perPerson; });
+    return {v2: true, count, perPerson, people: people.length, total: perPerson * people.length,
+            nextGoal: teamBonusNextGoalV2(unit, count), byPerson};
+  }
+  const count = uniqueSaleCount(unitSales);
+  const total = teamBonusTotal(unit, count);
+  const nextGoal = teamBonusNextGoal(unit, count);
+
+  const cadShare = unit === 'club' ? 0.5 : 0.7;
+  const cadPeople = {}, convPeople = {};
+  unitSales.forEach(s => {
+    if (s.role === 'cadastro' || s.role === 'consultor' || s.role === 'completo') {
+      cadPeople[s.consultant] = (cadPeople[s.consultant]||0) + 1;
+    } else if (s.role === 'conversao') {
+      convPeople[s.consultant] = (convPeople[s.consultant]||0) + 1;
+    }
+  });
+  const cadTotalCount = Object.values(cadPeople).reduce((a,b)=>a+b, 0);
+  const convNames = Object.keys(convPeople);
+  const cadPool  = total * cadShare;
+  const convPool = total * (1 - cadShare);
+
+  const byPerson = {};
+  Object.keys(cadPeople).forEach(name => {
+    byPerson[name] = (byPerson[name]||0) + (cadTotalCount > 0 ? cadPool * (cadPeople[name]/cadTotalCount) : 0);
+  });
+  convNames.forEach(name => {
+    byPerson[name] = (byPerson[name]||0) + (convNames.length > 0 ? convPool / convNames.length : 0);
+  });
+
+  return {count, total, nextGoal, byPerson};
+}
+
+// ══════════════════════════════════════════════
+//  RENDER SECTION
+// ══════════════════════════════════════════════
+// Trava de verdade (não só esconder o botão do menu): decide aqui, no ponto que
+// efetivamente desenha o conteúdo, se a sessão atual pode ver esta seção. Cobre
+// qualquer jeito de o app chegar num id indevido (estado antigo vazando de outra
+// sessão, corrida de sincronização, bug futuro) — nunca desenha dado sensível sem
+// checar de novo, mesmo que o menu já devesse ter escondido o botão.
+function sectionAllowed(id) {
+  const isCoord = session.role === 'coordinator';
+  if (id === 'admin') return isCoord;
+  if (id === 'sales')  return isCoord || salesVisibleToConsultants;
+  return true;
+}
+
+
+// Cores dos gráficos no padrão WasFit (revisão de design 26/11), claras ou escuras conforme o tema na hora de desenhar
+function corGrafico() {
+  const esc = document.documentElement.dataset.tema === 'escuro';
+  return esc ? { a: '#2EE6A0', b: '#3B82F6', c: '#9A9A9A', tinta: '#EDEDED', grade: '#2E2E2E' }
+             : { a: '#16B981', b: '#2563EB', c: '#9AA3AE', tinta: '#1A1D23', grade: '#EBEBEB' };
+}
+function temaGraficos() {
+  if (!window.Chart) return;
+  const k = corGrafico();
+  Chart.defaults.font.family = "'Geist', system-ui, sans-serif";
+  Chart.defaults.color = k.tinta;
+  Chart.defaults.borderColor = k.grade;
+}
+function renderSection(id) {
+  ['overview','weekly','sales','ranking','disputes','compare','admin'].forEach(p => {
+    document.getElementById('panel-'+p).classList.toggle('active', p===id);
+  });
+
+  if (!sectionAllowed(id)) {
+    document.getElementById('panel-'+id).innerHTML = `
+      <div class="empty-state">
+        <div class="icon">🔒</div>
+        <p>Esta área não está disponível para o seu usuário.</p>
+      </div>`;
+    return;
+  }
+
+  temaGraficos();
+  const raw = getFilteredSales();
+  const sales = pricedSales(raw);
+  if (id === 'overview')  renderOverview(sales);
+  if (id === 'weekly')    renderWeekly(raw);
+  if (id === 'sales')     renderSales(sales);
+  if (id === 'ranking')   renderRanking(sales);
+  if (id === 'disputes')  renderDisputes(sales);
+  if (id === 'compare')   renderCompare();
+  if (id === 'admin')     renderAdmin();
+}
+
+// ══════════════════════════════════════════════
+//  OVERVIEW
+// ══════════════════════════════════════════════
+function renderOverview(allSales) {
+  const el = document.getElementById('panel-overview');
+  const isCoord = session.role === 'coordinator';
+
+  // Consultor: mostra apenas seus próprios dados
+  if (!isCoord) {
+    const my = allSales.filter(s=>s.consultant===session.name);
+    const myBreak = roleBreakdown(my);
+    const myRen  = myBreak.ren;
+    const myDed  = deductionTotal(session.name, activeUnit);
+    const myComm = personTotal(session.name, my, activeUnit);
+    const myDisp = disputes.filter(d=>d.claimant===session.name&&d.status==='open').length;
+    const myUnits = [...new Set(my.map(s=>s.unit_label))].join(', ') || '—';
+
+    // Gráfico: meus novos vs rematrícula por unidade
+    const myUnitKeys = [...new Set(my.map(s=>s.unit))];
+    const chartData = myUnitKeys.map(u => ({
+      label: UNIT_LABELS[u] || u,
+      new:   my.filter(s=>s.unit===u&&s.type==='new').length,
+      ren:   my.filter(s=>s.unit===u&&s.type==='renewal').length,
+    }));
+
+    el.innerHTML = `
+      <div class="my-highlight-bar">
+        <div class="mh-name">${session.name}</div>
+        <div class="divider"></div>
+        <div class="mh-item"><div class="mh-val">${myBreak.cad + myBreak.full}</div><div class="mh-lbl">Cadastros</div></div>
+        <div class="divider"></div>
+        <div class="mh-item"><div class="mh-val">${myBreak.conv}</div><div class="mh-lbl">Conversões</div></div>
+        <div class="divider"></div>
+        <div class="mh-item"><div class="mh-val">${myRen}</div><div class="mh-lbl">Rematrículas</div></div>
+        ${myBreak.renF ? `<div class="divider"></div><div class="mh-item"><div class="mh-val">${myBreak.renF}</div><div class="mh-lbl">Renovações</div></div>` : ''}
+        <div class="divider"></div>
+        <div class="mh-item"><div class="mh-val">R$&nbsp;${money(myComm)}</div><div class="mh-lbl">Meu Bônus</div></div>
+      </div>
+      <p class="page-title">Meu Desempenho</p>
+      <p class="page-sub">${MONTH} · Unidade(s): ${myUnits}</p>
+      <div class="kpi-grid">
+        <div class="kpi-card highlight">
+          <div class="kpi-label">Meu Bônus</div>
+          <div class="kpi-value">R$ ${money(myComm)}</div>
+          <div class="kpi-sub">${my.length} vendas${myDed>0?` · -R$ ${money(myDed)} em descontos`:''}</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Cadastros</div>
+          <div class="kpi-value">${myBreak.cad + myBreak.full}</div>
+          <div class="kpi-sub">R$ ${money(calcCommission(my.filter(s=>s.role==='cadastro'||s.role==='completo')))} · ${my.length && my.every(s => ehClubV3(s.unit, s.month)) ? '50%' : my.some(s => ehClubV3(s.unit, s.month)) ? 'sua parte' : '70%'} da venda nova</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Conversões</div>
+          <div class="kpi-value">${myBreak.conv}</div>
+          <div class="kpi-sub">R$ ${money(calcCommission(my.filter(s=>s.role==='conversao')))} · ${my.length && my.every(s => ehClubV3(s.unit, s.month)) ? '50%' : my.some(s => ehClubV3(s.unit, s.month)) ? 'sua parte' : '30%'} da venda nova</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Rematrículas</div>
+          <div class="kpi-value">${myRen}</div>
+          <div class="kpi-sub">R$ ${money(calcCommission(my.filter(s=>s.type==='renewal'&&s.source!=='filtro')))} · relatório oficial</div>
+        </div>
+        ${myBreak.renF ? `
+        <div class="kpi-card">
+          <div class="kpi-label">Renovações</div>
+          <div class="kpi-value">${myBreak.renF}</div>
+          <div class="kpi-sub">R$ ${money(calcCommission(my.filter(s=>s.type==='renewal'&&s.source==='filtro')))} · renovação, troca e upgrade (não contam pra meta)</div>
+        </div>` : ''}
+        <div class="kpi-card">
+          <div class="kpi-label">Minhas Disputas</div>
+          <div class="kpi-value">${myDisp}</div>
+          <div class="kpi-sub" style="color:var(--warning)">${myDisp>0?'Aguardando decisão':'Nenhuma pendente'}</div>
+        </div>
+      </div>
+      ${chartData.length > 0 ? `
+      <div class="charts-grid" style="grid-template-columns:1fr">
+        <div class="chart-card" style="max-width:500px">
+          <h3>Minhas vendas por unidade</h3>
+          <canvas id="chart-compare"></canvas>
+        </div>
+      </div>` : ''}
+    `;
+
+    if (chartData.length > 0) {
+      const ctx = document.getElementById('chart-compare').getContext('2d');
+      chartCompare = new Chart(ctx, {
+        type:'bar',
+        data:{
+          labels: chartData.map(d=>d.label.replace('Positiva ','').replace('Acqua ','')),
+          datasets:[
+            {label:'Novos',     data:chartData.map(d=>d.new), backgroundColor:corGrafico().b,borderRadius:4},
+            {label:'Rematrícula',data:chartData.map(d=>d.ren), backgroundColor:corGrafico().a,borderRadius:4},
+          ]
+        },
+        options:{responsive:true,plugins:{legend:{position:'bottom'}},scales:{y:{beginAtZero:true}}}
+      });
+    }
+    return;
+  }
+
+  // Coordenador: visão geral da unidade selecionada
+  const sales = allSales;
+  const consultants = getConsultants(sales);
+  const totalNew     = uniqueTypeCount(sales, 'new');
+  const totalRen     = uniqueTypeCount(sales, 'renewal', 'relatorio');
+  const totalRenF    = uniqueTypeCount(sales, 'renewal', 'filtro');
+  const totalComm    = calcCommission(sales) - allDeductionsTotal(activeUnit);
+  const openDisputes = disputes.filter(d=>d.status==='open' && (!activeUnit||d.unit===activeUnit)).length;
+  const unitTitle    = activeUnit ? UNIT_LABELS[activeUnit] : 'Todas as Unidades';
+
+  // Cards por unidade (só na visão "Todas as Unidades")
+  const unitCardsHtml = !activeUnit ? `
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:24px">
+      ${UNIT_KEYS.map(uk => {
+        const us = sales.filter(s => s.unit === uk);
+        const uc = calcCommission(us) - allDeductionsTotal(uk);
+        const usRenF = uniqueTypeCount(us,'renewal','filtro');
+        return `<div class="kpi-card" style="cursor:pointer" onclick="switchUnitByKey('${uk}')">
+          <div class="kpi-label" style="color:var(--navy)">${UNIT_LABELS[uk]}</div>
+          <div class="kpi-value" style="font-size:24px">R$ ${money(uc)}</div>
+          <div class="kpi-sub">${uniqueSaleCount(us)} vendas · ${uniqueTypeCount(us,'new')} novos · ${uniqueTypeCount(us,'renewal','relatorio')} rematrículas${usRenF?` · ${usRenF} renovações`:''}</div>
+        </div>`;
+      }).join('')}
+    </div>` : '';
+
+  el.innerHTML = `
+    <p class="page-title">${unitTitle}</p>
+    <p class="page-sub">${MONTH} · ${uniqueSaleCount(sales)} vendas no total</p>
+    <div class="kpi-grid">
+      <div class="kpi-card highlight">
+        <div class="kpi-label">Total Bônus</div>
+        <div class="kpi-value">R$ ${money(totalComm)}</div>
+        <div class="kpi-sub">${sales.length} lançamentos</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label" title="Vendas de aluno novo que contam no Bônus (regras do Bônus — não é a conversão do Comercial)">Alunos novos que pagam bônus</div>
+        <div class="kpi-value">${totalNew}</div>
+        <div class="kpi-sub">R$ ${money(calcCommission(sales.filter(s=>s.type==='new')))} no total</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Rematrículas</div>
+        <div class="kpi-value">${totalRen}</div>
+        <div class="kpi-sub">R$ ${money(calcCommission(sales.filter(s=>s.type==='renewal'&&s.source!=='filtro')))} · relatório oficial</div>
+      </div>
+      ${totalRenF ? `
+      <div class="kpi-card">
+        <div class="kpi-label">Renovações</div>
+        <div class="kpi-value">${totalRenF}</div>
+        <div class="kpi-sub">R$ ${money(calcCommission(sales.filter(s=>s.type==='renewal'&&s.source==='filtro')))} · renovação, troca e upgrade (não contam pra meta)</div>
+      </div>` : ''}
+      <div class="kpi-card">
+        <div class="kpi-label">Consultores Ativos</div>
+        <div class="kpi-value">${consultants.length}</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Disputas Abertas</div>
+        <div class="kpi-value">${openDisputes}</div>
+        <div class="kpi-sub" style="color:${openDisputes>0?'var(--texto-aviso)':'var(--texto-sucesso)'}">${openDisputes>0?'Requer atenção':'Tudo ok'}</div>
+      </div>
+    </div>
+    ${unitCardsHtml}
+    <div class="charts-grid">
+      <div class="chart-card">
+        <h3>Ranking de Bônus</h3>
+        <canvas id="chart-ranking"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>${!activeUnit ? 'Bônus por Unidade' : 'Novos vs Rematrícula'}</h3>
+        <canvas id="chart-compare"></canvas>
+      </div>
+    </div>
+  `;
+
+  const ranked = consultants.map(c => {
+    const b = roleBreakdown(salesForConsultant(c, sales));
+    return {
+      name: shortName(c),
+      comm: personTotal(c, sales, activeUnit),
+      cad:  b.cad + b.full,
+      conv: b.conv,
+      ren:  b.ren,
+    };
+  }).sort((a,b)=>b.comm-a.comm);
+
+  const ctx1 = document.getElementById('chart-ranking').getContext('2d');
+  chartRanking = new Chart(ctx1, {
+    type:'bar',
+    data:{
+      labels: ranked.map(r=>r.name),
+      datasets:[{label:'Bônus (R$)',data:ranked.map(r=>r.comm),backgroundColor:corGrafico().a,borderRadius:6}]
+    },
+    options:{responsive:true,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{beginAtZero:true}}}
+  });
+
+  const ctx2 = document.getElementById('chart-compare').getContext('2d');
+  if (!activeUnit) {
+    const unitStats = UNIT_KEYS.map(uk => ({
+      label: (UNIT_LABELS[uk]||uk).replace('Positiva ','').replace('Acqua ',''),
+      new:   uniqueTypeCount(sales.filter(s=>s.unit===uk), 'new'),
+      ren:   uniqueTypeCount(sales.filter(s=>s.unit===uk), 'renewal'),
+      comm:  calcCommission(sales.filter(s=>s.unit===uk)),
+    }));
+    chartCompare = new Chart(ctx2, {
+      type:'bar',
+      data:{
+        labels: unitStats.map(u=>u.label),
+        datasets:[
+          {label:'Novos',      data:unitStats.map(u=>u.new), backgroundColor:corGrafico().b,borderRadius:4},
+          {label:'Rematrícula',data:unitStats.map(u=>u.ren), backgroundColor:corGrafico().a,borderRadius:4},
+        ]
+      },
+      options:{responsive:true,plugins:{legend:{position:'bottom'}},scales:{y:{beginAtZero:true}}}
+    });
+  } else {
+    chartCompare = new Chart(ctx2, {
+      type:'bar',
+      data:{
+        labels: ranked.map(r=>r.name),
+        datasets:[
+          {label:'Cadastros',  data:ranked.map(r=>r.cad), backgroundColor:corGrafico().b,borderRadius:4},
+          {label:'Conversões', data:ranked.map(r=>r.conv),backgroundColor:corGrafico().c,borderRadius:4},
+          {label:'Rematrícula',data:ranked.map(r=>r.ren), backgroundColor:corGrafico().a,borderRadius:4},
+        ]
+      },
+      options:{responsive:true,plugins:{legend:{position:'bottom'}},scales:{x:{stacked:false},y:{beginAtZero:true}}}
+    });
+  }
+}
+
+function switchUnitByKey(uk) {
+  const btn = [...document.querySelectorAll('.tab-btn')].find(b => b.textContent === (UNIT_LABELS[uk]||uk));
+  if (btn) switchUnit(uk, btn);
+}
+
+// ══════════════════════════════════════════════
+//  SEMANAL
+// ══════════════════════════════════════════════
+// `rawSales` é a base COMPLETA do mês/unidade ativos (com dono, sem multiplicador
+// aplicado) — vem de renderSection() já assim de propósito, porque tanto a contagem
+// de contratos quanto o valor ganho precisam da mesma base pra baterem entre si.
+function weekBonusCard(unit) {
+  if (unit === GRUPO_ACQUA) return teamBonusCardV3();
+  const base = getFilteredSales(null, {includeUnassigned: false}).filter(s => s.unit === unit);
+  const b = computeTeamBonus(base, unit);
+  const pct = b.nextGoal === 0 ? 100 : Math.min(100, Math.round((b.count / (b.count + b.nextGoal)) * 100));
+  // v2: valor fixo por pessoa (a quantidade de pessoas elegíveis só mostra o total da unidade).
+  const valueHtml = b.v2
+    ? `R$ ${money(b.perPerson)} <span style="font-size:13px;font-weight:600">por consultora</span>`
+    : `R$ ${money(b.total)}`;
+  const peopleTxt = b.v2 && b.perPerson > 0 ? ` · ${b.people} pessoa${b.people!==1?'s':''} (R$ ${money(b.total)} no total)` : '';
+  return `
+    <div class="kpi-card ${b.total > 0 ? 'highlight' : ''}">
+      <div class="kpi-label">Bônus de Equipe — ${UNIT_LABELS[unit]||unit}</div>
+      <div class="kpi-value">${valueHtml}</div>
+      <div class="kpi-sub">${b.count} contrato${b.count!==1?'s':''} no mês${peopleTxt}
+        ${b.nextGoal > 0 ? ` · faltam ${b.nextGoal} pra próxima faixa` : ' · faixa máxima'}${b.clubV3 ? `<br>R$ ${CLUB_V3_TEAM.amounts.map((v, i) => `${v} com ${CLUB_V3_TEAM.steps[i]}`).join(' · ')}+ vendas (só matrícula nova e rematrícula; Black vale meio)` : ''}</div>
+    </div>`;
+}
+
+function teamBonusCardV3() {
+  const b = teamBonusAcquaV3(getFilteredSales(null, {includeUnassigned: false, allUnits: true}));
+  const r = b.regua;
+  const pct = b.nextGoal === 0 ? 100 : Math.min(100, Math.round((b.count / (b.count + b.nextGoal)) * 100));
+  const alvoSaidas = b.saidas != null ? b.saidas : Math.round(b.saidasBase);
+  const caixa = b.trava === 'aberta' ? `✓ repôs as ${b.saidas} saídas do mês`
+    : b.trava === 'fechada' ? `✗ saíram ${b.saidas} alunos — extras travados`
+    : `para não perder alunos: ${alvoSaidas} (${b.count >= alvoSaidas ? 'já passou da média' : `faltam ${alvoSaidas - b.count}`}; libera quando as saídas do mês forem lançadas)`;
+  const valor = b.trava === 'aberta' ? b.perPerson : b.previsto;
+  return `
+    <div class="kpi-card ${b.total > 0 ? 'highlight' : ''}">
+      <div class="kpi-label">Bônus de Equipe — ${ROTULO_ACQUA}</div>
+      <div class="kpi-value">R$ ${money(valor)} <span style="font-size:13px;font-weight:600">por consultora${b.trava === 'pendente' && valor ? ' (previsto)' : b.trava === 'fechada' && valor ? ' (travado)' : ''}</span></div>
+      <div class="kpi-sub">${b.count} contrato${b.count!==1?'s':''} da equipe no mês · R$ 200 com ${r.equipe_200}, R$ 300 com ${r.equipe_300}
+        ${b.nextGoal > 0 ? ` · faltam ${b.nextGoal} pra próxima faixa` : ' · faixa máxima'}<br>Caixa d'água: ${caixa}</div>
+    </div>`;
+}
+
+// Semana 'closed' (já terminou), 'current' (hoje cai dentro dela) ou 'upcoming' (ainda
+// não começou) — evita que uma semana em andamento com poucos contratos pareça "fechada
+// em 0%", quando na verdade ainda dá tempo de bater a meta.
+function dateOnly(d) { return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+function weekStatus(range) {
+  const today = dateOnly(new Date());
+  if (today > range.end) return 'closed';
+  if (today < range.start) return 'upcoming';
+  return 'current';
+}
+function weekStatusBadge(status) {
+  if (status === 'current')  return '<span class="tag" style="background:#e3f2fd;color:#1565c0;font-size:10px;margin-left:6px">Em andamento</span>';
+  if (status === 'upcoming') return '<span class="tag" style="background:#f5f5f5;color:#999;font-size:10px;margin-left:6px">Ainda não começou</span>';
+  return '';
+}
+
+function weekCardHtml(w, unit, name) {
+  const fmt = d => d.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit'});
+  const pctLabel = w.pct === 0 ? '0%' : Math.round(w.pct*100) + '%';
+  const parts = [];
+  if (w.typeBreak.novos)        parts.push(`${w.typeBreak.novos} novo${w.typeBreak.novos!==1?'s':''}`);
+  if (w.typeBreak.rematriculas) parts.push(`${w.typeBreak.rematriculas} rematríc.`);
+  if (w.typeBreak.renovacoes)   parts.push(`${w.typeBreak.renovacoes} renov.`);
+  const breakdown = parts.length ? ` (${parts.join(' · ')})` : '';
+  return `
+    <div class="kpi-card ${w.pct >= 1 ? 'highlight' : ''}">
+      <div class="kpi-label">Semana ${w.wk} · ${fmt(w.range.start)}–${fmt(w.range.end)}${weekStatusBadge(w.status)}</div>
+      <div class="kpi-value">R$ ${money(w.earned)}</div>
+      <div class="kpi-sub">${w.count} contrato${w.count!==1?'s':''}${breakdown} · ${w.label} (${pctLabel})
+        ${w.toNext > 0 ? `<br>faltam ${w.toNext} pra próxima faixa` : ''}${centralLinha(w.central)}</div>
+      ${w.hasAny ? `<button class="btn-sm" style="margin-top:10px;background:#eef1f4;color:var(--navy)" onclick="openWeekDetailModal('${name}','${unit}',${w.wk})">Ver alunos</button>` : ''}
+    </div>`;
+}
+
+// Linha do bônus da Central no cartão da semana (v3)
+function centralLinha(c) {
+  if (!c || !c.semana) return '';
+  const pts = `${money(c.pontos)} pts`;
+  if (c.valor > 0) return `<br><span style="color:#2e7d32;font-weight:700">⭐ Central: ${c.nivel} (+${Math.round(c.pct*100)}%) · +R$ ${money(c.valor)}</span> <span style="color:var(--mid)">(${pts})</span>`;
+  if (c.pendente) return `<br><span style="color:#e65100;font-weight:700">⭐ Central: ${c.nivel} · +R$ ${money(c.previsto)} previsto</span> <span style="color:var(--mid)">(${c.motivo})</span>`;
+  if (c.pct > 0) return `<br><span style="color:#c62828">⭐ Central: ${c.nivel}, mas ${c.motivo}</span>`;
+  return `<br><span style="color:var(--mid)">⭐ Central: ${c.motivo}</span>`;
+}
+
+// `unit` pode ser uma unidade ou o grupo 'acqua' (v3: Laranjeiras + República juntas)
+function personWeeklyRows(name, unit, rawSales, priced) {
+  const bounds = weekBoundsForMonth(activeMonth);
+  if (!bounds) return [];
+  return bounds.map((range, i) => {
+    const wk = i + 1;
+    const weekSales = rawSales.filter(s => s.consultant === name && noGrupo(s, unit) && weekIndexForSale(s) === wk);
+    const metaSales = weekSales.filter(countsToGoal);
+    const mc = somaMeta(metaSales);
+    const earned = priced
+      .filter(s => s.consultant === name && noGrupo(s, unit) && weekIndexForSale(s) === wk)
+      .reduce((a,s) => a + s.commission, 0);
+    const typeBreak = {
+      novos:        metaSales.filter(s=>s.type==='new').length,
+      rematriculas: metaSales.filter(s=>s.type==='renewal' && s.source!=='filtro').length,
+      renovacoes:   metaSales.filter(s=>s.type==='renewal' && s.source==='filtro').length,
+    };
+    return {
+      wk, range, earned, typeBreak,
+      count: mc,
+      hasAny: weekSales.length > 0,
+      pct: weeklyTierPct(unit, mc),
+      label: weekTierLabel(unit, mc),
+      toNext: weekTierNextGoal(unit, mc),
+      status: weekStatus(range),
+      central: unit === GRUPO_ACQUA ? centralDaSemana(name, wk, mc, earned) : null,
+    };
+  });
+}
+
+// Modal com a lista de alunos de uma pessoa numa semana — inclui também as conversões
+// dela (não contam pra meta, mas entram no valor ganho), marcadas à parte.
+function openWeekDetailModal(name, unit, wk) {
+  const bounds = weekBoundsForMonth(activeMonth);
+  if (!bounds) return;
+  const range = bounds[wk - 1];
+  const raw    = getFilteredSales(null, {includeUnassigned: false, allUnits: unit === GRUPO_ACQUA});
+  const priced = pricedSales(raw);
+  const weekSales   = raw.filter(s => s.consultant === name && noGrupo(s, unit) && weekIndexForSale(s) === wk);
+  const weekPriced  = priced.filter(s => s.consultant === name && noGrupo(s, unit) && weekIndexForSale(s) === wk);
+  const metaCount   = somaMeta(weekSales.filter(countsToGoal));
+  const earned      = weekPriced.reduce((a,s) => a + s.commission, 0);
+  const pct         = weeklyTierPct(unit, metaCount);
+  const fmt = d => d.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit'});
+
+  document.getElementById('week-detail-title').textContent = `${shortName(name)} — Semana ${wk}`;
+  document.getElementById('week-detail-info').innerHTML = `
+    <strong>Período:</strong> ${fmt(range.start)}–${fmt(range.end)}${weekStatusBadge(weekStatus(range))}<br>
+    <strong>${weekTierLabel(unit, metaCount)}</strong> (${Math.round(pct*100)}%) · <strong>${metaCount}</strong> contrato${metaCount!==1?'s':''} pra meta ·
+    <strong>R$ ${money(earned)}</strong> ganho na semana${centralLinha(unit === GRUPO_ACQUA ? centralDaSemana(name, wk, metaCount, earned) : null)}
+  `;
+
+  const rows = weekSales.map(s => {
+    const isMeta = countsToGoal(s);
+    const p = weekPriced.find(x => x.line_id === s.line_id);
+    const typeTxt = s.type === 'new' ? 'Novo' : s.kind === 'upgrade' ? 'Upgrade' : (s.source === 'filtro' ? 'Renovação' : 'Rematrícula');
+    return `<tr>
+      <td>${s.student}${unit === GRUPO_ACQUA ? `<div style="font-size:10px;color:var(--mid)">${UNIT_LABELS[s.unit] || s.unit}</div>` : ''}</td>
+      <td>${typeTxt}</td>
+      <td style="font-size:12px">${s.contract}</td>
+      <td>${roleLabel(s)}${!isMeta ? '<div style="font-size:10px;color:var(--mid)">não conta pra meta</div>' : pesoMeta(s) !== 1 ? '<div style="font-size:10px;color:var(--mid)">Black: vale meio contrato na meta</div>' : ''}</td>
+      <td style="text-align:right">R$ ${money(p ? p.commission : s.commission)}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('week-detail-body').innerHTML = weekSales.length ? `
+    <table class="data-table">
+      <thead><tr><th>Aluno</th><th>Tipo</th><th>Contrato</th><th>Papel</th><th style="text-align:right">Valor</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>` : '<div class="empty-state" style="padding:16px 0"><p>Nenhuma venda dessa pessoa nessa semana.</p></div>';
+
+  openModal('modal-week-detail');
+}
+
+// Explicação curta da meta v3 (Acqua) para o topo da aba Semanal
+function metaV3Sub() {
+  const r = reguaDe();
+  return `<br>Acqua (Laranjeiras + República juntas): Entrada ${r.entrada} contrato${r.entrada!==1?'s':''} (30%) · Básico ${r.basico} (60%) · Meta real ${r.meta_real}+ (100%) por semana — saídas usadas na meta: ${money(r.saidas_base)} por mês, ${r.consultoras} consultoras.`;
+}
+// Explicação curta da meta do Club (nov/2026+) para o topo da aba Semanal
+function clubV3Sub() {
+  return `<br>Club: Básico 4 contratos (50%) · Meta real 7 (70%) · Super meta 10+ (100%) por semana — cada Black vale meio contrato; renovação, troca e upgrade pagam, mas não contam pra meta. Plano CLT Laranjeiras: renda extra de 20% (1 a 3 na semana), 25% (4 a 6), 30% (7 a 9) ou 35% (10+) do bônus de um Seja, fora da meta.`;
+}
+// Prêmio mensal do Club (vale-compras): quantas semanas em Super meta; perde se alguma semana já fechada ficou abaixo do Básico
+function premioClub(weeks) {
+  const supers = weeks.filter(w => w.pct >= 1).length;
+  const perdeu = PREMIO_CLUB.pisoTodas && weeks.some(w => w.status === 'closed' && w.pct === 0);
+  const faixa = PREMIO_CLUB.faixas.find(([n]) => supers >= n);
+  return { supers, perdeu, valor: !perdeu && faixa ? faixa[1] : 0, aberto: weeks.some(w => w.status !== 'closed') };
+}
+function premioClubCard(weeks) {
+  const p = premioClub(weeks);
+  const regra = `R$ ${PREMIO_CLUB.faixas.slice().reverse().map(([n, v]) => `${v} com ${n}`).join(' · ')} semanas em Super meta${PREMIO_CLUB.pisoTodas ? ', sem nenhuma semana abaixo do Básico' : ''}`;
+  const sub = p.perdeu ? 'uma semana ficou abaixo do Básico — sem prêmio este mês' : `${p.supers} de 4 semana${p.supers !== 1 ? 's' : ''} em Super meta${p.aberto ? ' até agora' : ''}`;
+  return `<div class="kpi-grid"><div class="kpi-card ${p.valor > 0 ? 'highlight' : ''}">
+    <div class="kpi-label">🎁 Prêmio do mês — vale-compras Showroom Dus2</div>
+    <div class="kpi-value">R$ ${money(p.valor)}${p.valor > 0 && p.aberto ? ' <span style="font-size:13px;font-weight:600">garantido até agora</span>' : ''}</div>
+    <div class="kpi-sub">${sub}<br>${regra}. Pago à parte, fora do Pix do bônus.</div>
+  </div></div>`;
+}
+// Resumo do bônus da Central no mês, para a consultora
+function centralResumoHtml(weeks) {
+  const c = CENTRAL[activeMonth];
+  if (!c) return '';
+  const valor = weeks.reduce((a, w) => a + (w.central ? w.central.valor : 0), 0);
+  const previsto = weeks.reduce((a, w) => a + (w.central && w.central.pendente ? w.central.previsto : 0), 0);
+  return `<div class="kpi-grid"><div class="kpi-card ${valor > 0 ? 'highlight' : ''}">
+    <div class="kpi-label">⭐ Bônus da Central — ${activeMonth}</div>
+    <div class="kpi-value">R$ ${money(valor)}${previsto > 0 ? ` <span style="font-size:13px;font-weight:600">+ R$ ${money(previsto)} previsto</span>` : ''}</div>
+    <div class="kpi-sub">Pontos por semana: matrícula 4, renovação 3, pagamento 2, voltou a treinar 1 (+ esforço e medalhas, até 5).
+      Bom a partir de ${money(c.bom)} pontos (+5%), Ótimo a partir de ${money(c.otimo)} (+20%) — régua: a melhor da equipe.
+      Só vale na semana em que você bate o Básico e o mínimo em 4 de 5 dias, e no mês em que a equipe repõe as saídas.</div>
+  </div></div>`;
+}
+
+function renderWeekly(rawSales) {
+  const el = document.getElementById('panel-weekly');
+  const isCoord = session.role === 'coordinator';
+  const bounds = weekBoundsForMonth(activeMonth);
+
+  if (!bounds) {
+    el.innerHTML = `<div class="empty-state"><div class="icon">📅</div><p>Não foi possível calcular as semanas de ${activeMonth}.</p></div>`;
+    return;
+  }
+
+  // v3: Laranjeiras + República aparecem juntas (uma meta só) — conta com as vendas das duas, mesmo na aba de uma unidade
+  const v3 = policyV3(activeMonth);
+  if (v3) rawSales = getFilteredSales(null, {includeUnassigned: false, allUnits: true});
+  const priced = pricedSales(rawSales);
+  const unitsInView = gruposDe(activeUnit ? [activeUnit] : UNIT_KEYS);
+  const bonusCardsHtml = unitsInView.map(weekBonusCard).join('');
+
+  if (!isCoord) {
+    // Quem vende em mais de uma unidade tem uma aba por unidade (ver buildTabs()) — aqui só
+    // falta cobrir a visão combinada ("Meu Dashboard", sem unidade selecionada): mostra a
+    // semana de CADA unidade em que a pessoa vende, não só a primeira que aparecer nos dados.
+    const myUnits = gruposDe(activeUnit ? [activeUnit] : [...new Set(RAW_SALES.filter(s => s.consultant === session.name).map(s => s.unit))]);
+    const myBonusHtml = (activeUnit ? unitsInView : myUnits).map(weekBonusCard).join('');
+    const sectionsHtml = myUnits.map(uk => {
+      const myWeeks = personWeeklyRows(session.name, uk, rawSales, priced);
+      return `
+        ${myUnits.length > 1 || uk === GRUPO_ACQUA ? `<p class="page-title" style="font-size:17px;margin-top:20px">${rotuloGrupo(uk)}</p>` : ''}
+        <div class="kpi-grid">${myWeeks.map(w => weekCardHtml(w, uk, session.name)).join('')}</div>
+        ${uk === GRUPO_ACQUA ? centralResumoHtml(myWeeks) : ''}${ehClubV3(uk) ? premioClubCard(myWeeks) : ''}`;
+    }).join('');
+    el.innerHTML = `
+      <p class="page-title">Minha Semana</p>
+      <p class="page-sub">${activeMonth} · meta contada pelos contratos que você cadastrou (ou rematrícula sua; renovação não conta a partir de setembro/2026)${v3 ? metaV3Sub() : ''}${policyClubV3(activeMonth) && myUnits.includes('club') ? clubV3Sub() : ''}</p>
+      ${sectionsHtml}
+      <p class="page-title" style="font-size:17px;margin-top:8px">Bônus de Equipe</p>
+      <p class="page-sub">Coletivo — pago junto com o bônus individual</p>
+      <div class="kpi-grid">${myBonusHtml}</div>
+    `;
+    return;
+  }
+
+  // Coordenador: todo mundo lado a lado, por unidade — clique numa célula pra ver quem são
+  const unitTitle = activeUnit ? UNIT_LABELS[activeUnit] : 'Todas as Unidades';
+  const rowsHtml = unitsInView.map(uk => {
+    const consultants = getConsultants(rawSales.filter(s => noGrupo(s, uk)));
+    if (!consultants.length) return '';
+    const comCentral = uk === GRUPO_ACQUA;
+    const comPremio = ehClubV3(uk);
+    const bodyRows = consultants.map(name => {
+      const weeks = personWeeklyRows(name, uk, rawSales, priced);
+      const total = weeks.reduce((a,w) => a + w.earned, 0);
+      const central = weeks.reduce((a,w) => a + (w.central ? w.central.valor : 0), 0);
+      const previsto = weeks.reduce((a,w) => a + (w.central && w.central.pendente ? w.central.previsto : 0), 0);
+      const weekCells = weeks.map(w => `
+        <td ${w.hasAny ? `style="cursor:pointer" onclick="openWeekDetailModal('${name}','${uk}',${w.wk})"` : ''}>
+          <span class="tag" style="background:${w.pct>=1?'#e8f5e9':w.pct>0?'#fff3e0':'#ffebee'};color:${w.pct>=1?'#2e7d32':w.pct>0?'#e65100':'#c62828'}">
+            ${w.count} · ${Math.round(w.pct*100)}%
+          </span>${weekStatusBadge(w.status)}${comCentral && w.central && w.central.semana ? `<div style="font-size:10px;color:${w.central.valor > 0 ? '#2e7d32' : 'var(--mid)'};margin-top:3px" title="${w.central.motivo || ''}">⭐ ${money(w.central.pontos)} pts${w.central.pct ? ` · ${w.central.nivel}` : ''}</div>` : ''}
+        </td>`).join('');
+      return `<tr><td>${shortName(name)}</td>${weekCells}<td><strong>R$ ${money(total)}</strong></td>${comCentral ? `<td>${central > 0 ? `<strong style="color:#2e7d32">+R$ ${money(central)}</strong>` : previsto > 0 ? `<span style="color:#e65100">+R$ ${money(previsto)} previsto</span>` : '—'}</td>` : ''}${comPremio ? (() => { const p = premioClub(weeks); return `<td title="${p.supers} semana(s) em Super meta">${p.valor > 0 ? `<strong style="color:#2e7d32">R$ ${money(p.valor)}</strong>` : p.perdeu ? '<span style="color:#c62828">—</span>' : `<span style="color:var(--mid)">${p.supers}/4 Super</span>`}</td>`; })() : ''}</tr>`;
+    }).join('');
+    return `
+      <div class="table-card">
+        <h3>${rotuloGrupo(uk)}</h3>
+        <p style="font-size:12px;color:var(--mid);margin-bottom:12px">Clique numa célula pra ver quem são os alunos daquela semana.${comCentral ? ` ⭐ = pontos da Central na semana (Bom a partir de ${money((CENTRAL[activeMonth] || {}).bom || 0)}, Ótimo a partir de ${money((CENTRAL[activeMonth] || {}).otimo || 0)}).` : ''}</p>
+        <table class="data-table">
+          <thead><tr><th>Consultor</th><th>Sem. 1</th><th>Sem. 2</th><th>Sem. 3</th><th>Sem. 4</th><th>Total no mês</th>${comCentral ? '<th>Bônus da Central</th>' : ''}${comPremio ? '<th>Prêmio (vale)</th>' : ''}</tr></thead>
+          <tbody>${bodyRows}</tbody>
+        </table>
+      </div>`;
+  }).join('');
+
+  el.innerHTML = `
+    <p class="page-title">Semanal — ${unitTitle}</p>
+    <p class="page-sub">${activeMonth} · meta semanal (segunda a domingo) por pessoa, contada pelos cadastros/rematrículas/renovações dela${v3 ? metaV3Sub() : ''}${unitsInView.some(u => ehClubV3(u)) ? clubV3Sub() : ''}</p>
+    <div class="kpi-grid">${bonusCardsHtml}</div>
+    ${rowsHtml || '<div class="empty-state"><div class="icon">📭</div><p>Nenhum consultor com vendas no período.</p></div>'}
+  `;
+}
+
+// ══════════════════════════════════════════════
+//  SALES TABLE
+// ══════════════════════════════════════════════
+function renderSales(sales) {
+  const el = document.getElementById('panel-sales');
+  const isCoord = session.role === 'coordinator';
+  const unitTitle = activeUnit ? UNIT_LABELS[activeUnit] : 'Todas as Unidades';
+
+  // Coordenador vê todas inclusive sem dono; consultor não vê sem dono
+  if (isCoord) sales = pricedSales(getFilteredSales(null, {includeUnassigned: true}));
+
+  // Para consultor: montar opções de unidades onde ele tem vendas
+  const allSales = getFilteredSales(null, isCoord ? {includeUnassigned: true} : null);
+
+  const unitFilterHtml = !isCoord ? `
+    <select id="unit-filter" onchange="applyFilters()">
+      <option value="">Todas as unidades</option>
+      ${UNIT_KEYS.map(u=>`<option value="${u}">${(UNIT_LABELS[u]||u).replace('Positiva ','').replace('Acqua ','')}</option>`).join('')}
+    </select>` : '';
+
+  const reviewCount = allSales.filter(s => s.needs_review).length;
+  const reviewBannerHtml = reviewCount > 0 ? `
+    <div class="coordinator-notice" style="background:#fff3e0;border-color:#ffe0b2;color:#e65100">
+      ⚠ ${reviewCount} venda${reviewCount!==1?'s têm':' tem'} valor de bônus não reconhecido pela tabela de planos (tag "Revisar")${isCoord ? ' — clique em "Editar" na linha para corrigir o valor.' : '.'}
+      ${isCoord ? `<button onclick="document.getElementById('review-filter').checked=true;applyFilters()" style="margin-left:10px;padding:4px 12px;background:#e65100;color:#fff;border:none;border-radius:6px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer">Mostrar só essas</button>` : ''}
+    </div>` : '';
+
+  el.innerHTML = `
+    <p class="page-title">Vendas — ${isCoord ? unitTitle : 'Todas as Unidades'}</p>
+    <p class="page-sub">${MONTH}</p>
+    ${reviewBannerHtml}
+    <div class="table-card">
+      <div class="table-header">
+        <h3>Lista de Vendas (${sales.length})</h3>
+        <div class="flex-row">
+          ${unitFilterHtml}
+          <select id="type-filter" onchange="applyFilters()">
+            <option value="">Todos os tipos</option>
+            <option value="new">Novos</option>
+            <option value="renewal">Rematrículas</option>
+          </select>
+          ${isCoord ? `<select id="consultant-filter" onchange="applyFilters()">
+            <option value="">Todos os consultores</option>
+            ${getConsultants(allSales).map(c=>`<option value="${c}">${shortName(c)}</option>`).join('')}
+          </select>` : ''}
+          <input class="search-box" id="search-sales" placeholder="Buscar aluno, ID..." oninput="applyFilters()">
+          ${isCoord && reviewCount > 0 ? `<label style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#e65100;cursor:pointer">
+            <input type="checkbox" id="review-filter" onchange="applyFilters()"> Só revisar (${reviewCount})
+          </label>` : ''}
+          ${isCoord ? `<button class="btn-add" onclick="openAddSaleModal()" style="padding:8px 16px;font-size:13px">+ Adicionar Venda</button>
+          <button onclick="exportPaymentReport()" style="padding:8px 16px;font-size:13px;background:#e3f2fd;color:#1565c0;border:none;border-radius:8px;font-family:inherit;font-weight:800;cursor:pointer">📄 Relatório de Pagamento</button>` : ''}
+        </div>
+      </div>
+      <div id="sales-table-body"></div>
+    </div>
+    ${isCoord ? '<div id="deductions-panel"></div>' : ''}
+  `;
+  renderSalesTable(sales);
+  if (isCoord) renderDeductionsPanel();
+}
+
+// ══════════════════════════════════════════════
+//  DESCONTOS POR NÃO CONFORMIDADE (coordenador)
+// ══════════════════════════════════════════════
+// Desconto avulso da comissão do mês de um consultor — não ligado a uma venda
+// específica (ex.: cadastro errado, agendamento errado, ver Seção 6/7 da política).
+// Não afeta o bônus de equipe, só a comissão individual da pessoa descontada.
+function renderDeductionsPanel() {
+  const el = document.getElementById('deductions-panel');
+  if (!el) return;
+  const unit = activeUnit;
+  const monthDeductions = deductions
+    .filter(d => d.month === activeMonth && (!unit || d.unit === unit))
+    .slice().reverse();
+  const total = monthDeductions.reduce((a,d)=>a+Number(d.amount), 0);
+  const names = getConsultants(getFilteredSales(null, {includeUnassigned:true}));
+
+  el.innerHTML = `
+    <div class="table-card">
+      <div class="table-header">
+        <h3>Descontos por Não Conformidade</h3>
+        ${monthDeductions.length ? `<span style="font-size:13px;font-weight:800;color:#c62828">Total descontado: -R$ ${money(total)}</span>` : ''}
+      </div>
+      <p style="font-size:13px;color:var(--mid);margin-bottom:16px">
+        Desconta do bônus do mês do consultor (não muda o bônus de equipe). Sempre confirme com a
+        gestão/financeiro antes de aplicar.
+      </p>
+      ${monthDeductions.length ? `
+      <table class="data-table" style="margin-bottom:18px">
+        <thead><tr><th>Consultor</th><th>Unidade</th><th>Motivo</th><th>Data</th><th>Valor</th><th></th></tr></thead>
+        <tbody>
+          ${monthDeductions.map(d => `
+            <tr>
+              <td>${shortName(d.consultant)}</td>
+              <td>${d.unit_label}</td>
+              <td>${d.reason}</td>
+              <td>${d.createdAt}</td>
+              <td style="color:#c62828;font-weight:800">-R$ ${money(d.amount)}</td>
+              <td><button class="btn-del" onclick="removeDeduction('${d._localId}')">Remover</button></td>
+            </tr>`).join('')}
+        </tbody>
+      </table>` : `<div class="empty-state" style="padding:16px 0"><p>Nenhum desconto lançado neste mês${unit?' nesta unidade':''}.</p></div>`}
+      <div class="add-user-form">
+        <select id="ded-consultant">${names.map(c=>`<option value="${c}">${shortName(c)}</option>`).join('')}</select>
+        <select id="ded-unit">${UNIT_KEYS.map(u=>`<option value="${u}" ${u===unit?'selected':''}>${UNIT_LABELS[u]||u}</option>`).join('')}</select>
+        <input id="ded-amount" placeholder="Valor (R$)" style="max-width:120px">
+        <input id="ded-reason" placeholder="Motivo do desconto" style="flex:2;min-width:220px">
+        <button class="btn-add" onclick="addDeduction()">− Descontar</button>
+      </div>
+    </div>
+  `;
+}
+
+async function addDeduction() {
+  const consultant = document.getElementById('ded-consultant').value;
+  const unit       = document.getElementById('ded-unit').value;
+  const amountRaw  = document.getElementById('ded-amount').value.trim().replace(',', '.');
+  const amount     = parseFloat(amountRaw);
+  const reason     = document.getElementById('ded-reason').value.trim();
+
+  if (!consultant || !unit) { alert('Selecione o consultor e a unidade.'); return; }
+  if (!amountRaw || isNaN(amount) || amount <= 0) { alert('Informe um valor de desconto válido.'); return; }
+  if (!reason) { alert('Informe o motivo do desconto.'); return; }
+
+  const newDeduction = {
+    _localId: Date.now() + '-' + Math.random().toString(36).slice(2),
+    consultant, unit, unit_label: UNIT_LABELS[unit] || unit,
+    amount, reason, month: activeMonth,
+    createdBy: session.name, createdAt: new Date().toLocaleDateString('pt-BR'),
+  };
+  deductions.push(newDeduction);
+  saveDeductionsLocal(deductions);
+  destroyCharts();
+  renderSection('sales');
+  await sbAddDeduction(newDeduction);
+}
+
+async function removeDeduction(localId) {
+  if (!confirm('Remover este desconto? O bônus da pessoa volta ao valor cheio.')) return;
+  deductions = deductions.filter(d => d._localId !== localId);
+  saveDeductionsLocal(deductions);
+  destroyCharts();
+  renderSection('sales');
+  await sbDeleteDeduction(localId);
+}
+
+function applyFilters() {
+  const search   = (document.getElementById('search-sales')?.value || '').toLowerCase();
+  const type     = document.getElementById('type-filter')?.value || '';
+  const cons     = document.getElementById('consultant-filter')?.value || '';
+  const unit     = document.getElementById('unit-filter')?.value || '';
+  const onlyRev  = document.getElementById('review-filter')?.checked || false;
+  const isCoord = session.role === 'coordinator';
+  let sales = pricedSales(getFilteredSales(null, isCoord ? {includeUnassigned:true} : null));
+  if (type)    sales = sales.filter(s=>s.type===type);
+  if (cons)    sales = sales.filter(s=>s.consultant===cons);
+  if (unit)    sales = sales.filter(s=>s.unit===unit);
+  if (onlyRev) sales = sales.filter(s=>s.needs_review);
+  if (search) sales = sales.filter(s=>
+    s.student.toLowerCase().includes(search) ||
+    s.id.toLowerCase().includes(search) ||
+    (s.consultant||'').toLowerCase().includes(search)
+  );
+  renderSalesTable(sales);
+}
+
+function renderSalesTable(sales) {
+  const body = document.getElementById('sales-table-body');
+  if (!body) return;
+  if (!sales.length) {
+    body.innerHTML = '<div class="empty-state"><div class="icon">🔍</div><p>Nenhuma venda encontrada.</p></div>';
+    return;
+  }
+
+  const isCoord = session.role === 'coordinator';
+  const overrides = loadOverrides();
+
+  // Célula com os dados que variam por pessoa (Consultor, Tipo/Papel, Comissão, Ação).
+  // Cada linha de comissão mantém sua própria disputa e botão de contestação, mesmo
+  // quando exibida agrupada com o outro lado de uma matrícula dividida (cadastro/conversão).
+  function personCell(s) {
+    const dispute = disputes.find(d=>d.saleId===s.line_id && d.unit===s.unit && d.status==='open');
+    const resolved= disputes.find(d=>d.saleId===s.line_id && d.unit===s.unit && d.status==='resolved');
+    const isDisp  = !!dispute;
+    const isRes   = !!resolved;
+    const isMe    = s.consultant === session.name;
+    const isUnassigned = !s.consultant;
+    const isManual = !!s._manual;
+    const isAlreadyUnassigned = overrides.unassigned.some(u => u.id === s.line_id && u.unit === s.unit);
+    let statusTag = '';
+    if (isDisp) statusTag = ' <span class="tag tag-disputed" style="font-size:9px">Disputa</span>';
+    else if (isRes) statusTag = ' <span class="tag tag-resolved" style="font-size:9px">Resolvida</span>';
+
+    const isEditOfReport = isManual && RAW_SALES.some(r => r.line_id === s.line_id);
+    const editBtn = `<button class="btn-edit-pw" onclick="openEditSaleModal('${s.line_id}','${s.unit}')" style="font-size:11px;padding:3px 8px;margin-right:4px">Editar</button>`;
+
+    let actionCell = '<td></td>';
+    if (isCoord) {
+      if (isEditOfReport) {
+        actionCell = `<td>${editBtn}<span class="tag" style="background:#ede7f6;color:#5e35b1;font-size:11px;margin-right:6px">Editada</span><button class="btn-del" onclick="deleteAddedSale('${s.line_id}')" style="font-size:11px;padding:3px 8px">Reverter</button></td>`;
+      } else if (isManual) {
+        actionCell = `<td>${editBtn}<span class="tag" style="background:#e3f2fd;color:#1565c0;font-size:11px;margin-right:6px">Manual</span><button class="btn-del" onclick="deleteAddedSale('${s.line_id}')" style="font-size:11px;padding:3px 8px">Excluir</button></td>`;
+      } else if (isAlreadyUnassigned) {
+        // O coordenador removeu o dono manualmente antes (via "Remover Dono") — reatribuir
+        // devolve ao consultor original do relatório.
+        actionCell = `<td>${editBtn}<button class="btn-sm btn-approve" onclick="reassignSale('${s.line_id}','${s.unit}')" style="font-size:11px">Reatribuir</button></td>`;
+      } else if (isUnassigned) {
+        // Já veio sem consultor do próprio relatório (ex.: "Cadastrado por" em branco) —
+        // não existe um "dono original" pra reatribuir, então só "Editar" (escolher alguém
+        // manualmente) faz sentido aqui. Mostrar "Reatribuir" nesse caso não fazia nada ao
+        // clicar, o que parecia um botão quebrado.
+        actionCell = `<td>${editBtn}</td>`;
+      } else {
+        actionCell = `<td>${editBtn}<button class="btn-sm btn-reject" onclick="unassignSale('${s.line_id}','${s.unit}')" style="font-size:11px">Remover Dono</button></td>`;
+      }
+    } else {
+      if (!isMe && !isDisp && !isRes && !isUnassigned && contestacaoAberta(MONTH)) {
+        actionCell = `<td><button class="btn-dispute" onclick="openDisputeModal('${s.line_id}','${s.unit}')">Contestar</button></td>`;
+      } else if (isDisp && dispute.claimant === session.name) {
+        actionCell = `<td><span style="font-size:12px;color:var(--warning);font-weight:700">Aguardando</span></td>`;
+      } else if (isDisp && s.consultant === session.name && !dispute.defense) {
+        actionCell = `<td><button class="btn-sm btn-approve" onclick="openDefenseModal(${disputes.indexOf(dispute)})" style="font-size:11px">⚔️ Me Defender</button></td>`;
+      } else if (isDisp && s.consultant === session.name && dispute.defense) {
+        actionCell = `<td><span style="font-size:12px;color:var(--success);font-weight:700">✓ Defesa enviada</span></td>`;
+      }
+    }
+
+    const role = roleLabel(s);
+    const isRecon = s.type === 'renewal' && s.source === 'filtro';
+    const typeTagClass = s.type === 'new' ? 'tag-new' : (isRecon ? 'tag-type' : 'tag-renewal');
+    const typeTagText  = s.type === 'new' ? 'Novo' : (isRecon ? 'Renovação' : 'Rematrícula');
+    const consultantCell = isUnassigned
+      ? '<span class="tag" style="background:#f5f5f5;color:#999;font-size:11px">Sem consultor</span>'
+      : `${shortName(s.consultant)} ${isMe?'<span class="tag" style="background:#e8f5e9;color:#2e7d32;font-size:10px">Você</span>':''}${statusTag}`;
+    return {
+      isMe, isUnassigned,
+      front: `
+        <td>${consultantCell}</td>
+        <td><span class="tag ${typeTagClass}">${typeTagText}</span>${role?`<div style="font-size:11px;color:var(--mid);margin-top:2px">${role}</div>`:''}${isRecon?'<div style="font-size:10px;color:var(--mid);margin-top:2px">Não capturada no relatório de rematrícula</div>':''}</td>
+        <td><strong>R$ ${money(s.commission)}</strong> ${s.needs_review?'<span class="tag" style="background:#fff3e0;color:#e65100;font-size:10px" title="Plano não reconhecido na tabela de bônus — valor padrão aplicado, revise">⚠ Revisar</span>':''}</td>`,
+      actionCell,
+    };
+  }
+
+  // Agrupa cadastro + conversão da mesma matrícula em um único bloco visual —
+  // são duas linhas de comissão distintas, mas representam uma única venda.
+  const groups = [];
+  const index = new Map();
+  sales.forEach(s => {
+    if (index.has(s.id)) { index.get(s.id).push(s); }
+    else { const arr = [s]; index.set(s.id, arr); groups.push(arr); }
+  });
+
+  const rowsHtml = groups.map(group => {
+    const isSplit = group.length === 2 && group.every(s => s.role === 'cadastro' || s.role === 'conversao');
+    const ordered = isSplit
+      ? [group.find(s=>s.role==='cadastro'), group.find(s=>s.role==='conversao')]
+      : group;
+    const [first, ...rest] = ordered;
+    const span = ordered.length;
+
+    const firstCell = personCell(first);
+    let html = `<tr class="${firstCell.isMe?'mine':''}${isSplit?' split-pair':''}"${firstCell.isUnassigned?' style="opacity:.6"':''}>
+      <td rowspan="${span}"><strong>#${first.id}</strong></td>
+      <td rowspan="${span}">${first.student}</td>
+      ${firstCell.front}
+      <td rowspan="${span}">${first.date}</td>
+      <td rowspan="${span}" style="max-width:200px;font-size:12px;color:var(--mid)">${first.contract.slice(0,40)}${first.contract.length>40?'…':''}</td>
+      ${firstCell.actionCell}
+    </tr>`;
+
+    rest.forEach(s => {
+      const cell = personCell(s);
+      html += `<tr class="${cell.isMe?'mine':''}${isSplit?' split-pair split-sub':''}"${cell.isUnassigned?' style="opacity:.6"':''}>
+        ${cell.front}
+        ${cell.actionCell}
+      </tr>`;
+    });
+    return html;
+  }).join('');
+
+  body.innerHTML = `<table class="data-table">
+    <thead><tr>
+      <th>ID</th><th>Aluno</th><th>Consultor</th><th>Tipo</th>
+      <th>Bônus</th><th>Data</th><th>Contrato</th>
+      <th>Ação</th>
+    </tr></thead>
+    <tbody>${rowsHtml}</tbody>
+  </table>`;
+}
+
+// ══════════════════════════════════════════════
+//  RANKING
+// ══════════════════════════════════════════════
+function renderRanking(sales) {
+  const el = document.getElementById('panel-ranking');
+  const unitTitle = activeUnit ? UNIT_LABELS[activeUnit] : 'Todas as Unidades';
+  const consultants = getConsultants(sales);
+
+  const ranked = consultants.map(c => {
+    const cs = salesForConsultant(c, sales);
+    return {
+      name: c,
+      comm: personTotal(c, sales, activeUnit),
+      breakdown: roleBreakdown(cs),
+      total: cs.length,
+    };
+  }).sort((a,b)=>b.comm-a.comm);
+
+  const maxComm = ranked[0]?.comm || 1;
+
+  el.innerHTML = `
+    <p class="page-title">Ranking — ${unitTitle}</p>
+    <p class="page-sub">${MONTH}</p>
+    <div class="table-card">
+      <h3>Consultores por Bônus</h3>
+      <div style="margin-top:16px">
+        ${ranked.map((r,i) => `
+          <div class="ranking-row">
+            <div class="rank-pos ${i<3?'top':''}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</div>
+            <div style="flex:1">
+              <div class="rank-name">${r.name === DEFAULT_CONSULTANT ? DEFAULT_CONSULTANT : r.name.split(' ').slice(0,2).join(' ')}
+                ${r.name===session.name?'<span class="tag" style="background:#e8f5e9;color:#2e7d32;font-size:10px">Você</span>':''}
+              </div>
+              <div class="rank-detail">${roleBreakdownText(r.breakdown)}</div>
+            </div>
+            <div class="rank-bar-wrap">
+              <div class="rank-bar" style="width:${Math.round(r.comm/maxComm*100)}%"></div>
+            </div>
+            <div class="rank-val">R$ ${money(r.comm)}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+// ══════════════════════════════════════════════
+//  DISPUTES
+// ══════════════════════════════════════════════
+function renderDisputes(sales) {
+  const el = document.getElementById('panel-disputes');
+  const isCoord = session.role === 'coordinator';
+  const relevantDisputes = disputes.filter(d => !activeUnit || d.unit === activeUnit);
+
+  const open     = relevantDisputes.filter(d=>d.status==='open');
+  const resolved = relevantDisputes.filter(d=>d.status==='resolved');
+
+  let html = `
+    <p class="page-title">Disputas</p>
+    <p class="page-sub">${MONTH} · ${open.length} aberta${open.length!==1?'s':''} · ${resolved.length} resolvida${resolved.length!==1?'s':''}</p>
+  `;
+
+  if (isCoord && open.length > 0) {
+    html += `<div class="coordinator-notice">Você tem ${open.length} disputa${open.length!==1?'s':''} aguardando decisão.</div>`;
+  }
+
+  if (!relevantDisputes.length) {
+    html += `<div class="empty-state"><div class="icon">✅</div><p>Nenhuma disputa registrada.</p></div>`;
+    el.innerHTML = html;
+    return;
+  }
+
+  if (open.length) {
+    html += `<h3 style="font-size:15px;font-weight:800;margin-bottom:12px;color:var(--warning)">Em Aberto (${open.length})</h3>`;
+    open.forEach((d,i) => {
+      const sale = sales.find(s=>s.line_id===d.saleId&&s.unit===d.unit);
+      html += `<div class="dispute-card">
+        <div class="dispute-meta">
+          <span class="tag tag-disputed">Em Disputa</span>
+          <strong>#${d.displayId}</strong>
+          <span class="tag tag-type">${disputeTypeLabel(d.saleId)}</span>
+          <span style="color:var(--mid);font-size:13px">${d.unit_label}</span>
+        </div>
+        <p style="font-size:14px"><strong>Venda atual:</strong> ${shortName(d.originalConsultant)}</p>
+        <p style="font-size:14px"><strong>Contestado por:</strong> ${shortName(d.claimant)}</p>
+        <div style="background:#fff3e0;border-radius:8px;padding:10px 14px;margin:8px 0">
+          <p style="font-size:13px"><strong>Motivo da contestação:</strong> ${d.reason}</p>
+        </div>
+        ${d.defense ? `
+        <div style="background:#e8f5e9;border-radius:8px;padding:10px 14px;margin:8px 0">
+          <p style="font-size:13px"><strong>Defesa de ${shortName(d.originalConsultant)}:</strong> ${d.defense}</p>
+        </div>` : (session.name === d.originalConsultant && !isCoord ? `
+        <div style="background:#fff8e1;border-radius:8px;padding:8px 12px;margin:8px 0;font-size:12px;color:#f57f17">
+          ⚠️ Você ainda não se defendeu desta contestação.
+        </div>` : `
+        <div style="background:#f5f5f5;border-radius:8px;padding:8px 12px;margin:8px 0;font-size:12px;color:var(--mid)">
+          Aguardando defesa de ${shortName(d.originalConsultant)}...
+        </div>`)}
+        <p style="font-size:12px;color:var(--mid)">Enviado em ${d.createdAt}</p>
+        <div class="dispute-actions">
+          ${isCoord ? `<button class="btn-sm btn-transfer" onclick="openResolveModal(${disputes.indexOf(d)})">Analisar e Decidir</button>` : ''}
+          ${!isCoord && session.name === d.originalConsultant && !d.defense ? `<button class="btn-sm btn-approve" onclick="openDefenseModal(${disputes.indexOf(d)})">⚔️ Me Defender</button>` : ''}
+        </div>
+      </div>`;
+    });
+  }
+
+  if (resolved.length) {
+    html += `<h3 style="font-size:15px;font-weight:800;margin:20px 0 12px;color:var(--success)">Resolvidas (${resolved.length})</h3>`;
+    resolved.forEach(d => {
+      const transf = d.action === 'transfer';
+      const de = shortName(d.originalConsultant), para = shortName(d.claimant);
+      const chip = 'display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;font-size:13px;';
+      const cap  = 'font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--mid);margin-bottom:4px';
+      html += `<div class="dispute-card resolved">
+        <div class="dispute-meta">
+          <span class="tag" style="background:#e8f5e9;color:#2e7d32">Resolvida</span>
+          <strong>#${d.displayId}</strong>
+          <span class="tag tag-type">${disputeTypeLabel(d.saleId)}</span>
+          <span style="color:var(--mid);font-size:13px">${d.unit_label}</span>
+          ${isCoord ? `<button class="btn-sm btn-reject" style="margin-left:auto" onclick="reopenDispute(${disputes.indexOf(d)})" title="Desfaz a decisão e devolve a disputa para Em Aberto">↩ Reabrir</button>` : ''}
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0 14px">
+          ${transf ? `
+            <span style="${chip}background:#f0f2f5;color:var(--mid)"><small>De</small> <strong style="text-decoration:line-through">${de}</strong></span>
+            <span style="color:#1565c0;font-weight:900;font-size:16px">→</span>
+            <span style="${chip}background:#e3f2fd;color:#1565c0"><small>Para</small> <strong>${para}</strong></span>
+            <span class="tag" style="background:#1565c0;color:#fff">Transferida</span>` : `
+            <span style="${chip}background:#e8f5e9;color:#2e7d32"><small>Fica com</small> <strong>${de}</strong></span>
+            <span class="tag" style="background:#2e7d32;color:#fff">Mantida</span>
+            <span style="font-size:12px;color:var(--mid)">contestação de ${para} negada</span>`}
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px 24px">
+          <div><div style="${cap}">Contestação de ${para}</div><div style="font-size:14px">${d.reason}</div></div>
+          <div><div style="${cap}">Decisão do coordenador</div><div style="font-size:14px">${d.resolution}</div>
+            <div style="font-size:11px;color:var(--mid);margin-top:2px">${d.resolvedBy} · ${d.resolvedAt}</div></div>
+        </div>
+      </div>`;
+    });
+  }
+
+  el.innerHTML = html;
+}
+
+// ══════════════════════════════════════════════
+//  COMPARAR MESES
+// ══════════════════════════════════════════════
+function renderCompare() {
+  const el = document.getElementById('panel-compare');
+  if (ALL_MONTHS.length < 2) {
+    el.innerHTML = '<div class="empty-state"><div class="icon">📅</div><p>Adicione dados de pelo menos 2 meses para comparar.</p></div>';
+    return;
+  }
+
+  const defaultA = ALL_MONTHS[ALL_MONTHS.length - 2];
+  const defaultB = ALL_MONTHS[ALL_MONTHS.length - 1];
+
+  el.innerHTML = `
+    <p class="page-title">Comparar Meses</p>
+    <p class="page-sub">Selecione dois meses para comparar lado a lado</p>
+    <div class="flex-row" style="margin-bottom:24px;gap:16px;flex-wrap:wrap;align-items:center">
+      <select id="cmp-month-a" onchange="updateCompare()" style="font-size:15px;font-weight:800;padding:10px 16px;border:2px solid var(--navy);border-radius:10px">
+        ${ALL_MONTHS.map(m=>`<option value="${m}" ${m===defaultA?'selected':''}>${m}</option>`).join('')}
+      </select>
+      <span style="font-size:20px;color:var(--mid);font-weight:900">vs</span>
+      <select id="cmp-month-b" onchange="updateCompare()" style="font-size:15px;font-weight:800;padding:10px 16px;border:2px solid var(--green);border-radius:10px">
+        ${ALL_MONTHS.map(m=>`<option value="${m}" ${m===defaultB?'selected':''}>${m}</option>`).join('')}
+      </select>
+    </div>
+    <div id="compare-body"></div>
+  `;
+  updateCompare();
+}
+
+function updateCompare() {
+  const mA = document.getElementById('cmp-month-a')?.value;
+  const mB = document.getElementById('cmp-month-b')?.value;
+  if (!mA || !mB) return;
+
+  if (chartCmp1) { chartCmp1.destroy(); chartCmp1 = null; }
+  if (chartCmp2) { chartCmp2.destroy(); chartCmp2 = null; }
+
+  const salesA = pricedSales(getFilteredSales(mA), mA);
+  const salesB = pricedSales(getFilteredSales(mB), mB);
+
+  function stats(sales) {
+    const consultants = getConsultants(sales);
+    return {
+      total: uniqueSaleCount(sales),
+      newCount: uniqueTypeCount(sales, 'new'),
+      renCount: uniqueTypeCount(sales, 'renewal'),
+      commission: calcCommission(sales),
+      consultants: consultants.length,
+      ranked: consultants.map(c => {
+        const cs = salesForConsultant(c, sales);
+        return {name:shortName(c), comm:calcCommission(cs), new:cs.filter(s=>s.type==='new').length, ren:cs.filter(s=>s.type==='renewal').length};
+      }).sort((a,b)=>b.comm-a.comm),
+    };
+  }
+
+  const stA = stats(salesA);
+  const stB = stats(salesB);
+
+  function delta(a, b) {
+    const d = b - a;
+    if (d === 0) return '<span style="color:var(--mid)">—</span>';
+    const sign = d > 0 ? '+' : '';
+    const color = d > 0 ? 'var(--success)' : 'var(--danger)';
+    return `<span style="color:${color};font-weight:900">${sign}${d}</span>`;
+  }
+  function deltaR(a, b) {
+    if (!a) return '';
+    const d = ((b-a)/a*100).toFixed(1);
+    const sign = d > 0 ? '+' : '';
+    const color = d > 0 ? 'var(--success)' : 'var(--danger)';
+    return `<span style="font-size:11px;color:${color}">${sign}${d}%</span>`;
+  }
+
+  // All consultants union
+  const allConsultants = [...new Set([...stA.ranked.map(r=>r.name), ...stB.ranked.map(r=>r.name)])];
+
+  const body = document.getElementById('compare-body');
+  body.innerHTML = `
+    <!-- KPI comparison -->
+    <div class="table-card" style="margin-bottom:20px">
+      <table class="data-table">
+        <thead><tr>
+          <th>Métrica</th>
+          <th style="color:var(--navy)">${mA}</th>
+          <th style="color:var(--dark)">${mB}</th>
+          <th>Variação</th>
+        </tr></thead>
+        <tbody>
+          <tr><td><strong>Total Vendas</strong></td><td>${stA.total}</td><td>${stB.total}</td><td>${delta(stA.total,stB.total)} ${deltaR(stA.total,stB.total)}</td></tr>
+          <tr><td>Alunos Novos</td><td>${stA.newCount}</td><td>${stB.newCount}</td><td>${delta(stA.newCount,stB.newCount)} ${deltaR(stA.newCount,stB.newCount)}</td></tr>
+          <tr><td>Rematrículas</td><td>${stA.renCount}</td><td>${stB.renCount}</td><td>${delta(stA.renCount,stB.renCount)} ${deltaR(stA.renCount,stB.renCount)}</td></tr>
+          <tr><td><strong>Total Bônus</strong></td><td><strong>R$ ${money(stA.commission)}</strong></td><td><strong>R$ ${money(stB.commission)}</strong></td><td>${delta(stA.commission,stB.commission)} ${deltaR(stA.commission,stB.commission)}</td></tr>
+          <tr><td>Consultores Ativos</td><td>${stA.consultants}</td><td>${stB.consultants}</td><td>${delta(stA.consultants,stB.consultants)}</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Charts -->
+    <div class="charts-grid" style="margin-bottom:20px">
+      <div class="chart-card">
+        <h3>Bônus por Consultor — ${mA} vs ${mB}</h3>
+        <canvas id="chart-cmp1"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>Novos vs Rematrícula — ${mA} vs ${mB}</h3>
+        <canvas id="chart-cmp2"></canvas>
+      </div>
+    </div>
+
+    <!-- Consultant detail table -->
+    <div class="table-card">
+      <h3 style="margin-bottom:16px">Desempenho por Consultor</h3>
+      <table class="data-table">
+        <thead><tr>
+          <th>Consultor</th>
+          <th style="color:var(--navy)">Bônus ${mA}</th>
+          <th style="color:var(--dark)">Bônus ${mB}</th>
+          <th>Variação</th>
+          <th style="color:var(--navy)">Vendas ${mA}</th>
+          <th style="color:var(--dark)">Vendas ${mB}</th>
+        </tr></thead>
+        <tbody>
+          ${allConsultants.map(name => {
+            const a = stA.ranked.find(r=>r.name===name) || {comm:0,new:0,ren:0};
+            const b = stB.ranked.find(r=>r.name===name) || {comm:0,new:0,ren:0};
+            const isMe = session.name.startsWith(name.split(' ')[0]);
+            return `<tr class="${isMe?'mine':''}">
+              <td><strong>${name}</strong></td>
+              <td>R$ ${money(a.comm)}</td>
+              <td>R$ ${money(b.comm)}</td>
+              <td>${delta(a.comm,b.comm)} ${deltaR(a.comm,b.comm)}</td>
+              <td>${a.new+a.ren}</td>
+              <td>${b.new+b.ren}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  // Chart 1: comissão lado a lado por consultor
+  const ctx1 = document.getElementById('chart-cmp1').getContext('2d');
+  chartCmp1 = new Chart(ctx1, {
+    type: 'bar',
+    data: {
+      labels: allConsultants.map(n=>n.split(' ')[0]),
+      datasets: [
+        {label:mA, data:allConsultants.map(n=>{const r=stA.ranked.find(x=>x.name===n);return r?r.comm:0}), backgroundColor:corGrafico().b, borderRadius:4},
+        {label:mB, data:allConsultants.map(n=>{const r=stB.ranked.find(x=>x.name===n);return r?r.comm:0}), backgroundColor:corGrafico().a, borderRadius:4},
+      ]
+    },
+    options:{responsive:true,plugins:{legend:{position:'bottom'}},scales:{y:{beginAtZero:true}}}
+  });
+
+  // Chart 2: novos + rematrícula total por mês
+  const ctx2 = document.getElementById('chart-cmp2').getContext('2d');
+  chartCmp2 = new Chart(ctx2, {
+    type:'bar',
+    data:{
+      labels:[mA, mB],
+      datasets:[
+        {label:'Novos',      data:[stA.newCount,stB.newCount], backgroundColor:corGrafico().b, borderRadius:4},
+        {label:'Rematrícula',data:[stA.renCount,stB.renCount], backgroundColor:corGrafico().a, borderRadius:4},
+      ]
+    },
+    options:{responsive:true,plugins:{legend:{position:'bottom'}},scales:{y:{beginAtZero:true}}}
+  });
+}
+
+// ══════════════════════════════════════════════
+//  ADMIN
+// ══════════════════════════════════════════════
+function renderAdmin() {
+  const el = document.getElementById('panel-admin');
+  el.innerHTML = `
+    <p class="page-title">Configurações</p>
+    <p class="page-sub">Usuários e senhas agora são gerenciados na Central de Tarefas → Configurações → Usuários</p>
+
+    <div class="admin-section">
+      <h3>Vendas e contestação das consultoras</h3>
+      <p style="font-size:13px;color:var(--mid);margin-bottom:16px"><b>Automático:</b> do dia 1º ao dia 10 de cada mês, as consultoras veem a aba "Vendas" do mês que fechou e podem contestar. Depois do dia 10 a aba some para elas e não dá mais para contestar (a meta semanal continua sempre visível). Contestações já abertas seguem para defesa e decisão normalmente.<br><br>
+      <b>Exceção:</b> ligue abaixo só se precisar liberar a aba e a contestação fora do prazo (vale para todas, em tempo real). Lembre de desligar depois.</p>
+      <label style="display:flex;align-items:center;gap:12px;cursor:pointer;width:fit-content">
+        <span class="toggle-switch ${salesVisibleToConsultants?'on':''}" onclick="setSalesVisibility(!salesVisibleToConsultants)"></span>
+        <span style="font-weight:700;font-size:14px;color:${salesVisibleToConsultants?'#2e7d32':'#c62828'}">${salesVisibleToConsultants ? 'Exceção ligada — liberado fora do prazo' : 'Exceção desligada — vale a regra do dia 10'}</span>
+      </label>
+    </div>
+    ${adminMetaAcquaHtml()}
+  `;
+}
+
+// Meta da Acqua (v3): saídas do mês lidas no dashboard da EVO (Laranjeiras + República). A meta de cada mês usa a média dos
+// 3 meses anteriores; as saídas do próprio mês liberam (ou travam) os extras no fechamento. Só o administrador geral lança.
+function adminMetaAcquaHtml() {
+  const label = policyV3(activeMonth) ? activeMonth : 'Dezembro/2026';
+  const r = REGUAS[label];
+  const hoje = hojeSPBonus();
+  const mesPassado = (() => { const a = +hoje.slice(0, 4), m = +hoje.slice(5, 7); return m === 1 ? `${a - 1}-12` : `${a}-${String(m - 1).padStart(2, '0')}`; })();
+  return `
+    <div class="admin-section">
+      <h3>Meta da Acqua (Laranjeiras + República) — vale de dezembro/2026 em diante</h3>
+      ${r ? `<p style="font-size:13px;color:var(--mid);margin-bottom:12px"><b>${label}:</b> saídas usadas na meta ${money(r.saidas_base)} por mês (média dos 3 meses anteriores) ÷ ${r.consultoras} consultoras ÷ 4 semanas →
+        <b>Entrada ${r.entrada}</b> (30%) · <b>Básico ${r.basico}</b> (60%) · <b>Meta real ${r.meta_real}+</b> (100%) por semana.
+        Bônus de equipe: R$ 200 com ${r.equipe_200} contratos, R$ 300 com ${r.equipe_300}.
+        Saídas do próprio mês: <b>${r.saidas_mes != null ? r.saidas_mes : 'ainda não lançadas'}</b> (sem elas, os extras ficam "previstos").
+        ${r.fixa ? 'Meta do mês travada (a partir do dia 4 ela não muda mais).' : 'Meta do mês provisória: trava no dia 4, depois das saídas do mês que fechou serem lançadas.'}
+        Régua da Central: ${money(r.regua_central)} pontos por semana (Bom ${money(r.regua_central * 0.7)}, Ótimo ${money(r.regua_central * 0.9)}).</p>`
+        : '<p style="font-size:13px;color:var(--mid);margin-bottom:12px">A régua ainda não carregou.</p>'}
+      ${session.super ? `
+      <p style="font-size:13px;color:var(--mid);margin-bottom:10px">Lance as saídas do mês que fechou (dashboard da EVO → saídas de cada unidade) até o dia 3. Elas entram na meta dos próximos 3 meses e liberam os extras do mês.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
+        <label style="font-size:12px;font-weight:700">Mês<br><input type="month" id="saidas-mes" value="${mesPassado}" style="padding:6px 10px;border:1.5px solid var(--gray);border-radius:8px"></label>
+        <label style="font-size:12px;font-weight:700">Saídas Laranjeiras<br><input type="number" min="0" id="saidas-lar" style="width:110px;padding:6px 10px;border:1.5px solid var(--gray);border-radius:8px"></label>
+        <label style="font-size:12px;font-weight:700">Saídas República<br><input type="number" min="0" id="saidas-rep" style="width:110px;padding:6px 10px;border:1.5px solid var(--gray);border-radius:8px"></label>
+        <label style="font-size:12px;font-weight:700">Consultoras (vazio = as ativas)<br><input type="number" min="1" id="saidas-cons" style="width:110px;padding:6px 10px;border:1.5px solid var(--gray);border-radius:8px"></label>
+        <button class="btn-sm" onclick="salvarSaidas()">Salvar saídas</button>
+      </div>` : '<p style="font-size:12px;color:var(--mid)">Só o administrador geral lança as saídas.</p>'}
+    </div>`;
+}
+async function salvarSaidas() {
+  const mes = document.getElementById('saidas-mes').value;
+  const lar = document.getElementById('saidas-lar').value, rep = document.getElementById('saidas-rep').value;
+  const cons = document.getElementById('saidas-cons').value;
+  if (!mes || lar === '' || rep === '') { showSyncToast('Preencha o mês e as saídas das duas unidades'); return; }
+  const { error } = await db.rpc('bonus_salvar_saidas', { p_mes: `${mes}-01`, p_laranjeiras: +lar, p_republica: +rep, p_consultoras: cons ? +cons : null });
+  if (error) { showSyncToast('⚠ Não salvou: ' + error.message); return; }
+  await carregarReguas();
+  showSyncToast('✓ Saídas salvas');
+  destroyCharts();
+  renderSection(activeSection);
+}
+
+
+// ══════════════════════════════════════════════
+//  GERENCIAR VENDAS (COORD)
+// ══════════════════════════════════════════════
+async function unassignSale(lineId, unit) {
+  if (!confirm('Remover o dono desta venda? Ela ficará sem consultor atribuído.')) return;
+  const overrides = loadOverrides();
+  if (!overrides.unassigned.some(u => u.id === lineId && u.unit === unit)) {
+    overrides.unassigned.push({ id: lineId, unit });
+  }
+  saveOverridesLocal(overrides);
+  destroyCharts();
+  renderSection('sales');
+  await sbUnassignSale(lineId, unit);
+}
+
+async function reassignSale(lineId, unit) {
+  const overrides = loadOverrides();
+  overrides.unassigned = overrides.unassigned.filter(u => !(u.id === lineId && u.unit === unit));
+  saveOverridesLocal(overrides);
+  destroyCharts();
+  renderSection('sales');
+  await sbReassignSale(lineId, unit);
+}
+
+async function deleteAddedSale(lineId) {
+  if (!confirm('Excluir esta venda manual?')) return;
+  const overrides = loadOverrides();
+  overrides.added = overrides.added.filter(s => s.line_id !== lineId);
+  saveOverridesLocal(overrides);
+  destroyCharts();
+  renderSection('sales');
+  await sbDeleteManualSale(lineId);
+}
+
+let pendingEditLineId = null; // null = adicionando venda nova; caso contrário, editando esta linha
+
+function syncAddCommissionDefault() {
+  // Só sugere o valor padrão ao ADICIONAR uma venda nova — nunca sobrescreve ao editar
+  if (pendingEditLineId) return;
+  const type = document.getElementById('add-type').value;
+  document.getElementById('add-commission').value = type === 'new' ? '50' : '25';
+}
+
+function openAddSaleModal() {
+  pendingEditLineId = null;
+  const allSales = getFilteredSales();
+  const consultants = getConsultants(allSales.filter(s => s.consultant));
+  const sel = document.getElementById('add-consultant');
+  sel.innerHTML = '<option value="">— Sem consultor —</option>' +
+    consultants.map(c => `<option value="${c}">${shortName(c)}</option>`).join('');
+
+  const unitSel = document.getElementById('add-unit');
+  unitSel.innerHTML = UNIT_KEYS.map(u => `<option value="${u}">${UNIT_LABELS[u]||u}</option>`).join('');
+  if (activeUnit) unitSel.value = activeUnit;
+
+  document.getElementById('add-sale-title').textContent = 'Adicionar Venda Manualmente';
+  document.getElementById('add-sale-sub').textContent = 'Use para incluir vendas que não apareceram nos relatórios.';
+  document.getElementById('add-sale-submit').textContent = 'Adicionar Venda';
+  document.getElementById('add-student').value = '';
+  document.getElementById('add-date').value = '';
+  document.getElementById('add-contract').value = '';
+  document.getElementById('add-type').value = 'new';
+  syncAddCommissionDefault();
+  openModal('modal-add-sale');
+}
+
+function openEditSaleModal(lineId, unit) {
+  const sale = getFilteredSales(null, {includeUnassigned:true}).find(s => s.line_id === lineId && s.unit === unit);
+  if (!sale) return;
+  pendingEditLineId = lineId;
+
+  const allSales = getFilteredSales(null, {includeUnassigned:true});
+  const consultants = getConsultants(allSales.filter(s => s.consultant));
+  const sel = document.getElementById('add-consultant');
+  sel.innerHTML = '<option value="">— Sem consultor —</option>' +
+    consultants.map(c => `<option value="${c}">${shortName(c)}</option>`).join('');
+  sel.value = sale.consultant || '';
+
+  const unitSel = document.getElementById('add-unit');
+  unitSel.innerHTML = UNIT_KEYS.map(u => `<option value="${u}">${UNIT_LABELS[u]||u}</option>`).join('');
+  unitSel.value = sale.unit;
+
+  document.getElementById('add-sale-title').textContent = 'Editar Venda';
+  document.getElementById('add-sale-sub').textContent = !sale.consultant
+    ? '⚠ Esta venda veio sem consultor no relatório (campo em branco) — escolha quem deve receber no campo "Consultor" abaixo.'
+    : sale.needs_review
+    ? '⚠ Este plano não está na tabela de bônus — ajuste o valor correto abaixo.'
+    : 'Corrija os dados desta venda. A alteração fica registrada e sincronizada.';
+  document.getElementById('add-sale-submit').textContent = 'Salvar Alterações';
+  document.getElementById('add-student').value = sale.student;
+  document.getElementById('add-type').value = sale.type;
+  document.getElementById('add-date').value = sale.date;
+  document.getElementById('add-contract').value = sale.contract;
+  document.getElementById('add-commission').value = String(sale.commission).replace('.', ',');
+  openModal('modal-add-sale');
+}
+
+async function submitAddSale() {
+  const student    = document.getElementById('add-student').value.trim().toUpperCase();
+  const consultant = document.getElementById('add-consultant').value;
+  const type       = document.getElementById('add-type').value;
+  const unit       = document.getElementById('add-unit').value;
+  const date       = document.getElementById('add-date').value.trim();
+  const contract   = document.getElementById('add-contract').value.trim() || '—';
+  const commissionRaw = document.getElementById('add-commission').value.trim().replace(',', '.');
+  const commission = parseFloat(commissionRaw);
+
+  if (!student || !date || !unit) { alert('Preencha aluno, data e unidade.'); return; }
+  if (!commissionRaw || isNaN(commission)) { alert('Informe um valor de bônus válido.'); return; }
+
+  // Ao editar, preserva o id de exibição e o papel (cadastro/conversão/etc) da linha original —
+  // só o line_id (chave técnica) e os campos editáveis mudam.
+  const original = pendingEditLineId
+    ? getFilteredSales(null, {includeUnassigned:true}).find(s => s.line_id === pendingEditLineId)
+    : null;
+  const lineId = pendingEditLineId || ('M' + Date.now());
+  const displayId = original ? original.id : lineId;
+  const role = original ? original.role : (consultant ? 'completo' : null);
+  const newSale = {
+    id: displayId, line_id: lineId, student, consultant, type, role,
+    commission, date, contract,
+    unit, unit_label: UNIT_LABELS[unit] || unit, month: MONTH, _manual: true, needs_review: false,
+  };
+  const overrides = loadOverrides();
+  overrides.added = overrides.added.filter(s => s.line_id !== lineId);
+  overrides.added.push(newSale);
+  saveOverridesLocal(overrides);
+  closeModal('modal-add-sale');
+  destroyCharts();
+  renderSection('sales');
+  await sbAddManualSale(newSale);
+}
+
+// ══════════════════════════════════════════════
+//  DISPUTE MODAL
+// ══════════════════════════════════════════════
+function openDisputeModal(saleId, unit) {
+  const sales = getFilteredSales();
+  const sale = sales.find(s=>s.line_id===saleId&&s.unit===unit);
+  if (!sale) return;
+  pendingDisputeSale = {saleId, unit};
+  document.getElementById('dispute-sale-info').innerHTML = `
+    <strong>Aluno:</strong> ${sale.student} (#${sale.id})<br>
+    <strong>${sale.role==='conversao'?'Convertido por':sale.role==='consultor'?'Consultor':'Cadastrado por'}:</strong> ${sale.consultant}<br>
+    <strong>Bônus contestado:</strong> R$ ${money(sale.commission)} (${roleLabel(sale)})<br>
+    <strong>Data:</strong> ${sale.date}<br>
+    <strong>Contrato:</strong> ${sale.contract}
+  `;
+  document.getElementById('dispute-reason').value = '';
+  openModal('modal-dispute');
+}
+
+async function submitDispute() {
+  const reason = document.getElementById('dispute-reason').value.trim();
+  if (!reason) { alert('Informe o motivo da contestação.'); return; }
+  if (!contestacaoAberta(MONTH)) { alert('O prazo para contestar as vendas de ' + MONTH + ' terminou (vai até o dia 10 do mês seguinte).'); closeModal('modal-dispute'); return; }
+  const sales = getFilteredSales();
+  const sale  = sales.find(s=>s.line_id===pendingDisputeSale.saleId&&s.unit===pendingDisputeSale.unit);
+  if (!sale) return;
+
+  const newDispute = {
+    _localId: Date.now() + '-' + Math.random().toString(36).slice(2),
+    saleId: pendingDisputeSale.saleId,
+    displayId: sale.id,
+    unit:   pendingDisputeSale.unit,
+    unit_label: UNIT_LABELS[pendingDisputeSale.unit] || pendingDisputeSale.unit,
+    originalConsultant: sale.consultant,
+    claimant: session.name,
+    reason,
+    status: 'open',
+    createdAt: new Date().toLocaleDateString('pt-BR'),
+    resolution: null, resolvedBy: null, resolvedAt: null, action: null,
+    defense: null, defendedAt: null, month: MONTH,
+  };
+  disputes.push(newDispute);
+  saveDisputesLocal(disputes);
+  closeModal('modal-dispute');
+  buildSectionNav();
+  renderSection('disputes');
+  await sbAddDispute(newDispute);
+}
+
+// ══════════════════════════════════════════════
+//  DEFENSE MODAL
+// ══════════════════════════════════════════════
+function openDefenseModal(idx) {
+  pendingDefenseIdx = idx;
+  const d = disputes[idx];
+  const sales = getFilteredSales();
+  const sale  = sales.find(s => s.line_id === d.saleId && s.unit === d.unit);
+  document.getElementById('defense-sale-info').innerHTML = `
+    <strong>Aluno:</strong> ${sale ? sale.student : d.displayId} (#${d.displayId})<br>
+    <strong>Tipo:</strong> <span class="tag tag-type">${disputeTypeLabel(d.saleId)}</span><br>
+    <strong>Contestado por:</strong> ${shortName(d.claimant)}<br>
+    <strong>Data:</strong> ${sale ? sale.date : '—'}
+  `;
+  document.getElementById('defense-claim-reason').textContent = d.reason;
+  document.getElementById('defense-reason').value = '';
+  openModal('modal-defense');
+}
+
+async function submitDefense() {
+  const defense = document.getElementById('defense-reason').value.trim();
+  if (!defense) { alert('Escreva sua defesa antes de enviar.'); return; }
+  disputes[pendingDefenseIdx].defense = defense;
+  disputes[pendingDefenseIdx].defendedAt = new Date().toLocaleDateString('pt-BR');
+  saveDisputesLocal(disputes);
+  closeModal('modal-defense');
+  buildSectionNav();
+  renderSection('disputes');
+  await sbUpdateDispute(disputes[pendingDefenseIdx]);
+}
+
+// ══════════════════════════════════════════════
+//  RESOLVE MODAL
+// ══════════════════════════════════════════════
+function openResolveModal(idx) {
+  pendingResolveIdx = idx;
+  const d = disputes[idx];
+  document.getElementById('resolve-info').innerHTML = `
+    <strong>Venda #${d.displayId}</strong> — ${d.unit_label}<br>
+    <strong>Tipo:</strong> <span class="tag tag-type" style="margin-top:4px">${disputeTypeLabel(d.saleId)}</span><br><br>
+    <div style="background:#fff3e0;border-radius:8px;padding:10px 12px;margin-bottom:8px">
+      <strong>⚔️ Contestação de ${shortName(d.claimant)}:</strong><br>
+      <span style="font-size:13px">${d.reason}</span>
+    </div>
+    <div style="background:${d.defense ? '#e8f5e9' : '#f5f5f5'};border-radius:8px;padding:10px 12px">
+      <strong>🛡️ Defesa de ${shortName(d.originalConsultant)}:</strong><br>
+      <span style="font-size:13px">${d.defense || '<em style="color:#999">Sem defesa registrada</em>'}</span>
+    </div>
+  `;
+  document.getElementById('resolve-reason').value = '';
+  openModal('modal-resolve');
+}
+
+async function resolveDispute(action) {
+  const res = document.getElementById('resolve-reason').value.trim();
+  if (!res) { alert('Informe a justificativa da decisão.'); return; }
+  const d = disputes[pendingResolveIdx];
+  d.status     = 'resolved';
+  d.action     = action;
+  d.resolution = res;
+  d.resolvedBy = session.name;
+  d.resolvedAt = new Date().toLocaleDateString('pt-BR');
+  saveDisputesLocal(disputes);
+  closeModal('modal-resolve');
+  buildSectionNav();
+  renderSection('disputes');
+  await sbUpdateDispute(d);
+}
+
+// Desfaz a decisão (ex.: coordenador decidiu errado): a disputa volta para "Em Aberto".
+// Mantém contestação e defesa; limpa decisão e responsável. Se a decisão era "transferir",
+// a venda volta sozinha para o consultor original (a transferência só vale para disputa resolvida).
+async function reopenDispute(idx) {
+  const d = disputes[idx];
+  if (!d || d.status !== 'resolved') return;
+  const decisao = d.action === 'transfer' ? `A venda #${d.displayId} volta para ${shortName(d.originalConsultant)}.` : 'A venda continua com o consultor atual.';
+  if (!confirm(`Reabrir a disputa #${d.displayId}?
+
+${decisao}
+A decisão anterior será apagada e a disputa volta para "Em Aberto".`)) return;
+  d.status     = 'open';
+  d.action     = null;
+  d.resolution = null;
+  d.resolvedBy = null;
+  d.resolvedAt = null;
+  saveDisputesLocal(disputes);
+  destroyCharts();
+  buildSectionNav();
+  renderSection('disputes');
+  await sbUpdateDispute(d);
+}
+
+// ══════════════════════════════════════════════
+//  EXPORTAR PLANILHA
+// ══════════════════════════════════════════════
+function exportSalesCSV() {
+  const sales = pricedSales(getFilteredSales(null, {includeUnassigned: false}));
+
+  const rows = sales.map(s => {
+    const dispute = disputes.find(d => d.saleId === s.line_id && d.unit === s.unit && d.status === 'resolved');
+    const origem  = s._manual ? 'Manual' : (dispute ? 'Disputa resolvida' : 'Relatório');
+    return {
+      'ID':          s.id,
+      'Aluno':       s.student,
+      'Consultor':   s.consultant,
+      'Papel':       roleLabel(s) || (s.type === 'new' ? 'Novo' : 'Rematrícula'),
+      'Tipo':        s.type === 'new' ? 'Novo' : 'Rematrícula',
+      'Bônus (R$)': s.commission,
+      'Data':        s.date,
+      'Contrato':    s.contract,
+      'Unidade':     s.unit_label,
+      'Mês':         s.month,
+      'Origem':      origem,
+    };
+  });
+
+  // Descontos por não conformidade entram como linhas negativas, pra o total do CSV
+  // bater com o que a aba Mensal mostra (que já vem líquido de desconto).
+  deductions
+    .filter(d => d.month === activeMonth && (!activeUnit || d.unit === activeUnit))
+    .forEach(d => rows.push({
+      'ID': '—', 'Aluno': '—', 'Consultor': d.consultant, 'Papel': 'Desconto',
+      'Tipo': 'Desconto', 'Bônus (R$)': -Number(d.amount), 'Data': d.createdAt,
+      'Contrato': d.reason, 'Unidade': d.unit_label, 'Mês': d.month, 'Origem': 'Desconto',
+    }));
+
+  if (!rows.length) { alert('Nenhuma venda para exportar.'); return; }
+
+  const headers = Object.keys(rows[0]);
+  const escape  = v => `"${String(v).replace(/"/g, '""')}"`;
+  const csvContent = [
+    headers.map(escape).join(';'),
+    ...rows.map(r => headers.map(h => escape(r[h])).join(';'))
+  ].join('\n');
+
+  const blob = new Blob(['﻿' + csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  const unit = activeUnit ? UNIT_LABELS[activeUnit].replace(/\s+/g,'_') : 'Todas_Unidades';
+  a.href     = url;
+  a.download = `Bonus_${MONTH.replace('/','_')}_${unit}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ══════════════════════════════════════════════
+//  RELATÓRIO DE PAGAMENTO (financeiro)
+// ══════════════════════════════════════════════
+// Documento imprimível agrupado por pessoa: quanto pagar a cada um e a justificativa
+// venda a venda. Mesma fonte de dados do CSV (mês/unidade ativos, manuais e disputas
+// resolvidas incluídas). Coordenador apenas — checado aqui além do botão escondido.
+function exportPaymentReport() {
+  if (session.role !== 'coordinator') return;
+  const sales = pricedSales(getFilteredSales(null, {includeUnassigned: false}));
+  if (!sales.length) { alert('Nenhuma venda para gerar relatório.'); return; }
+
+  const esc = v => String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const brl = v => 'R$ ' + (Math.round(v * 100) / 100).toFixed(2).replace('.', ',');
+  const origem = s => {
+    if (s.source === 'filtro') return s.kind === 'upgrade' ? 'Upgrade' : 'Renovação';
+    const d = disputes.find(d => d.saleId === s.line_id && d.unit === s.unit && d.status === 'resolved');
+    return s._manual ? 'Manual' : (d ? 'Disputa resolvida' : 'Relatório');
+  };
+
+  const consultants = getConsultants(sales)
+    .map(name => {
+      const list = salesForConsultant(name, sales);
+      const ded  = deductions.filter(d => d.consultant === name && d.month === activeMonth && (!activeUnit || d.unit === activeUnit));
+      return {name, sales: list, ded, dedTotal: deductionTotal(name, activeUnit), total: personTotal(name, sales, activeUnit), b: roleBreakdown(list)};
+    })
+    .sort((a, b) => b.total - a.total);
+  const grandTotal = calcCommission(sales) - allDeductionsTotal(activeUnit);
+
+  const unitLabel = activeUnit ? UNIT_LABELS[activeUnit] : 'Todas as Unidades';
+  const logoSrc   = window.__contaLogo || new URL('../assets/logo-escuro.png', location.href).href;   // logo da academia (conta)
+  const now       = new Date();
+  const genAt     = now.toLocaleDateString('pt-BR') + ' às ' + now.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+
+  const summaryRows = consultants.map(c => `
+      <tr>
+        <td>${esc(c.name)}</td>
+        <td class="num">${c.b.cad}</td>
+        <td class="num">${c.b.conv}</td>
+        <td class="num">${c.b.full}</td>
+        <td class="num">${c.b.ren}</td>
+        <td class="num">${c.b.renF}</td>
+        <td class="num" style="color:#c62828">${c.dedTotal > 0 ? '-'+brl(c.dedTotal) : '—'}</td>
+        <td class="num strong">${brl(c.total)}</td>
+      </tr>`).join('');
+
+  const detailSections = consultants.map(c => `
+    <section class="person">
+      <div class="person-head">
+        <div>
+          <h3>${esc(c.name)}</h3>
+          <p>${roleBreakdownText(c.b)}${c.dedTotal > 0 ? ` · -${brl(c.dedTotal)} em descontos` : ''}</p>
+        </div>
+        <div class="person-total">${brl(c.total)}</div>
+      </div>
+      <table>
+        <thead><tr><th>Aluno</th><th>Papel</th><th>Contrato / Plano</th><th>Data</th><th>Unidade</th><th>Origem</th><th class="num">Valor</th></tr></thead>
+        <tbody>
+          ${c.sales.map(s => `
+          <tr>
+            <td>${esc(s.student)}</td>
+            <td>${roleLabel(s) || 'Rematrícula (100%)'}</td>
+            <td>${esc(s.contract)}</td>
+            <td>${esc(s.date)}</td>
+            <td>${esc(s.unit_label)}</td>
+            <td>${origem(s)}</td>
+            <td class="num">${brl(s.commission)}</td>
+          </tr>`).join('')}
+          ${c.ded.map(d => `
+          <tr>
+            <td colspan="5">Desconto — ${esc(d.reason)}</td>
+            <td>Não conformidade</td>
+            <td class="num" style="color:#c62828">-${brl(d.amount)}</td>
+          </tr>`).join('')}
+          <tr class="subtotal"><td colspan="6">Total a pagar — ${esc(shortName(c.name))}</td><td class="num">${brl(c.total)}</td></tr>
+        </tbody>
+      </table>
+    </section>`).join('');
+
+  const doc = `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Relatório de Pagamento — ${esc(activeMonth)} — ${esc(unitLabel)}</title>
+<style>
+  @page { size: A4; margin: 14mm; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Avenir Next','Avenir','Montserrat',sans-serif; color:#212B37; font-size:12px; padding:24px; }
+  .doc-head { display:flex; align-items:center; gap:16px; border-bottom:3px solid #BEF575; padding-bottom:14px; margin-bottom:18px; }
+  .doc-head img { height:52px; }
+  .doc-head h1 { font-size:19px; font-weight:800; }
+  .doc-head .meta { font-size:12px; color:#788192; margin-top:3px; }
+  h2 { font-size:14px; font-weight:800; margin:20px 0 8px; }
+  table { width:100%; border-collapse:collapse; }
+  th { background:#EEF1F4; text-align:left; font-size:10.5px; text-transform:uppercase; letter-spacing:.4px; color:#34425C; padding:6px 8px; }
+  td { padding:5px 8px; border-bottom:1px solid #EEF1F4; vertical-align:top; }
+  .num { text-align:right; white-space:nowrap; }
+  .strong { font-weight:800; }
+  .grand td { background:#212B37; color:#fff; font-weight:800; border:none; }
+  .person { margin-top:18px; break-inside:avoid; }
+  .person-head { display:flex; justify-content:space-between; align-items:center; background:#34425C; color:#fff; border-radius:8px 8px 0 0; padding:9px 12px; }
+  .person-head h3 { font-size:13.5px; font-weight:800; }
+  .person-head p { font-size:11px; color:#BBC0C9; margin-top:2px; }
+  .person-total { font-size:15px; font-weight:800; color:#BEF575; white-space:nowrap; }
+  .subtotal td { background:#F4F8EC; font-weight:800; border:none; }
+  .rules { margin-top:26px; font-size:11px; color:#788192; border-top:1px solid #BBC0C9; padding-top:10px; line-height:1.5; }
+  .signatures { display:flex; gap:40px; margin-top:44px; }
+  .signatures div { flex:1; border-top:1px solid #212B37; padding-top:6px; font-size:11px; text-align:center; color:#34425C; }
+  .print-btn { position:fixed; top:14px; right:14px; padding:10px 18px; background:#212B37; color:#fff; border:none; border-radius:8px; font-family:inherit; font-size:13px; font-weight:800; cursor:pointer; }
+  @media print { body { padding:0; } .print-btn { display:none; } }
+</style>
+</head>
+<body>
+<button class="print-btn" onclick="window.print()">🖨 Imprimir / Salvar PDF</button>
+
+<div class="doc-head">
+  ${logoSrc ? `<img src="${logoSrc}" alt="">` : ''}
+  <div>
+    <h1>Relatório de Pagamento de Bônus</h1>
+    <div class="meta">${esc(unitLabel)} · Referência: ${esc(activeMonth)} · Gerado em ${genAt} por ${esc(session.name)}</div>
+  </div>
+</div>
+
+<h2>Resumo — quanto pagar a cada pessoa</h2>
+<table>
+  <thead><tr><th>Consultor</th><th class="num">Cadastros</th><th class="num">Conversões</th><th class="num">Completas</th><th class="num">Rematrículas</th><th class="num">Renovações</th><th class="num">Descontos</th><th class="num">Total a Pagar</th></tr></thead>
+  <tbody>
+    ${summaryRows}
+    <tr class="grand"><td colspan="7">TOTAL GERAL — ${esc(activeMonth)}</td><td class="num">${brl(grandTotal)}</td></tr>
+  </tbody>
+</table>
+
+<h2>Detalhamento por pessoa</h2>
+${detailSections}
+
+<div class="rules">
+  <strong>Regras de bônus:</strong> matrículas novas têm o bônus dividido em 70% para quem fez o cadastro
+  e 30% para quem fez a conversão (no Club, a partir de novembro/2026: 50% e 50%; quando a mesma pessoa faz as duas
+  etapas, recebe as duas partes). No Club (novembro/2026+), renovação, troca de contrato e upgrade pagam 100% ao
+  consultor responsável e não contam pra meta; cada Black vale meio contrato na meta.
+  Rematrículas pagam valor integral ao consultor responsável. O valor de cada linha já reflete a meta semanal:
+  quem bate a meta da semana (segunda a domingo, contada pelos próprios cadastros/rematrículas) recebe 100% do
+  que é dela naquela semana, inclusive conversão; quem fica abaixo da meta recebe o percentual da faixa atingida
+  (veja a aba Semanal do dashboard). Vendas com origem "Manual" foram adicionadas pela coordenação; "Disputa
+  resolvida" indica venda reatribuída após contestação analisada no sistema. Descontos por não conformidade
+  (lançados na aba Vendas, confirmados pela gestão/financeiro antes de aplicar) já estão subtraídos do total —
+  o motivo de cada um aparece no detalhamento da pessoa. Bônus de equipe e bônus da Central (Acqua, a partir de
+  dezembro/2026) são pagos à parte — veja a aba Semanal.
+</div>
+
+<div class="signatures">
+  <div>Coordenação</div>
+  <div>Financeiro</div>
+</div>
+
+<script>window.onload = () => setTimeout(() => window.print(), 500);<\/script>
+</body>
+</html>`;
+
+  const w = window.open('', '_blank');
+  if (!w) { alert('O navegador bloqueou a janela do relatório. Permita pop-ups para este site e tente de novo.'); return; }
+  w.document.write(doc);
+  w.document.close();
+}
+
+// ══════════════════════════════════════════════
+//  MODAL HELPERS
+// ══════════════════════════════════════════════
+function openModal(id)  { document.getElementById(id).classList.add('open') }
+function closeModal(id) { document.getElementById(id).classList.remove('open') }
+document.querySelectorAll('.modal-overlay').forEach(m =>
+  m.addEventListener('click', e => { if(e.target===m) m.classList.remove('open'); })
+);
+
+// ══════════════════════════════════════════════
+//  CHART CLEANUP
+// ══════════════════════════════════════════════
+function destroyCharts() {
+  if (chartRanking)  { chartRanking.destroy();  chartRanking=null; }
+  if (chartCompare)  { chartCompare.destroy();  chartCompare=null; }
+  if (chartTimeline) { chartTimeline.destroy(); chartTimeline=null; }
+  if (chartCmp1)     { chartCmp1.destroy();     chartCmp1=null; }
+  if (chartCmp2)     { chartCmp2.destroy();     chartCmp2=null; }
+}
+
+// ══════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════
+(async function init() {
+  // restos do login antigo
+  [SESSION_KEY, USERS_KEY, 'positiva_users_ver'].forEach(k => localStorage.removeItem(k));
+  const { data: { session: s } } = await db.auth.getSession();
+  if (!s) { location.replace('../index.html'); return; }
+  const { data: p } = await db.from('profiles').select('*').eq('id', s.user.id).maybeSingle();
+  if (!p || !p.ativo || !p.acesso_bonus || !p.papel_bonus) { location.replace('../index.html'); return; }
+  session = {
+    login: p.email || s.user.email,
+    name: p.nome_bonus || p.nome,          // precisa ser igual ao nome nas vendas
+    role: p.papel_bonus === 'coordinator' ? 'coordinator' : 'consultant',
+    super: !!p.super_admin,
+  };
+  if (session.role === 'coordinator' && !p.super_admin) UNIDADES_PERMITIDAS = p.unidades_coord || [];
+  document.getElementById('btn-trocar').hidden = !(p.acesso_tarefas && p.papel_tarefas);
+  if (!(await carregarPublicacao())) {
+    document.getElementById('carregando-msg').textContent = 'Não foi possível carregar o bônus. Atualize a página.';
+    return;
+  }
+  await carregarReguas();
+  bootApp();
+})();
+</script>
+</body>
+</html>

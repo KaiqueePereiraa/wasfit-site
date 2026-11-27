@@ -17,3 +17,4 @@ exclude:
 # Jekyll pula pastas com "." no nome — forçar a publicação do security.txt.
 include:
   - .well-known
+  - "_*.js"
